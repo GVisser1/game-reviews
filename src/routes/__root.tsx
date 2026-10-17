@@ -1,27 +1,12 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { createRootRouteWithContext } from "@tanstack/react-router";
+import { NotFoundPage } from "../NotFoundPage";
+import { RootDocument } from "../RootDocument";
 import appCss from "../index.css?url";
 
 type RouterContext = {
   queryClient: QueryClient;
 };
-
-type RootDocumentProps = {
-  children: ReactNode;
-};
-
-const RootDocument = ({ children }: RootDocumentProps): React.JSX.Element => (
-  <html lang="en">
-    <head>
-      <HeadContent />
-    </head>
-    <body>
-      {children}
-      <Scripts />
-    </body>
-  </html>
-);
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
@@ -35,9 +20,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
     ],
   }),
-  component: () => (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
-  ),
+  component: RootDocument,
+  notFoundComponent: NotFoundPage,
 });

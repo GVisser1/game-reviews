@@ -8,156 +8,166 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as AppRouteImport } from "./routes/app";
-import { Route as AppGamesGameIdRouteImport } from "./routes/app/games.$gameId";
-import { Route as AppIndexRouteImport } from "./routes/app/index";
-import { Route as AppMyReviewsRouteImport } from "./routes/app/my-reviews";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as LoginRouteImport } from "./routes/login";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppMyReviewsRouteImport } from './routes/app/my-reviews'
+import { Route as AppGamesGameIdRouteImport } from './routes/app/games.$gameId'
 
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AppRoute = AppRouteImport.update({
-  id: "/app",
-  path: "/app",
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const LoginRoute = LoginRouteImport.update({
-  id: "/login",
-  path: "/login",
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => AppRoute,
-} as any);
+} as any)
 const AppMyReviewsRoute = AppMyReviewsRouteImport.update({
-  id: "/my-reviews",
-  path: "/my-reviews",
+  id: '/my-reviews',
+  path: '/my-reviews',
   getParentRoute: () => AppRoute,
-} as any);
+} as any)
 const AppGamesGameIdRoute = AppGamesGameIdRouteImport.update({
-  id: "/games/$gameId",
-  path: "/games/$gameId",
+  id: '/games/$gameId',
+  path: '/games/$gameId',
   getParentRoute: () => AppRoute,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/app": typeof AppRouteWithChildren;
-  "/login": typeof LoginRoute;
-  "/app/my-reviews": typeof AppMyReviewsRoute;
-  "/app/": typeof AppIndexRoute;
-  "/app/games/$gameId": typeof AppGamesGameIdRoute;
+  '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/app/my-reviews': typeof AppMyReviewsRoute
+  '/app/': typeof AppIndexRoute
+  '/app/games/$gameId': typeof AppGamesGameIdRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/login": typeof LoginRoute;
-  "/app/my-reviews": typeof AppMyReviewsRoute;
-  "/app": typeof AppIndexRoute;
-  "/app/games/$gameId": typeof AppGamesGameIdRoute;
+  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/app/my-reviews': typeof AppMyReviewsRoute
+  '/app': typeof AppIndexRoute
+  '/app/games/$gameId': typeof AppGamesGameIdRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/app": typeof AppRouteWithChildren;
-  "/login": typeof LoginRoute;
-  "/app/my-reviews": typeof AppMyReviewsRoute;
-  "/app/": typeof AppIndexRoute;
-  "/app/games/$gameId": typeof AppGamesGameIdRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/app/my-reviews': typeof AppMyReviewsRoute
+  '/app/': typeof AppIndexRoute
+  '/app/games/$gameId': typeof AppGamesGameIdRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/app" | "/login" | "/app/my-reviews" | "/app/" | "/app/games/$gameId";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/login" | "/app/my-reviews" | "/app" | "/app/games/$gameId";
-  id: "__root__" | "/" | "/app" | "/login" | "/app/my-reviews" | "/app/" | "/app/games/$gameId";
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    '/' | '/app' | '/login' | '/app/my-reviews' | '/app/' | '/app/games/$gameId'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/login' | '/app/my-reviews' | '/app' | '/app/games/$gameId'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/login'
+    | '/app/my-reviews'
+    | '/app/'
+    | '/app/games/$gameId'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AppRoute: typeof AppRouteWithChildren;
-  LoginRoute: typeof LoginRoute;
+  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/app": {
-      id: "/app";
-      path: "/app";
-      fullPath: "/app";
-      preLoaderRoute: typeof AppRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/login": {
-      id: "/login";
-      path: "/login";
-      fullPath: "/login";
-      preLoaderRoute: typeof LoginRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/app/": {
-      id: "/app/";
-      path: "/";
-      fullPath: "/app/";
-      preLoaderRoute: typeof AppIndexRouteImport;
-      parentRoute: typeof AppRoute;
-    };
-    "/app/my-reviews": {
-      id: "/app/my-reviews";
-      path: "/my-reviews";
-      fullPath: "/app/my-reviews";
-      preLoaderRoute: typeof AppMyReviewsRouteImport;
-      parentRoute: typeof AppRoute;
-    };
-    "/app/games/$gameId": {
-      id: "/app/games/$gameId";
-      path: "/games/$gameId";
-      fullPath: "/app/games/$gameId";
-      preLoaderRoute: typeof AppGamesGameIdRouteImport;
-      parentRoute: typeof AppRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/my-reviews': {
+      id: '/app/my-reviews'
+      path: '/my-reviews'
+      fullPath: '/app/my-reviews'
+      preLoaderRoute: typeof AppMyReviewsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/games/$gameId': {
+      id: '/app/games/$gameId'
+      path: '/games/$gameId'
+      fullPath: '/app/games/$gameId'
+      preLoaderRoute: typeof AppGamesGameIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
-  AppMyReviewsRoute: typeof AppMyReviewsRoute;
-  AppIndexRoute: typeof AppIndexRoute;
-  AppGamesGameIdRoute: typeof AppGamesGameIdRoute;
+  AppMyReviewsRoute: typeof AppMyReviewsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppGamesGameIdRoute: typeof AppGamesGameIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppMyReviewsRoute: AppMyReviewsRoute,
   AppIndexRoute: AppIndexRoute,
   AppGamesGameIdRoute: AppGamesGameIdRoute,
-};
+}
 
-const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren);
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
-};
-export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>();
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
-import type { createStart } from "@tanstack/react-start";
-import type { getRouter } from "./router.tsx";
-declare module "@tanstack/react-start" {
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
   interface Register {
-    ssr: true;
-    router: Awaited<ReturnType<typeof getRouter>>;
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
   }
 }
