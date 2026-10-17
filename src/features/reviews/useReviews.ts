@@ -1,0 +1,116 @@
+import type { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { isNil } from "lodash";
+import { supabase } from "../../lib/supabase";
+import type { Review } from "./types";
+
+const REVIEWS_QUERY_KEY = ["reviews"];
+
+type ReviewRow = {
+  game_id: number;
+  game_name: string;
+  cover_url: string | null;
+  rating: number;
+};
+
+type ReviewsState = {
+  reviews: Review[];
+  isLoading: boolean;
+  error: string | null;
+  saveReview: (review: Review) => void;
+  removeReview: (gameId: number) => void;
+};
+
+type ReviewsSnapshot = {
+  previousReviews: Review[] | undefined;
+};
+
+const toReview = (row: ReviewRow): Review => ({
+  gameId: row.game_id,
+  gameName: row.game_name,
+  coverUrl: row.cover_url,
+  rating: row.rating,
+});
+
+const toReviewRow = (review: Review): ReviewRow => ({
+  game_id: review.gameId,
+  game_name: review.gameName,
+  cover_url: review.coverUrl,
+  rating: review.rating,
+});
+
+const withoutGame = (reviews: Review[], gameId: number): Review[] =>
+  reviews.filter((review) => review.gameId !== gameId);
+
+const throwIfError = ({ error }: { error: Error | null }): void => {
+  if (!isNil(error)) {
+    throw error;
+  }
+};
+
+const fetchReviews = async (): Promise<Review[]> => {
+  const { data, error }: PostgrestSingleResponse<ReviewRow[]> = await supabase
+    .from("reviews")
+    .select("game_id, game_name, cover_url, rating")
+    .order("created_at", { ascending: false })
+    .overrideTypes<ReviewRow[], { merge: false }>();
+  throwIfError({ error });
+  return (data ?? []).map(toReview);
+};
+
+export const reviewsQueryOptions = queryOptions({
+  queryKey: REVIEWS_QUERY_KEY,
+  queryFn: fetchReviews,
+});
+
+const upsertReview = async (review: Review): Promise<void> => {
+  throwIfError(await supabase.from("reviews").upsert(toReviewRow(review), { onConflict: "user_id,game_id" }));
+};
+
+const deleteReview = async (gameId: number): Promise<void> => {
+  throwIfError(await supabase.from("reviews").delete().eq("game_id", gameId));
+};
+
+export const useReviews = (): ReviewsState => {
+  const queryClient = useQueryClient();
+  const reviewsQuery = useQuery(reviewsQueryOptions);
+
+  // Update the cache straight away so stars change instantly, and roll back if the save fails.
+  const updateReviewsOptimistically = async (update: (reviews: Review[]) => Review[]): Promise<ReviewsSnapshot> => {
+    await queryClient.cancelQueries({ queryKey: REVIEWS_QUERY_KEY });
+    const previousReviews = queryClient.getQueryData<Review[]>(REVIEWS_QUERY_KEY);
+    queryClient.setQueryData<Review[]>(REVIEWS_QUERY_KEY, (reviews = []) => update(reviews));
+    return { previousReviews };
+  };
+
+  const rollBack = (_error: Error, _variables: unknown, snapshot?: ReviewsSnapshot): void => {
+    queryClient.setQueryData(REVIEWS_QUERY_KEY, snapshot?.previousReviews);
+  };
+
+  const refetchReviews = (): Promise<void> => queryClient.invalidateQueries({ queryKey: REVIEWS_QUERY_KEY });
+
+  const saveMutation = useMutation({
+    mutationFn: upsertReview,
+    onMutate: (review: Review) =>
+      updateReviewsOptimistically((reviews) => [review, ...withoutGame(reviews, review.gameId)]),
+    onError: rollBack,
+    onSettled: refetchReviews,
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: deleteReview,
+    onMutate: (gameId: number) => updateReviewsOptimistically((reviews) => withoutGame(reviews, gameId)),
+    onError: rollBack,
+    onSettled: refetchReviews,
+  });
+
+  const error = reviewsQuery.error ?? saveMutation.error ?? removeMutation.error;
+
+  return {
+    reviews: reviewsQuery.data ?? [],
+    isLoading: reviewsQuery.isPending,
+    error: error?.message ?? null,
+    saveReview: saveMutation.mutate,
+    removeReview: removeMutation.mutate,
+  };
+};

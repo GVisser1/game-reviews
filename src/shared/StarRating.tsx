@@ -1,0 +1,43 @@
+import { isNil } from "lodash";
+
+const MAX_STARS = 5;
+const STAR_VALUES = Array.from({ length: MAX_STARS }, (_, index) => index + 1);
+const STAR_CLASS_NAME = "text-2xl text-yellow-500";
+
+type StarRatingProps = {
+  rating: number;
+  // Leave out to show the rating read-only.
+  onChange?: (rating: number) => void;
+};
+
+const toStar = (value: number, rating: number): string => (value <= rating ? "★" : "☆");
+
+export const StarRating = ({ rating, onChange }: StarRatingProps): React.JSX.Element => {
+  if (isNil(onChange)) {
+    return (
+      <div role="img" aria-label={`Rated ${rating} out of ${MAX_STARS}`} className={`flex ${STAR_CLASS_NAME}`}>
+        {STAR_VALUES.map((value) => (
+          <span key={value} aria-hidden>
+            {toStar(value, rating)}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex">
+      {STAR_VALUES.map((value) => (
+        <button
+          key={value}
+          type="button"
+          onClick={() => onChange(value)}
+          aria-label={`${value} star${value > 1 ? "s" : ""}`}
+          className={STAR_CLASS_NAME}
+        >
+          {toStar(value, rating)}
+        </button>
+      ))}
+    </div>
+  );
+};

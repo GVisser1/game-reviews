@@ -1,0 +1,42 @@
+import { Link, Outlet } from "@tanstack/react-router";
+import type { ErrorComponentProps } from "@tanstack/react-router";
+import type { ReactNode } from "react";
+import { toErrorMessage } from "./lib/toErrorMessage";
+
+const NAV_LINK_CLASS_NAME = "hover:underline";
+const ACTIVE_NAV_LINK_PROPS = { className: "font-bold underline" };
+
+type LayoutProps = {
+  children: ReactNode;
+};
+
+const Layout = ({ children }: LayoutProps): React.JSX.Element => (
+  <>
+    <nav className="flex gap-4 border-b p-4">
+      <Link
+        to="/"
+        className={NAV_LINK_CLASS_NAME}
+        activeProps={ACTIVE_NAV_LINK_PROPS}
+        activeOptions={{ exact: true, includeSearch: false }}
+      >
+        Games
+      </Link>
+      <Link to="/my-reviews" className={NAV_LINK_CLASS_NAME} activeProps={ACTIVE_NAV_LINK_PROPS}>
+        My reviews
+      </Link>
+    </nav>
+    <main className="p-4">{children}</main>
+  </>
+);
+
+export const RootLayout = (): React.JSX.Element => (
+  <Layout>
+    <Outlet />
+  </Layout>
+);
+
+export const RootError = ({ error }: ErrorComponentProps): React.JSX.Element => (
+  <Layout>
+    <p className="text-red-600">Something went wrong: {toErrorMessage(error)}</p>
+  </Layout>
+);
