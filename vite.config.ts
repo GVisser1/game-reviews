@@ -35,6 +35,13 @@ export default defineConfig({
       "react/only-export-components": ["warn", { allowConstantExport: true }],
       "vite-plus/prefer-vite-plus-imports": "error",
     },
+    overrides: [
+      {
+        // Playwright fixtures receive a function named `use`, which this rule mistakes for React's `use` hook.
+        files: ["e2e-tests/**"],
+        rules: { "react/rules-of-hooks": "off" },
+      },
+    ],
     options: {
       typeAware: true,
       typeCheck: true,
@@ -58,6 +65,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ]),
+  test: {
+    // Playwright's *.spec.ts files in e2e-tests/ run separately with `pnpm test:e2e`.
+    include: ["src/**/*.test.{ts,tsx}", "supabase/**/*.test.ts"],
+  },
   ssr: {
     // lodash is CommonJS; bundling it lets the prerender step use named imports like `import { isNil } from "lodash"`.
     noExternal: ["lodash"],

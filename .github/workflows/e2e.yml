@@ -1,0 +1,42 @@
+name: E2E Tests
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  playwright:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      # The tests fake Supabase in the browser, so the build only needs placeholder values, not real keys.
+      VITE_SUPABASE_URL: https://e2e.supabase.invalid
+      VITE_SUPABASE_PUBLISHABLE_KEY: e2e-placeholder-key
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm has to be installed before setup-node so setup-node can cache the pnpm store.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: html-report--attempt-${{ github.run_attempt }}
+          path: e2e-tests/test-reports
+          retention-days: 7
