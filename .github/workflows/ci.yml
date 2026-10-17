@@ -37,3 +37,7 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  e2e:
+    needs: analyze
+    uses: ./.github/workflows/e2e.yml

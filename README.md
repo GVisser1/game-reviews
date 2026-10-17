@@ -24,15 +24,25 @@ The build writes static files to `dist/client`: `index.html` (the landing page) 
 
 ## Scripts
 
-| Command                                        | What it does                                                      |
-| ---------------------------------------------- | ----------------------------------------------------------------- |
-| `pnpm dev`                                     | Start the dev server (`vp dev`)                                   |
-| `pnpm check`                                   | Format check, lint and type check in one go (`vp check`)          |
-| `pnpm fmt`                                     | Format all files (`vp fmt`)                                       |
-| `pnpm build`                                   | Type check and build for production                               |
-| `pnpm test`                                    | Run the unit tests (`vp test`)                                    |
-| `pnpm compare-search save <name>`              | Snapshot 45 searches against the deployed `igdb-games` function   |
-| `pnpm compare-search compare <before> <after>` | Show which games each search gained or lost between two snapshots |
+| Command                                        | What it does                                                        |
+| ---------------------------------------------- | ------------------------------------------------------------------- |
+| `pnpm dev`                                     | Start the dev server (`vp dev`)                                     |
+| `pnpm check`                                   | Format check, lint and type check in one go (`vp check`)            |
+| `pnpm fmt`                                     | Format all files (`vp fmt`)                                         |
+| `pnpm build`                                   | Type check and build for production                                 |
+| `pnpm test`                                    | Run the unit tests (`vp test`)                                      |
+| `pnpm test:e2e`                                | Run the Playwright end-to-end tests in Chromium, Firefox and WebKit |
+| `pnpm test:e2e-ui`                             | Open Playwright's UI to run and debug E2E tests                     |
+| `pnpm test:e2e-report`                         | Open the report of the last E2E run                                 |
+| `pnpm compare-search save <name>`              | Snapshot 45 searches against the deployed `igdb-games` function     |
+| `pnpm compare-search compare <before> <after>` | Show which games each search gained or lost between two snapshots   |
+
+### End-to-end tests
+
+The tests in `e2e-tests/` run against `pnpm dev` locally (reusing a dev server that's already running) and against the
+production build (`pnpm preview`) in CI. `e2e-tests/mocks/fakeBackend.ts` stands in for Supabase and IGDB inside the
+browser, including a fake Twitch sign-in, so the tests need no secrets, create no real users and don't depend on live
+IGDB results. That also means they don't catch a broken real backend; use `pnpm compare-search` for the search side.
 
 ### Tuning search
 

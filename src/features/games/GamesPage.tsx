@@ -17,6 +17,7 @@ export const GamesPage = (): React.JSX.Element => {
         // Replace instead of push so typing doesn't add a history entry per keystroke.
         onChange={(event) => void navigate({ search: { q: event.target.value || undefined }, replace: true })}
         placeholder="Search games…"
+        aria-label="Search games"
         className="w-full max-w-md rounded border px-3 py-2"
       />
       <GameGrid key={search} search={search} />
