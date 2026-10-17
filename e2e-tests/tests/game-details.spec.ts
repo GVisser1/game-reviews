@@ -38,3 +38,15 @@ test("says when a game has no written reviews yet", async ({ gameDetailsPage }) 
   await expect(gameDetailsPage.heading("Grand Theft Auto V (2013)")).toBeVisible();
   await expect(gameDetailsPage.noReviewsYet).toBeVisible();
 });
+
+test("shows the community rating", async ({ gameDetailsPage }) => {
+  await gameDetailsPage.goto(72);
+
+  await expect(gameDetailsPage.communityRating("5.0/5 from 1 rating")).toBeVisible();
+});
+
+test("says when a game has no community ratings yet", async ({ gameDetailsPage }) => {
+  await gameDetailsPage.goto(1020);
+
+  await expect(gameDetailsPage.communityRating("No ratings yet")).toBeVisible();
+});

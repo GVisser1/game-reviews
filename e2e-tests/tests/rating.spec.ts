@@ -81,3 +81,16 @@ test("writes, edits and removes a review", async ({ backend, signIn, gameDetails
   await expect(ownReview).toBeHidden();
   await expect.poll(() => backend.reviews).toEqual([]);
 });
+
+test("updates the community rating when rating a game", async ({ signIn, gameDetailsPage }) => {
+  await signIn("/app/games/72");
+  await expect(gameDetailsPage.communityRating("5.0/5 from 1 rating")).toBeVisible();
+
+  await gameDetailsPage.starButton(3).click();
+
+  await expect(gameDetailsPage.communityRating("4.0/5 from 2 ratings")).toBeVisible();
+
+  await gameDetailsPage.removeReviewButton.click();
+
+  await expect(gameDetailsPage.communityRating("5.0/5 from 1 rating")).toBeVisible();
+});
