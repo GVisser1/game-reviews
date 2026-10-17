@@ -1,5 +1,6 @@
 import { expect, test as base } from "@playwright/test";
 import { type FakeBackend, installFakeBackend } from "./mocks/fakeBackend";
+import { TWITCH_DISPLAY_NAME } from "./mocks/testData";
 import { GameDetailsPage } from "./page-objects/pages/gameDetailsPage";
 import { GamesPage } from "./page-objects/pages/gamesPage";
 import { LandingPage } from "./page-objects/pages/landingPage";
@@ -15,7 +16,7 @@ type Fixtures = {
   myReviewsPage: MyReviewsPage;
   loginPage: LoginPage;
   notFoundPage: NotFoundPage;
-  // Signs in with (fake) Twitch from the login page and ends up back on `redirectPath`.
+  // Signs in with (fake) Twitch from the login page and ends up back on `redirectPath`, an /app page.
   signIn: (redirectPath: string) => Promise<void>;
 };
 
@@ -33,6 +34,7 @@ export const test = base.extend<Fixtures>({
       await loginPage.goto(`?redirect=${encodeURIComponent(redirectPath)}`);
       await loginPage.continueWithTwitchButton.click();
       await expect(page).toHaveURL(redirectPath);
+      await expect(page.getByRole("navigation").getByText(TWITCH_DISPLAY_NAME)).toBeVisible();
     }),
 });
 
