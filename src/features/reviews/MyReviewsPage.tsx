@@ -27,6 +27,7 @@ export const MyReviewsPage = (): React.JSX.Element => {
       {reviews.map((review) => (
         <GameTile key={review.gameId} gameId={review.gameId} name={review.gameName} coverUrl={review.coverUrl}>
           <StarRating rating={review.rating} />
+          {review.body && <p className="line-clamp-3 text-sm text-gray-600">{review.body}</p>}
         </GameTile>
       ))}
     </ul>

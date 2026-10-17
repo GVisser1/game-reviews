@@ -57,3 +57,15 @@ export const TEST_GAMES: TestGameDetails[] = [
 ];
 
 export const TWITCH_DISPLAY_NAME = "E2E Tester";
+
+// Written reviews from other players, as get_game_reviews returns them.
+export const OTHER_PLAYER_REVIEWS = [
+  {
+    game_id: 72,
+    display_name: "Other Player",
+    avatar_url: null,
+    rating: 5,
+    body: "Best co-op puzzles ever made.",
+    created_at: "2026-10-01T12:00:00Z",
+  },
+];

@@ -1,6 +1,6 @@
 import type { Page, Route } from "@playwright/test";
 import { find } from "lodash-es";
-import { TEST_GAMES, TWITCH_DISPLAY_NAME } from "./testData";
+import { OTHER_PLAYER_REVIEWS, TEST_GAMES, TWITCH_DISPLAY_NAME } from "./testData";
 
 // Stands in for Supabase (auth, the reviews table and the IGDB edge functions) inside the browser, so tests need no
 // secrets, create no real users and don't depend on live IGDB results. Saved reviews live for one test.
@@ -10,6 +10,7 @@ type StoredReview = {
   game_name: string;
   cover_url: string | null;
   rating: number;
+  body: string | null;
 };
 
 type FakeUser = {
@@ -164,6 +165,31 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
     const { id }: { id?: number } = route.request().postDataJSON() ?? {};
     const game = find(TEST_GAMES, { id });
     await (game ? json(route, game) : json(route, { error: `Game ${id} not found` }, HTTP_SERVER_ERROR));
+  });
+
+  // The public review list for one game: the signed-in user's written review (if any) plus other players' reviews.
+  await page.route("**/rest/v1/rpc/get_game_reviews", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    const { target_game_id: gameId }: { target_game_id?: number } = route.request().postDataJSON() ?? {};
+    const user = userFromRequest(route);
+    const ownReviews = user.isAnonymous
+      ? []
+      : backend.reviews
+          .filter((review) => review.game_id === gameId && review.body !== null)
+          .map((review) => ({
+            display_name: TWITCH_DISPLAY_NAME,
+            avatar_url: null,
+            rating: review.rating,
+            body: review.body,
+            created_at: new Date().toISOString(),
+            is_own: true,
+          }));
+    const otherReviews = OTHER_PLAYER_REVIEWS.filter((review) => review.game_id === gameId).map(
+      ({ game_id: _gameId, ...review }) => ({ ...review, is_own: false }),
+    );
+    await json(route, [...ownReviews, ...otherReviews]);
   });
 
   await page.route("**/rest/v1/reviews**", async (route) => {

@@ -2,6 +2,7 @@ import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil } from "lodash";
 import { supabase } from "../../lib/supabase";
+import { GAME_REVIEWS_QUERY_KEY } from "./gameReviewsQuery";
 import type { Review } from "./types";
 
 const REVIEWS_QUERY_KEY = ["reviews"];
@@ -11,6 +12,7 @@ type ReviewRow = {
   game_name: string;
   cover_url: string | null;
   rating: number;
+  body: string | null;
 };
 
 type ReviewsState = {
@@ -30,6 +32,7 @@ const toReview = (row: ReviewRow): Review => ({
   gameName: row.game_name,
   coverUrl: row.cover_url,
   rating: row.rating,
+  body: row.body,
 });
 
 const toReviewRow = (review: Review): ReviewRow => ({
@@ -37,6 +40,7 @@ const toReviewRow = (review: Review): ReviewRow => ({
   game_name: review.gameName,
   cover_url: review.coverUrl,
   rating: review.rating,
+  body: review.body,
 });
 
 const withoutGame = (reviews: Review[], gameId: number): Review[] =>
@@ -51,7 +55,7 @@ const throwIfError = ({ error }: { error: Error | null }): void => {
 const fetchReviews = async (): Promise<Review[]> => {
   const { data, error }: PostgrestSingleResponse<ReviewRow[]> = await supabase
     .from("reviews")
-    .select("game_id, game_name, cover_url, rating")
+    .select("game_id, game_name, cover_url, rating, body")
     .order("created_at", { ascending: false })
     .overrideTypes<ReviewRow[], { merge: false }>();
   throwIfError({ error });
@@ -87,7 +91,13 @@ export const useReviews = (): ReviewsState => {
     queryClient.setQueryData(REVIEWS_QUERY_KEY, snapshot?.previousReviews);
   };
 
-  const refetchReviews = (): Promise<void> => queryClient.invalidateQueries({ queryKey: REVIEWS_QUERY_KEY });
+  // Your own reviews and the games' public review lists both change when you save or remove a review.
+  const refetchReviews = async (): Promise<void> => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: REVIEWS_QUERY_KEY }),
+      queryClient.invalidateQueries({ queryKey: GAME_REVIEWS_QUERY_KEY }),
+    ]);
+  };
 
   const saveMutation = useMutation({
     mutationFn: upsertReview,
