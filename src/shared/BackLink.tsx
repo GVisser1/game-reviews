@@ -5,14 +5,15 @@ type BackLinkProps = {
   children: ReactNode;
 };
 
-// Going back in history (instead of linking to "/") keeps the previous search and scroll position.
+// Going back in history (instead of linking to "/app") keeps the previous search and scroll position.
 export const BackLink = ({ children }: BackLinkProps): React.JSX.Element => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
 
   return (
     <Link
-      to="/"
+      to="/app"
+      search={{ q: undefined }}
       onClick={(event) => {
         if (canGoBack) {
           event.preventDefault();

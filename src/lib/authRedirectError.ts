@@ -3,6 +3,11 @@ const ERROR_PARAMS = ["error", "error_code", "error_description"];
 // Supabase reports a failed OAuth redirect (e.g. the user declined on Twitch) in the URL's query or hash.
 // Read it once and strip it, so the error doesn't stay in the address bar or get handled twice.
 export const takeAuthRedirectErrorCode = (): string | null => {
+  // Also imported while prerendering pages on the server, where there's no browser URL.
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   const url = new URL(window.location.href);
   const hashParams = new URLSearchParams(url.hash.slice(1));
   // Not every failure has an error_code (a declined Twitch login only sends error=access_denied).

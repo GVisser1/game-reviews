@@ -10,7 +10,7 @@ type GameTileProps = {
 
 export const GameTile = ({ gameId, name, coverUrl, children }: GameTileProps): React.JSX.Element => (
   <li className="flex flex-col gap-1">
-    <Link to="/games/$gameId" params={{ gameId }} className="flex flex-col gap-1 hover:underline">
+    <Link to="/app/games/$gameId" params={{ gameId }} className="flex flex-col gap-1 hover:underline">
       {coverUrl ? (
         <img src={coverUrl} alt={name} className="aspect-3/4 w-full rounded object-cover" />
       ) : (
