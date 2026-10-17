@@ -1,11 +1,17 @@
 import { isEmpty } from "lodash";
 import { GameTile } from "../../shared/GameTile";
 import { StarRating } from "../../shared/StarRating";
+import { SignInPrompt } from "../auth/SignInPrompt";
+import { useAuthUser } from "../auth/useAuthUser";
 import { useReviews } from "./useReviews";
 
 export const MyReviewsPage = (): React.JSX.Element => {
   const { reviews, isLoading, error } = useReviews();
+  const user = useAuthUser();
 
+  if (user?.is_anonymous) {
+    return <SignInPrompt message="Sign in to rate games and see your reviews here." />;
+  }
   if (isLoading) {
     return <p>Loading your reviews…</p>;
   }

@@ -1,5 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack/react-router";
+import { createRootRouteWithContext, createRoute, createRouter, redirect } from "@tanstack/react-router";
+import { LoginPage } from "./features/auth/LoginPage";
+import { LOGIN_PATH, validateLoginSearch } from "./features/auth/loginRedirect";
 import { sessionQueryOptions } from "./features/auth/sessionQuery";
 import { GameDetailsError, GameDetailsPage, GameDetailsPending } from "./features/games/GameDetailsPage";
 import { gameDetailsQueryOptions } from "./features/games/gameDetailsQuery";
@@ -8,6 +10,7 @@ import { parseGameId, validateGamesSearch } from "./features/games/routeParams";
 import { MyReviewsPage } from "./features/reviews/MyReviewsPage";
 import { reviewsQueryOptions } from "./features/reviews/useReviews";
 import { queryClient } from "./lib/queryClient";
+import { supabase } from "./lib/supabase";
 import { RootError, RootLayout } from "./RootLayout";
 
 type RouterContext = {
@@ -48,7 +51,21 @@ const myReviewsRoute = createRoute({
   component: MyReviewsPage,
 });
 
-const routeTree = rootRoute.addChildren([gamesRoute, gameDetailsRoute, myReviewsRoute]);
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: LOGIN_PATH,
+  validateSearch: validateLoginSearch,
+  // Signed-in users (including those just returning from Twitch) go on to where they came from.
+  beforeLoad: async ({ search }) => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session?.user.is_anonymous === false) {
+      throw redirect({ href: search.redirect ?? "/", replace: true });
+    }
+  },
+  component: LoginPage,
+});
+
+const routeTree = rootRoute.addChildren([gamesRoute, gameDetailsRoute, myReviewsRoute, loginRoute]);
 
 export const router = createRouter({
   routeTree,

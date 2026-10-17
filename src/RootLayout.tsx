@@ -1,6 +1,7 @@
 import { Link, Outlet } from "@tanstack/react-router";
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { AccountMenu } from "./features/auth/AccountMenu";
 import { toErrorMessage } from "./lib/toErrorMessage";
 
 const NAV_LINK_CLASS_NAME = "hover:underline";
@@ -12,7 +13,7 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps): React.JSX.Element => (
   <>
-    <nav className="flex gap-4 border-b p-4">
+    <nav className="flex items-center gap-4 border-b p-4">
       <Link
         to="/"
         className={NAV_LINK_CLASS_NAME}
@@ -24,6 +25,9 @@ const Layout = ({ children }: LayoutProps): React.JSX.Element => (
       <Link to="/my-reviews" className={NAV_LINK_CLASS_NAME} activeProps={ACTIVE_NAV_LINK_PROPS}>
         My reviews
       </Link>
+      <div className="ml-auto">
+        <AccountMenu />
+      </div>
     </nav>
     <main className="p-4">{children}</main>
   </>
