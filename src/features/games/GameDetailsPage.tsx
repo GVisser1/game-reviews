@@ -7,6 +7,7 @@ import { toErrorMessage } from "../../lib/toErrorMessage";
 import { BackLink } from "../../shared/BackLink";
 import { SignInPrompt } from "../auth/SignInPrompt";
 import { useAuthUser } from "../auth/useAuthUser";
+import { CommunityRating } from "../reviews/CommunityRating";
 import { GameReviews } from "../reviews/GameReviews";
 import { useReviews } from "../reviews/useReviews";
 import { YourReview } from "../reviews/YourReview";
@@ -61,6 +62,7 @@ export const GameDetailsPage = (): React.JSX.Element => {
               onRemove={removeReview}
             />
           )}
+          <CommunityRating gameId={gameId} />
           {!isNil(game.igdbRating) && <p>IGDB rating: {game.igdbRating}/100</p>}
           {!isEmpty(game.genres) && <p>Genres: {game.genres.join(", ")}</p>}
           {!isEmpty(game.platforms) && <p>Platforms: {game.platforms.join(", ")}</p>}

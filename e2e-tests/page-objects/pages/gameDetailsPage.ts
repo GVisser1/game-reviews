@@ -39,6 +39,10 @@ export class GameDetailsPage extends BasePage {
     return this.page.getByRole("listitem").filter({ hasText: reviewerName });
   }
 
+  public communityRating(summary: string): Locator {
+    return this.page.getByText(`Community rating: ${summary}`);
+  }
+
   public errorMessage(text: string): Locator {
     return this.page.getByText(`Could not load game: ${text}`);
   }

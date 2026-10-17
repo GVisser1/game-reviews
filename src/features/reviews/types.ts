@@ -15,3 +15,8 @@ export type GameReview = {
   createdAt: string;
   isOwn: boolean;
 };
+
+export type RatingSummary = {
+  averageRating: number | null;
+  ratingCount: number;
+};

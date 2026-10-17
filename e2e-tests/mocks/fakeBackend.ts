@@ -1,5 +1,5 @@
 import type { Page, Route } from "@playwright/test";
-import { find } from "lodash-es";
+import { find, isEmpty, sum } from "lodash-es";
 import { OTHER_PLAYER_REVIEWS, TEST_GAMES, TWITCH_DISPLAY_NAME } from "./testData";
 
 // Stands in for Supabase (auth, the reviews table and the IGDB edge functions) inside the browser, so tests need no
@@ -190,6 +190,19 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       ({ game_id: _gameId, ...review }) => ({ ...review, is_own: false }),
     );
     await json(route, [...ownReviews, ...otherReviews]);
+  });
+
+  // A game's average rating and number of ratings: other players' ratings plus the signed-in user's own.
+  await page.route("**/rest/v1/rpc/get_game_rating_summary", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    const { target_game_id: gameId }: { target_game_id?: number } = route.request().postDataJSON() ?? {};
+    const ratings = [...OTHER_PLAYER_REVIEWS, ...backend.reviews]
+      .filter((review) => review.game_id === gameId)
+      .map((review) => review.rating);
+    const average = isEmpty(ratings) ? null : Math.round((sum(ratings) / ratings.length) * 10) / 10;
+    await json(route, [{ average_rating: average, rating_count: ratings.length }]);
   });
 
   await page.route("**/rest/v1/reviews**", async (route) => {
