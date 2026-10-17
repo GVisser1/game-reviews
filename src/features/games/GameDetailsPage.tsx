@@ -6,6 +6,8 @@ import type { ReactNode } from "react";
 import { toErrorMessage } from "../../lib/toErrorMessage";
 import { BackLink } from "../../shared/BackLink";
 import { StarRating } from "../../shared/StarRating";
+import { SignInPrompt } from "../auth/SignInPrompt";
+import { useAuthUser } from "../auth/useAuthUser";
 import { RemoveRatingButton } from "../reviews/RemoveRatingButton";
 import { useReviews } from "../reviews/useReviews";
 import { gameDetailsQueryOptions } from "./gameDetailsQuery";
@@ -40,6 +42,7 @@ export const GameDetailsPage = (): React.JSX.Element => {
   const { data: game } = useSuspenseQuery(gameDetailsQueryOptions(gameId));
   const { reviews, saveReview, removeReview, error: reviewError } = useReviews();
   const review = reviews.find((currentReview) => currentReview.gameId === gameId);
+  const user = useAuthUser();
 
   return (
     <GamePageLayout>
@@ -49,15 +52,18 @@ export const GameDetailsPage = (): React.JSX.Element => {
           <h1 className="text-2xl font-bold">
             {game.name} {game.releaseYear && <span className="text-gray-500">({game.releaseYear})</span>}
           </h1>
-          <div className="flex flex-col gap-1">
-            <span className="text-sm font-medium">Your rating</span>
-            <StarRating
-              rating={review?.rating ?? NO_RATING}
-              onChange={(rating) => saveReview({ gameId, gameName: game.name, coverUrl: game.coverUrl, rating })}
-            />
-            {!isNil(review) && <RemoveRatingButton onClick={() => removeReview(gameId)} />}
-            {reviewError && <p className="text-red-600">Could not update review: {reviewError}</p>}
-          </div>
+          {user?.is_anonymous && <SignInPrompt message="Sign in to rate this game." />}
+          {user && !user.is_anonymous && (
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-medium">Your rating</span>
+              <StarRating
+                rating={review?.rating ?? NO_RATING}
+                onChange={(rating) => saveReview({ gameId, gameName: game.name, coverUrl: game.coverUrl, rating })}
+              />
+              {!isNil(review) && <RemoveRatingButton onClick={() => removeReview(gameId)} />}
+              {reviewError && <p className="text-red-600">Could not update review: {reviewError}</p>}
+            </div>
+          )}
           {!isNil(game.igdbRating) && <p>IGDB rating: {game.igdbRating}/100</p>}
           {!isEmpty(game.genres) && <p>Genres: {game.genres.join(", ")}</p>}
           {!isEmpty(game.platforms) && <p>Platforms: {game.platforms.join(", ")}</p>}

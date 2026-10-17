@@ -44,4 +44,9 @@ export default defineConfig({
     ],
   },
   plugins: lazyPlugins(() => [react(), tailwindcss()]),
+  server: {
+    // Supabase only allows the Twitch sign-in to redirect back to this port, so fail instead of picking another.
+    port: 5173,
+    strictPort: true,
+  },
 });
