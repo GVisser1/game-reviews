@@ -33,7 +33,8 @@ export const StarRating = ({ rating, onChange }: StarRatingProps): React.JSX.Ele
           type="button"
           onClick={() => onChange(value)}
           aria-label={`${value} star${value > 1 ? "s" : ""}`}
-          className={STAR_CLASS_NAME}
+          // A fixed 32px target: the star glyph alone is ~24px and narrower in some fonts, below WCAG's 24px minimum.
+          className={`inline-flex size-8 items-center justify-center ${STAR_CLASS_NAME}`}
         >
           {toStar(value, rating)}
         </button>
