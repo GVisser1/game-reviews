@@ -18,6 +18,10 @@ export class MyReviewsPage extends BasePage {
     return this.page.getByRole("listitem").filter({ has: this.page.getByRole("link", { name, exact: true }) });
   }
 
+  public reviewText(text: string): Locator {
+    return this.page.getByText(text);
+  }
+
   public rating(stars: number): Locator {
     return this.page.getByRole("img", { name: `Rated ${stars} out of 5` });
   }

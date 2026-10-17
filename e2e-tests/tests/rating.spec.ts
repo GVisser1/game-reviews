@@ -23,10 +23,10 @@ test("rates a game, sees it on My reviews and removes it", async ({
 
   await gameDetailsPage.starButton(4).click();
 
-  await expect(gameDetailsPage.removeRatingButton).toBeVisible();
+  await expect(gameDetailsPage.removeReviewButton).toBeVisible();
   await expect
     .poll(() => backend.reviews)
-    .toEqual([{ game_id: 72, game_name: "Portal 2", cover_url: null, rating: 4 }]);
+    .toEqual([{ game_id: 72, game_name: "Portal 2", cover_url: null, rating: 4, body: null }]);
 
   await myReviewsPage.goto();
 
@@ -35,9 +35,9 @@ test("rates a game, sees it on My reviews and removes it", async ({
   await myReviewsPage.assertPageIsAccessible();
 
   await myReviewsPage.reviewedGame("Portal 2").getByRole("link").click();
-  await gameDetailsPage.removeRatingButton.click();
+  await gameDetailsPage.removeReviewButton.click();
 
-  await expect(gameDetailsPage.removeRatingButton).toBeHidden();
+  await expect(gameDetailsPage.removeReviewButton).toBeHidden();
   await expect.poll(() => backend.reviews).toEqual([]);
 });
 
@@ -48,4 +48,36 @@ test("signs out back to an anonymous visitor", async ({ signIn, gameDetailsPage 
 
   await expect(gameDetailsPage.navSignInLink).toBeVisible();
   await expect(gameDetailsPage.signInPrompt).toBeVisible();
+});
+
+test("writes, edits and removes a review", async ({ backend, signIn, gameDetailsPage, myReviewsPage }) => {
+  await signIn("/app/games/72");
+
+  await expect(gameDetailsPage.saveReviewButton).toBeDisabled();
+  await gameDetailsPage.starButton(5).click();
+  await gameDetailsPage.reviewTextbox.fill("  Clever puzzles and a great story.  ");
+  await gameDetailsPage.saveReviewButton.click();
+
+  const ownReview = gameDetailsPage.publicReview(`${TWITCH_DISPLAY_NAME} (you)`);
+  await expect(ownReview).toContainText("Clever puzzles and a great story.");
+  await expect.poll(() => backend.reviews[0]?.body).toBe("Clever puzzles and a great story.");
+  await expect(gameDetailsPage.saveReviewButton).toBeDisabled();
+  await gameDetailsPage.assertPageIsAccessible();
+
+  // Changing the stars keeps the saved text.
+  await gameDetailsPage.starButton(4).click();
+  await expect.poll(() => backend.reviews[0]).toMatchObject({ rating: 4, body: "Clever puzzles and a great story." });
+
+  await gameDetailsPage.reviewTextbox.fill("Clever puzzles, but too short.");
+  await gameDetailsPage.saveReviewButton.click();
+  await expect(ownReview).toContainText("Clever puzzles, but too short.");
+
+  await myReviewsPage.goto();
+  await expect(myReviewsPage.reviewText("Clever puzzles, but too short.")).toBeVisible();
+
+  await myReviewsPage.reviewedGame("Portal 2").getByRole("link").click();
+  await gameDetailsPage.removeReviewButton.click();
+
+  await expect(ownReview).toBeHidden();
+  await expect.poll(() => backend.reviews).toEqual([]);
 });

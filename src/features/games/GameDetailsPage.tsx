@@ -5,14 +5,12 @@ import { isEmpty, isNil } from "lodash";
 import type { ReactNode } from "react";
 import { toErrorMessage } from "../../lib/toErrorMessage";
 import { BackLink } from "../../shared/BackLink";
-import { StarRating } from "../../shared/StarRating";
 import { SignInPrompt } from "../auth/SignInPrompt";
 import { useAuthUser } from "../auth/useAuthUser";
-import { RemoveRatingButton } from "../reviews/RemoveRatingButton";
+import { GameReviews } from "../reviews/GameReviews";
 import { useReviews } from "../reviews/useReviews";
+import { YourReview } from "../reviews/YourReview";
 import { gameDetailsQueryOptions } from "./gameDetailsQuery";
-
-const NO_RATING = 0;
 
 type GamePageLayoutProps = {
   children: ReactNode;
@@ -40,7 +38,7 @@ export const GameDetailsError = ({ error }: ErrorComponentProps): React.JSX.Elem
 export const GameDetailsPage = (): React.JSX.Element => {
   const { gameId } = useParams({ from: "/app/games/$gameId" });
   const { data: game } = useSuspenseQuery(gameDetailsQueryOptions(gameId));
-  const { reviews, saveReview, removeReview, error: reviewError } = useReviews();
+  const { reviews, isLoading: isLoadingReviews, saveReview, removeReview, error: reviewError } = useReviews();
   const review = reviews.find((currentReview) => currentReview.gameId === gameId);
   const user = useAuthUser();
 
@@ -53,16 +51,15 @@ export const GameDetailsPage = (): React.JSX.Element => {
             {game.name} {game.releaseYear && <span className="text-gray-500">({game.releaseYear})</span>}
           </h1>
           {user?.is_anonymous && <SignInPrompt message="Sign in to rate this game." />}
-          {user && !user.is_anonymous && (
-            <div className="flex flex-col gap-1">
-              <span className="text-sm font-medium">Your rating</span>
-              <StarRating
-                rating={review?.rating ?? NO_RATING}
-                onChange={(rating) => saveReview({ gameId, gameName: game.name, coverUrl: game.coverUrl, rating })}
-              />
-              {!isNil(review) && <RemoveRatingButton onClick={() => removeReview(gameId)} />}
-              {reviewError && <p className="text-red-600">Could not update review: {reviewError}</p>}
-            </div>
+          {user && !user.is_anonymous && !isLoadingReviews && (
+            <YourReview
+              key={gameId}
+              game={{ id: gameId, name: game.name, coverUrl: game.coverUrl }}
+              review={review}
+              error={reviewError}
+              onSave={saveReview}
+              onRemove={removeReview}
+            />
           )}
           {!isNil(game.igdbRating) && <p>IGDB rating: {game.igdbRating}/100</p>}
           {!isEmpty(game.genres) && <p>Genres: {game.genres.join(", ")}</p>}
@@ -70,6 +67,7 @@ export const GameDetailsPage = (): React.JSX.Element => {
           {game.summary && <p className="whitespace-pre-line">{game.summary}</p>}
         </div>
       </article>
+      <GameReviews gameId={gameId} />
     </GamePageLayout>
   );
 };

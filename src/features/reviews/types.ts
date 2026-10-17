@@ -3,4 +3,15 @@ export type Review = {
   gameName: string;
   coverUrl: string | null;
   rating: number;
+  body: string | null;
+};
+
+// A review as shown publicly on a game's page.
+export type GameReview = {
+  displayName: string;
+  avatarUrl: string | null;
+  rating: number;
+  body: string;
+  createdAt: string;
+  isOwn: boolean;
 };
