@@ -1,0 +1,5 @@
+# Point every package that imports `vite` or `vitest` at Vite+'s own copies. Two Vite copies break TanStack Start's
+# dev server (an instanceof check fails and every page 404s): https://github.com/voidzero-dev/vite-plus/issues/1391
+overrides:
+  vite@*: npm:@voidzero-dev/vite-plus-core@1.2.0 # Match the installed vite-plus version
+  vitest@*: 5.0.4 # Match the version from `vp toolchain vitest`

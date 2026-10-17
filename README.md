@@ -2,7 +2,25 @@
 
 > Personal learning project, not maintained for outside use. No license: all rights reserved.
 
-[Vite+](https://viteplus.dev) + React front end, Supabase back end, game data from IGDB.
+[Vite+](https://viteplus.dev) + React with [TanStack Start](https://tanstack.com/start), Supabase back end, game data from IGDB.
+
+## Routes
+
+| Path                 | Page                    | Rendering                                  |
+| -------------------- | ----------------------- | ------------------------------------------ |
+| `/`                  | Landing page            | Prerendered to static HTML at build time   |
+| `/login`             | Sign in                 | In the browser                             |
+| `/app`               | Games list and search   | In the browser, signs in anonymously first |
+| `/app/games/:gameId` | Game details and rating | In the browser                             |
+| `/app/my-reviews`    | Your reviews            | In the browser                             |
+
+Routes are files in `src/routes/`; `src/routeTree.gen.ts` is generated from them by the dev server and build.
+
+### Hosting
+
+The build writes static files to `dist/client`: `index.html` (the landing page) and `_shell.html`, which renders every
+`/app` page in the browser. The host must serve `_shell.html` for `/app` and `/app/*`, e.g. a Netlify `_redirects` rule
+`/app/* /_shell.html 200`.
 
 ## Scripts
 

@@ -5,8 +5,8 @@ import { GameGrid } from "./GameGrid";
 const SEARCH_DEBOUNCE_MS = 300;
 
 export const GamesPage = (): React.JSX.Element => {
-  const { q: searchInput = "" } = useSearch({ from: "/" });
-  const navigate = useNavigate({ from: "/" });
+  const { q: searchInput = "" } = useSearch({ from: "/app/" });
+  const navigate = useNavigate({ from: "/app/" });
   const search = useDebouncedValue(searchInput.trim(), SEARCH_DEBOUNCE_MS);
 
   return (

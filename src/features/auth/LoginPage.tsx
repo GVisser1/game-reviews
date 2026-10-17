@@ -4,6 +4,8 @@ import { authRedirectErrorCode } from "../../lib/supabase";
 import { toErrorMessage } from "../../lib/toErrorMessage";
 import { signInWithTwitch } from "./twitchSignIn";
 
+const HOME_PATH = "/";
+
 export const LoginPage = (): React.JSX.Element => {
   const { redirect } = useSearch({ from: "/login" });
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -23,7 +25,11 @@ export const LoginPage = (): React.JSX.Element => {
   };
 
   return (
-    <div className="mx-auto mt-12 flex max-w-sm flex-col gap-4">
+    <div className="mx-auto mt-12 flex max-w-sm flex-col gap-4 px-4">
+      {/* A plain link: the redirect is an already-validated path, which the typed router <Link> can't take as a string. */}
+      <a href={redirect ?? HOME_PATH} className="self-start text-sm hover:underline">
+        ← Back
+      </a>
       <h1 className="text-2xl font-bold">Sign in</h1>
       <p className="text-gray-600">Sign in to rate games and keep track of your reviews.</p>
       <button

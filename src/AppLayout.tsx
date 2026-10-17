@@ -15,14 +15,15 @@ const Layout = ({ children }: LayoutProps): React.JSX.Element => (
   <>
     <nav className="flex items-center gap-4 border-b p-4">
       <Link
-        to="/"
+        to="/app"
+        search={{ q: undefined }}
         className={NAV_LINK_CLASS_NAME}
         activeProps={ACTIVE_NAV_LINK_PROPS}
         activeOptions={{ exact: true, includeSearch: false }}
       >
         Games
       </Link>
-      <Link to="/my-reviews" className={NAV_LINK_CLASS_NAME} activeProps={ACTIVE_NAV_LINK_PROPS}>
+      <Link to="/app/my-reviews" className={NAV_LINK_CLASS_NAME} activeProps={ACTIVE_NAV_LINK_PROPS}>
         My reviews
       </Link>
       <div className="ml-auto">
@@ -33,13 +34,13 @@ const Layout = ({ children }: LayoutProps): React.JSX.Element => (
   </>
 );
 
-export const RootLayout = (): React.JSX.Element => (
+export const AppLayout = (): React.JSX.Element => (
   <Layout>
     <Outlet />
   </Layout>
 );
 
-export const RootError = ({ error }: ErrorComponentProps): React.JSX.Element => (
+export const AppError = ({ error }: ErrorComponentProps): React.JSX.Element => (
   <Layout>
     <p className="text-red-600">Something went wrong: {toErrorMessage(error)}</p>
   </Layout>

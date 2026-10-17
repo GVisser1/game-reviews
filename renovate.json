@@ -61,6 +61,11 @@
       "matchUpdateTypes": ["major"],
       "minimumReleaseAge": "14 days",
       "automerge": false
+    },
+    {
+      "description": "TanStack Start requires a matching TanStack Router version, so they always update together.",
+      "matchPackageNames": ["@tanstack/react-router", "@tanstack/react-start"],
+      "groupName": "tanstack router and start"
     }
   ]
 }

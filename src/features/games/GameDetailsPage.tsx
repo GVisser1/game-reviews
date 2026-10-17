@@ -38,7 +38,7 @@ export const GameDetailsError = ({ error }: ErrorComponentProps): React.JSX.Elem
 );
 
 export const GameDetailsPage = (): React.JSX.Element => {
-  const { gameId } = useParams({ from: "/games/$gameId" });
+  const { gameId } = useParams({ from: "/app/games/$gameId" });
   const { data: game } = useSuspenseQuery(gameDetailsQueryOptions(gameId));
   const { reviews, saveReview, removeReview, error: reviewError } = useReviews();
   const review = reviews.find((currentReview) => currentReview.gameId === gameId);
