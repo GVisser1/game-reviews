@@ -20,7 +20,7 @@ Routes are files in `src/routes/`; `src/routeTree.gen.ts` is generated from them
 
 ### Hosting
 
-Production runs on Cloudflare Pages at https://game-reviews.pages.dev. Deploys are manual: run the **Deploy to PROD**
+Production runs on Cloudflare Pages at https://game-reviews-ccu.pages.dev. Deploys are manual: run the **Deploy to PROD**
 workflow from the Actions tab and pick the branch to deploy. It checks, tests and builds with `pnpm build:pages`, then uploads
 `dist/client` with `wrangler`.
 

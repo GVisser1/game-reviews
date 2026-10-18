@@ -20,7 +20,7 @@ jobs:
     # Variables and secrets below come from the "production" environment in the repository settings.
     environment:
       name: production
-      url: https://game-reviews.pages.dev
+      url: https://game-reviews-ccu.pages.dev
     env:
       VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
       VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
