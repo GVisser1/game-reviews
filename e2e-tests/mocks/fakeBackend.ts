@@ -111,10 +111,11 @@ const handlePreflight = async (route: Route): Promise<boolean> => {
 export type FakeBackend = {
   reviews: StoredReview[];
   anonymousSignInCount: number;
+  isAccountDeleted: boolean;
 };
 
 export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
-  const backend: FakeBackend = { reviews: [], anonymousSignInCount: 0 };
+  const backend: FakeBackend = { reviews: [], anonymousSignInCount: 0, isAccountDeleted: false };
 
   await page.route("**/auth/v1/**", async (route) => {
     if (await handlePreflight(route)) {
@@ -203,6 +204,20 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       .map((review) => review.rating);
     const average = isEmpty(ratings) ? null : Math.round((sum(ratings) / ratings.length) * 10) / 10;
     await json(route, [{ average_rating: average, rating_count: ratings.length }]);
+  });
+
+  // Mirrors the database function: deletes the signed-in user with their reviews; anonymous users can't.
+  await page.route("**/rest/v1/rpc/delete_own_account", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    if (userFromRequest(route).isAnonymous) {
+      await json(route, { code: "42501", message: "Only signed-in users can delete their account" }, HTTP_FORBIDDEN);
+      return;
+    }
+    backend.reviews = [];
+    backend.isAccountDeleted = true;
+    await route.fulfill({ status: HTTP_NO_CONTENT, headers: CORS_HEADERS });
   });
 
   await page.route("**/rest/v1/reviews**", async (route) => {

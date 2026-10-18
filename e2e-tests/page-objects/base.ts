@@ -21,6 +21,10 @@ export abstract class BasePage {
     return this.page.getByRole("navigation").getByRole("button", { name: "Sign out" });
   }
 
+  public get footerPrivacyLink(): Locator {
+    return this.page.getByRole("contentinfo").getByRole("link", { name: "Privacy" });
+  }
+
   public navUserName(name: string): Locator {
     return this.page.getByRole("navigation").getByText(name);
   }
@@ -37,8 +41,8 @@ export abstract class BasePage {
     expect.soft(results.violations).toEqual([]);
   };
 
-  public assertMeta = async (): Promise<void> => {
-    await expect(this.page).toHaveTitle(APP_TITLE);
+  public assertMeta = async (title = APP_TITLE): Promise<void> => {
+    await expect(this.page).toHaveTitle(title);
     await expect(this.page.locator("html")).toHaveAttribute("lang", "en");
   };
 }

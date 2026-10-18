@@ -1,4 +1,4 @@
-import { useSearch } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { authRedirectErrorCode } from "../../lib/supabase";
 import { toErrorMessage } from "../../lib/toErrorMessage";
@@ -41,6 +41,13 @@ export const LoginPage = (): React.JSX.Element => {
         Continue with Twitch
       </button>
       {error && <p className="text-sm text-red-600">{error}</p>}
+      <p className="text-sm text-gray-600">
+        See the{" "}
+        <Link to="/privacy" className="underline">
+          privacy page
+        </Link>{" "}
+        for what's stored when you sign in.
+      </p>
     </div>
   );
 };

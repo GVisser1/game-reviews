@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useLocation, useRouter } from "@tanstack/react-router";
+import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { isNil } from "lodash";
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
@@ -42,8 +42,10 @@ export const AccountMenu = (): React.JSX.Element | null => {
   const avatarUrl = getAvatarUrl(user);
   return (
     <div className="flex items-center gap-2">
-      {avatarUrl && <img src={avatarUrl} alt="" className="size-6 rounded-full" />}
-      <span className="text-sm">{getDisplayName(user)}</span>
+      <Link to="/app/account" className="flex items-center gap-2 text-sm hover:underline">
+        {avatarUrl && <img src={avatarUrl} alt="" className="size-6 rounded-full" />}
+        {getDisplayName(user)}
+      </Link>
       <button
         type="button"
         disabled={isSigningOut}

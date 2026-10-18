@@ -1,4 +1,5 @@
 import { HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { SiteFooter } from "./SiteFooter";
 
 export const RootDocument = (): React.JSX.Element => (
   <html lang="en">
@@ -7,6 +8,7 @@ export const RootDocument = (): React.JSX.Element => (
     </head>
     <body>
       <Outlet />
+      <SiteFooter />
       <Scripts />
     </body>
   </html>
