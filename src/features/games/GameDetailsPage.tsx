@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import type { ErrorComponentProps } from "@tanstack/react-router";
-import { isEmpty, isNil } from "lodash";
+import { isEmpty, isNil } from "lodash-es";
 import type { ReactNode } from "react";
 import { toErrorMessage } from "../../lib/toErrorMessage";
 import { BackLink } from "../../shared/BackLink";

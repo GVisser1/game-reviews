@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
 import { LOGIN_PATH } from "./loginRedirect";
 

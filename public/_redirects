@@ -1,0 +1,5 @@
+# Cloudflare Pages: the app's pages render in the browser, so they're all served by the SPA shell.
+# ("/_shell" rather than "/_shell.html", because Pages serves .html files without the extension.)
+/app      /_shell  200
+/app/*    /_shell  200
+/login    /_shell  200

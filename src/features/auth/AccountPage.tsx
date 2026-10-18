@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { useState } from "react";
 import { toErrorMessage } from "../../lib/toErrorMessage";
 import { deleteAccount } from "./deleteAccount";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { isEmpty } from "lodash";
+import { isEmpty } from "lodash-es";
 import { toErrorMessage } from "../../lib/toErrorMessage";
 import { StarRating } from "../../shared/StarRating";
 import { gameReviewsQueryOptions } from "./gameReviewsQuery";

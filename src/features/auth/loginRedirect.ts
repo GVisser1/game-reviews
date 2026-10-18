@@ -1,4 +1,4 @@
-import { isString } from "lodash";
+import { isString } from "lodash-es";
 
 export const LOGIN_PATH = "/login";
 // Only used to resolve the path; any value that resolves to a different origin points outside this app.

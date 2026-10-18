@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { useLayoutEffect, useState } from "react";
 import type { RefObject } from "react";
 

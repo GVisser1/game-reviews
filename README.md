@@ -20,9 +20,24 @@ Routes are files in `src/routes/`; `src/routeTree.gen.ts` is generated from them
 
 ### Hosting
 
-The build writes static files to `dist/client`: `index.html` (the landing page) and `_shell.html`, which renders every
-`/app` page in the browser. The host must serve `_shell.html` for `/app` and `/app/*`, e.g. a Netlify `_redirects` rule
-`/app/* /_shell.html 200`.
+Production runs on Cloudflare Pages at https://game-reviews.pages.dev. Deploys are manual: run the **Deploy to PROD**
+workflow from the Actions tab (main only). It checks, tests and builds with `pnpm build:pages`, then uploads
+`dist/client` with `wrangler`.
+
+The build writes `index.html` (landing) and `privacy.html` as static HTML, plus `_shell.html`, which renders every
+other page in the browser. `public/_redirects` serves the shell for `/app`, `/app/*` and `/login`, and `404.html` (a
+copy of the shell) shows the app's not-found page. Try a build locally with
+`pnpm build:pages && pnpm exec wrangler pages dev dist/client`.
+
+The workflow reads these from the `production` environment in the repository settings:
+
+| Name                            | Type     | Value                                              |
+| ------------------------------- | -------- | -------------------------------------------------- |
+| `VITE_SUPABASE_URL`             | Variable | Supabase project URL                               |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Variable | Supabase publishable key                           |
+| `VITE_TURNSTILE_SITE_KEY`       | Variable | Cloudflare Turnstile site key                      |
+| `CLOUDFLARE_ACCOUNT_ID`         | Secret   | Cloudflare account ID                              |
+| `CLOUDFLARE_API_TOKEN`          | Secret   | Cloudflare API token with "Cloudflare Pages: Edit" |
 
 ## Scripts
 

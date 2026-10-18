@@ -1,5 +1,5 @@
 import type { User } from "@supabase/supabase-js";
-import { compact, find, isString } from "lodash";
+import { compact, find, isString } from "lodash-es";
 
 const FALLBACK_DISPLAY_NAME = "Twitch user";
 const TWITCH_PROVIDER = "twitch";

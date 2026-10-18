@@ -1,6 +1,6 @@
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
 import type { RatingSummary } from "./types";
 

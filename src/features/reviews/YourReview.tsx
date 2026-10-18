@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { useState } from "react";
 import { StarRating } from "../../shared/StarRating";
 import { RemoveReviewButton } from "./RemoveReviewButton";

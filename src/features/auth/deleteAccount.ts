@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
 
 // Deletes the signed-in user together with their profile and reviews (see the delete_own_account migration).

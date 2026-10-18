@@ -1,0 +1,63 @@
+name: Deploy to PROD
+
+# Production deploys are manual: start this from the Actions tab ("Run workflow").
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never run two production deploys at once; a second one waits for the first.
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Only main is ever deployed to production.
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    # Variables and secrets below come from the "production" environment in the repository settings.
+    environment:
+      name: production
+      url: https://game-reviews.pages.dev
+    env:
+      VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm has to be installed before setup-node so setup-node can cache the pnpm store.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Check the production settings are set
+        run: |
+          for name in VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY VITE_TURNSTILE_SITE_KEY; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing variable $name in the production environment"
+              exit 1
+            fi
+          done
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Format, lint and type check
+        run: pnpm check
+
+      - name: Run unit tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build:pages
+
+      - name: Deploy to Cloudflare Pages
+        run: pnpm exec wrangler pages deploy dist/client --project-name=game-reviews --branch=main --commit-hash="$GITHUB_SHA"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

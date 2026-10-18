@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { toErrorMessage } from "../../lib/toErrorMessage";
