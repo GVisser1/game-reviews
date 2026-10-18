@@ -1,6 +1,6 @@
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
 import { GAME_REVIEWS_QUERY_KEY } from "./gameReviewsQuery";
 import { RATING_SUMMARY_QUERY_KEY } from "./ratingSummaryQuery";

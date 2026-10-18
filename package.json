@@ -15,7 +15,8 @@
     "compare-search": "node --env-file=.env.local scripts/compareSearch.ts",
     "test:e2e": "playwright test",
     "test:e2e-ui": "playwright test --ui",
-    "test:e2e-report": "playwright show-report e2e-tests/test-reports"
+    "test:e2e-report": "playwright show-report e2e-tests/test-reports",
+    "build:pages": "pnpm build && cp dist/client/_shell.html dist/client/404.html"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",
@@ -23,7 +24,7 @@
     "@tanstack/react-router": "1.170.44",
     "@tanstack/react-start": "1.169.2",
     "@tanstack/react-virtual": "3.14.19",
-    "lodash": "4.18.1",
+    "lodash-es": "^4.18.1",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
@@ -34,18 +35,17 @@
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
-    "@types/lodash": "4.17.26",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "24.13.3",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react": "6.1.1",
     "jsdom": "^30.1.2",
-    "lodash-es": "^4.18.1",
     "supabase": "2.121.0",
     "tailwindcss": "4.3.3",
     "typescript": "7.0.2",
-    "vite-plus": "1.2.0"
+    "vite-plus": "1.2.0",
+    "wrangler": "^4.151.1"
   },
   "packageManager": "pnpm@12.13.0+sha512.1e55719bf26e809dce5c5084fdebaa64efb3da9038ae5d68a9f8a68311f1a45841c8c3b76a37298c3b66f6bcc80409a9b7f33c78a7168a3e90fb65a5d8235ae4"
 }

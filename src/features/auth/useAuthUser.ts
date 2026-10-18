@@ -24,5 +24,7 @@ const subscribe = (listener: () => void): (() => void) => {
   return () => listeners.delete(listener);
 };
 
-// null until Supabase has restored the session on page load.
-export const useAuthUser = (): User | null => useSyncExternalStore(subscribe, () => currentUser);
+const getServerUser = (): null => null;
+
+// null until Supabase has restored the session on page load, and while prerendering (nobody is signed in there).
+export const useAuthUser = (): User | null => useSyncExternalStore(subscribe, () => currentUser, getServerUser);

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppError, AppLayout } from "../AppLayout";
+import { AppError, AppLayout, AppPending } from "../AppLayout";
 import { sessionQueryOptions } from "../features/auth/sessionQuery";
 
 export const Route = createFileRoute("/app")({
@@ -7,5 +7,6 @@ export const Route = createFileRoute("/app")({
   ssr: false,
   beforeLoad: ({ context }) => context.queryClient.ensureQueryData(sessionQueryOptions),
   component: AppLayout,
+  pendingComponent: AppPending,
   errorComponent: AppError,
 });

@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import type { RatingSummary } from "./types";
 
 const MAX_STARS = 5;

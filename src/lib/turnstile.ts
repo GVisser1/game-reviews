@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { seconds } from "./timeUtil";
 
 const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";

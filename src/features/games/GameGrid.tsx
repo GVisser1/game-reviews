@@ -1,4 +1,4 @@
-import { isEmpty, isNil } from "lodash";
+import { isEmpty, isNil } from "lodash-es";
 import { useRef } from "react";
 import { useGridLayout } from "../../shared/useGridLayout";
 import { useGames } from "./useGames";

@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
 import { toFunctionError } from "../../lib/toFunctionError";
 import type { GameDetails } from "./types";

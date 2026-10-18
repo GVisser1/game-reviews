@@ -61,7 +61,11 @@ export default defineConfig({
       prerender: { enabled: true, autoStaticPathsDiscovery: false, crawlLinks: false },
       // The landing and privacy pages are built to static HTML, so they work without JavaScript and search engines see
       // their content.
-      pages: [{ path: "/" }, { path: "/privacy" }],
+      pages: [
+        { path: "/" },
+        // As privacy.html rather than privacy/index.html, so static hosts serve /privacy without a trailing-slash redirect.
+        { path: "/privacy", prerender: { enabled: true, outputPath: "/privacy.html" } },
+      ],
     }),
     react(),
     tailwindcss(),
@@ -69,10 +73,6 @@ export default defineConfig({
   test: {
     // Playwright's *.spec.ts files in e2e-tests/ run separately with `pnpm test:e2e`.
     include: ["src/**/*.test.{ts,tsx}", "supabase/**/*.test.ts"],
-  },
-  ssr: {
-    // lodash is CommonJS; bundling it lets the prerender step use named imports like `import { isNil } from "lodash"`.
-    noExternal: ["lodash"],
   },
   server: {
     // Supabase only allows the Twitch sign-in to redirect back to this port, so fail instead of picking another.

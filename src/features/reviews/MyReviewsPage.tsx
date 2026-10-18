@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { isEmpty } from "lodash-es";
 import { GameTile } from "../../shared/GameTile";
 import { StarRating } from "../../shared/StarRating";
 import { SignInPrompt } from "../auth/SignInPrompt";

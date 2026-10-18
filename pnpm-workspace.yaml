@@ -3,3 +3,8 @@
 overrides:
   vite@*: npm:@voidzero-dev/vite-plus-core@1.2.0 # Match the installed vite-plus version
   vitest@*: 5.0.4 # Match the version from `vp toolchain vitest`
+
+# Install scripts pnpm should skip. Both get their binaries from platform-specific packages instead.
+allowBuilds:
+  esbuild: false
+  workerd: false

@@ -40,6 +40,14 @@ export const AppLayout = (): React.JSX.Element => (
   </Layout>
 );
 
+// Shown while the app signs the visitor in, which waits for Cloudflare Turnstile and can take a moment.
+export const AppPending = (): React.JSX.Element => (
+  <Layout>
+    <p>Checking your browser…</p>
+    <p className="text-sm text-gray-600">If a checkbox appears in the corner, tick it to continue.</p>
+  </Layout>
+);
+
 export const AppError = ({ error }: ErrorComponentProps): React.JSX.Element => (
   <Layout>
     <p className="text-red-600">Something went wrong: {toErrorMessage(error)}</p>

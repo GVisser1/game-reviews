@@ -1,6 +1,6 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import type { VirtualItem } from "@tanstack/react-virtual";
-import { chunk, isNil, last } from "lodash";
+import { chunk, isNil, last } from "lodash-es";
 import { useEffect } from "react";
 import { GameTile } from "../../shared/GameTile";
 import type { Game } from "./types";

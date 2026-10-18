@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { useCallback } from "react";
 import { supabase } from "../../lib/supabase";
 import { toFunctionError } from "../../lib/toFunctionError";

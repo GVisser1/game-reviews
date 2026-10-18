@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 
 const MAX_STARS = 5;
 const STAR_VALUES = Array.from({ length: MAX_STARS }, (_, index) => index + 1);
