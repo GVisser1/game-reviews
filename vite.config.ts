@@ -59,8 +59,9 @@ export default defineConfig({
       // Pages render in the browser like a regular single-page app, except the ones listed in `pages`.
       spa: { enabled: true, maskPath: "/app" },
       prerender: { enabled: true, autoStaticPathsDiscovery: false, crawlLinks: false },
-      // The landing page is built to static HTML, so search engines see its content.
-      pages: [{ path: "/" }],
+      // The landing and privacy pages are built to static HTML, so they work without JavaScript and search engines see
+      // their content.
+      pages: [{ path: "/" }, { path: "/privacy" }],
     }),
     react(),
     tailwindcss(),

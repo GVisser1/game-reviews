@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppAccountRouteImport } from './routes/app/account'
 import { Route as AppMyReviewsRouteImport } from './routes/app/my-reviews'
 import { Route as AppGamesGameIdRouteImport } from './routes/app/games.$gameId'
 
@@ -31,9 +33,19 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAccountRoute = AppAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMyReviewsRoute = AppMyReviewsRouteImport.update({
@@ -51,6 +63,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
@@ -58,6 +72,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
   '/app': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
@@ -67,6 +83,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
@@ -74,14 +92,30 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/app' | '/login' | '/app/my-reviews' | '/app/' | '/app/games/$gameId'
+    | '/'
+    | '/app'
+    | '/login'
+    | '/privacy'
+    | '/app/account'
+    | '/app/my-reviews'
+    | '/app/'
+    | '/app/games/$gameId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/app/my-reviews' | '/app' | '/app/games/$gameId'
+  to:
+    | '/'
+    | '/login'
+    | '/privacy'
+    | '/app/account'
+    | '/app/my-reviews'
+    | '/app'
+    | '/app/games/$gameId'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/login'
+    | '/privacy'
+    | '/app/account'
     | '/app/my-reviews'
     | '/app/'
     | '/app/games/$gameId'
@@ -91,6 +125,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,11 +151,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/': {
       id: '/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/account': {
+      id: '/app/account'
+      path: '/account'
+      fullPath: '/app/account'
+      preLoaderRoute: typeof AppAccountRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/my-reviews': {
@@ -141,12 +190,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppAccountRoute: typeof AppAccountRoute
   AppMyReviewsRoute: typeof AppMyReviewsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppGamesGameIdRoute: typeof AppGamesGameIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAccountRoute: AppAccountRoute,
   AppMyReviewsRoute: AppMyReviewsRoute,
   AppIndexRoute: AppIndexRoute,
   AppGamesGameIdRoute: AppGamesGameIdRoute,
@@ -158,6 +209,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
