@@ -1,6 +1,6 @@
 import type { Page, Route } from "@playwright/test";
 import { find, isEmpty, sum } from "lodash-es";
-import { OTHER_PLAYER_REVIEWS, TEST_GAMES, TWITCH_DISPLAY_NAME } from "./testData";
+import { OTHER_PLAYER_REVIEWS, TEST_GAMES, TURNSTILE_TEST_TOKEN, TWITCH_DISPLAY_NAME } from "./testData";
 
 // Stands in for Supabase (auth, the reviews table and the IGDB edge functions) inside the browser, so tests need no
 // secrets, create no real users and don't depend on live IGDB results. Saved reviews live for one test.
@@ -112,10 +112,31 @@ export type FakeBackend = {
   reviews: StoredReview[];
   anonymousSignInCount: number;
   isAccountDeleted: boolean;
+  // Whether the app loaded Turnstile (only when VITE_TURNSTILE_SITE_KEY is set), and the token it signed in with.
+  isTurnstileLoaded: boolean;
+  anonymousSignInCaptchaToken: string | undefined;
 };
 
 export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
-  const backend: FakeBackend = { reviews: [], anonymousSignInCount: 0, isAccountDeleted: false };
+  const backend: FakeBackend = {
+    reviews: [],
+    anonymousSignInCount: 0,
+    isAccountDeleted: false,
+    isTurnstileLoaded: false,
+    anonymousSignInCaptchaToken: undefined,
+  };
+
+  // Stands in for Cloudflare's Turnstile script: passes the check straight away with a fixed token.
+  await page.route("https://challenges.cloudflare.com/turnstile/**", async (route) => {
+    backend.isTurnstileLoaded = true;
+    await route.fulfill({
+      contentType: "text/javascript",
+      body: `window.turnstile = {
+        render: (container, options) => { setTimeout(() => options.callback(${JSON.stringify(TURNSTILE_TEST_TOKEN)})); return "e2e-widget"; },
+        remove: () => {},
+      };`,
+    });
+  });
 
   await page.route("**/auth/v1/**", async (route) => {
     if (await handlePreflight(route)) {
@@ -125,6 +146,8 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
 
     if (url.pathname.endsWith("/signup")) {
       backend.anonymousSignInCount++;
+      const body: { gotrue_meta_security?: { captcha_token?: string } } = route.request().postDataJSON() ?? {};
+      backend.anonymousSignInCaptchaToken = body.gotrue_meta_security?.captcha_token;
       await json(route, toSession(ANONYMOUS_USER));
     } else if (url.pathname.endsWith("/user")) {
       await json(route, toSupabaseUser(userFromRequest(route)));

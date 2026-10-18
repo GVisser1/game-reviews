@@ -69,3 +69,5 @@ export const OTHER_PLAYER_REVIEWS = [
     created_at: "2026-10-01T12:00:00Z",
   },
 ];
+
+export const TURNSTILE_TEST_TOKEN = "e2e-turnstile-token";
