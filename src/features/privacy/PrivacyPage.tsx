@@ -54,6 +54,10 @@ export const PrivacyPage = (): React.JSX.Element => (
           <strong>Twitch</strong> handles signing in. Game information comes from <strong>IGDB</strong>, which Twitch
           owns. Searches go to IGDB through this app&apos;s server, without any personal details.
         </li>
+        <li>
+          <strong>Cloudflare Turnstile</strong> checks that you&apos;re not a bot when you first open the app. It looks
+          at technical details of your browser and connection, such as your IP address, but not your account.
+        </li>
       </ul>
     </Section>
 

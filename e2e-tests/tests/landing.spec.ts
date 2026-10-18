@@ -1,4 +1,5 @@
 import { expect, test } from "../fixtures";
+import { TURNSTILE_TEST_TOKEN } from "../mocks/testData";
 
 test("renders the landing page", async ({ landingPage }) => {
   await landingPage.goto();
@@ -19,4 +20,17 @@ test("doesn't sign visitors in until they open the app", async ({ backend, landi
 
   await expect(gamesPage.gameLink("Portal 2")).toBeVisible();
   expect(backend.anonymousSignInCount).toBe(1);
+});
+
+test("checks visitors with Turnstile before signing them in anonymously", async ({
+  backend,
+  landingPage,
+  gamesPage,
+}) => {
+  await landingPage.goto();
+  await landingPage.browseGamesLink.click();
+  await expect(gamesPage.gameLink("Portal 2")).toBeVisible();
+
+  test.skip(!backend.isTurnstileLoaded, "VITE_TURNSTILE_SITE_KEY isn't set for this run");
+  expect(backend.anonymousSignInCaptchaToken).toBe(TURNSTILE_TEST_TOKEN);
 });
