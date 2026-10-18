@@ -34,3 +34,6 @@ supabase/.branches
 
 # Local search comparison snapshots and session
 scripts/search-snapshots/
+
+# Local state from `wrangler pages dev`
+.wrangler/
