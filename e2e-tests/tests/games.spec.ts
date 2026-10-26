@@ -48,3 +48,35 @@ test("shows community ratings in the list", async ({ gamesPage }) => {
   await expect(gamesPage.gameTile("Portal 2")).toContainText("★ 5.0 (1)");
   await expect(gamesPage.gameTile("Grand Theft Auto V")).not.toContainText("Community rating");
 });
+
+test("sorts the games and keeps the sort and search in the URL", async ({ page, gamesPage }) => {
+  await gamesPage.goto();
+  await expect(gamesPage.sortSelect).toHaveValue("popular");
+
+  await gamesPage.sortSelect.selectOption({ label: "Newest" });
+
+  await expect(page).toHaveURL("/app?sort=newest");
+  await expect(gamesPage.gameNames).toHaveText([
+    "Elden Ring",
+    "The Witcher 3: Wild Hunt",
+    "Grand Theft Auto V",
+    "Portal 2",
+  ]);
+
+  await gamesPage.searchInput.fill("the");
+  await expect(page).toHaveURL("/app?sort=newest&q=the");
+  await gamesPage.sortSelect.selectOption({ label: "Name A–Z" });
+  await expect(page).toHaveURL("/app?sort=name-asc&q=the");
+  await expect(gamesPage.gameNames).toHaveText(["Grand Theft Auto V", "The Witcher 3: Wild Hunt"]);
+  await gamesPage.sortSelect.selectOption({ label: "Name Z–A" });
+  await expect(page).toHaveURL("/app?sort=name-desc&q=the");
+  await expect(gamesPage.gameNames).toHaveText(["The Witcher 3: Wild Hunt", "Grand Theft Auto V"]);
+  await gamesPage.sortSelect.selectOption({ label: "Name A–Z" });
+
+  await page.reload();
+  await expect(gamesPage.sortSelect).toHaveValue("name-asc");
+  await expect(gamesPage.searchInput).toHaveValue("the");
+
+  await gamesPage.sortSelect.selectOption({ label: "Most popular" });
+  await expect(page).toHaveURL("/app?q=the");
+});

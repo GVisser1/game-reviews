@@ -15,7 +15,8 @@ const OVERSCAN_ROW_COUNT = 3;
 const measuredRowsByList = new Map<string, VirtualItem[]>();
 
 type VirtualGameRowsProps = {
-  search: string;
+  // Identifies the list (search and sort), so each one remembers its own row heights.
+  listKey: string;
   games: Game[];
   ratingSummaries: Map<number, RatingSummary>;
   columnCount: number;
@@ -25,7 +26,7 @@ type VirtualGameRowsProps = {
 };
 
 export const VirtualGameRows = ({
-  search,
+  listKey: baseListKey,
   games,
   ratingSummaries,
   columnCount,
@@ -33,7 +34,7 @@ export const VirtualGameRows = ({
   hasMore,
   loadMore,
 }: VirtualGameRowsProps): React.JSX.Element => {
-  const listKey = `${search}|${columnCount}`;
+  const listKey = `${baseListKey}|${columnCount}`;
   const rows = chunk(games, columnCount);
 
   // TanStack Virtual returns a new virtualizer state on every scroll, so the React Compiler

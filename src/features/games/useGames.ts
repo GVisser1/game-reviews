@@ -3,6 +3,7 @@ import { isNil } from "lodash-es";
 import { useCallback } from "react";
 import { supabase } from "../../lib/supabase";
 import { toFunctionError } from "../../lib/toFunctionError";
+import type { GamesSort } from "./gamesSort";
 import type { Game } from "./types";
 
 const FIRST_OFFSET = 0;
@@ -22,9 +23,9 @@ type GamesState = {
   loadMore: () => void;
 };
 
-const fetchGamesPage = async (search: string, offset: number): Promise<GamesPage> => {
+const fetchGamesPage = async (search: string, sort: GamesSort, offset: number): Promise<GamesPage> => {
   const { data, error } = await supabase.functions.invoke<GamesPage>("igdb-games", {
-    body: { search, offset },
+    body: { search, sort, offset },
   });
   if (!isNil(error)) {
     throw await toFunctionError(error);
@@ -32,10 +33,10 @@ const fetchGamesPage = async (search: string, offset: number): Promise<GamesPage
   return data ?? { games: [], nextOffset: null };
 };
 
-export const useGames = (search: string): GamesState => {
+export const useGames = (search: string, sort: GamesSort): GamesState => {
   const { data, isPending, isFetchingNextPage, hasNextPage, fetchNextPage, error } = useInfiniteQuery({
-    queryKey: ["games", search],
-    queryFn: ({ pageParam }) => fetchGamesPage(search, pageParam),
+    queryKey: ["games", search, sort],
+    queryFn: ({ pageParam }) => fetchGamesPage(search, sort, pageParam),
     initialPageParam: FIRST_OFFSET,
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
   });

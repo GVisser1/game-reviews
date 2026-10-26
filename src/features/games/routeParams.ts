@@ -1,5 +1,9 @@
+import { DEFAULT_GAMES_SORT, type GamesSort, isGamesSort } from "./gamesSort";
+
 export type GamesSearch = {
   q?: string;
+  // Left out of the URL for the default, most popular first.
+  sort?: GamesSort;
 };
 
 export const parseGameId = (gameId: string): number => {
@@ -12,9 +16,9 @@ export const parseGameId = (gameId: string): number => {
 
 // TanStack Router parses search values as JSON, so a hand-typed "?q=1942" arrives as a number.
 export const validateGamesSearch = (search: Record<string, unknown>): GamesSearch => {
-  const { q } = search;
-  if (typeof q === "number") {
-    return { q: String(q) };
-  }
-  return { q: typeof q === "string" && q !== "" ? q : undefined };
+  const { q, sort } = search;
+  return {
+    q: typeof q === "number" ? String(q) : typeof q === "string" && q !== "" ? q : undefined,
+    sort: isGamesSort(sort) && sort !== DEFAULT_GAMES_SORT ? sort : undefined,
+  };
 };
