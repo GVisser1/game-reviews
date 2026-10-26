@@ -21,6 +21,10 @@ export abstract class BasePage {
     return this.page.getByRole("navigation").getByRole("button", { name: "Sign out" });
   }
 
+  public get navTopRatedLink(): Locator {
+    return this.page.getByRole("navigation").getByRole("link", { name: "Top rated" });
+  }
+
   public get footerPrivacyLink(): Locator {
     return this.page.getByRole("contentinfo").getByRole("link", { name: "Privacy" });
   }

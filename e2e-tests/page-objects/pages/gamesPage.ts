@@ -18,4 +18,9 @@ export class GamesPage extends BasePage {
   public gameLink(name: string): Locator {
     return this.page.getByRole("link", { name, exact: true });
   }
+
+  // A game's tile in the list, found by its name.
+  public gameTile(name: string): Locator {
+    return this.page.getByRole("listitem").filter({ has: this.gameLink(name) });
+  }
 }

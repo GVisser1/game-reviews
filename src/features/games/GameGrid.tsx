@@ -1,6 +1,7 @@
 import { isEmpty, isNil } from "lodash-es";
 import { useRef } from "react";
 import { useGridLayout } from "../../shared/useGridLayout";
+import { useRatingSummaries } from "../reviews/useRatingSummaries";
 import { useGames } from "./useGames";
 import { VirtualGameRows } from "./VirtualGameRows";
 
@@ -11,7 +12,8 @@ type GameGridProps = {
 };
 
 export const GameGrid = ({ search }: GameGridProps): React.JSX.Element => {
-  const { games, isLoading, hasMore, error, loadMore } = useGames(search);
+  const { games, gameIdsByPage, isLoading, hasMore, error, loadMore } = useGames(search);
+  const ratingSummaries = useRatingSummaries(gameIdsByPage);
   const gridRef = useRef<HTMLDivElement>(null);
   const layout = useGridLayout(gridRef, MIN_TILE_WIDTH);
 
@@ -25,6 +27,7 @@ export const GameGrid = ({ search }: GameGridProps): React.JSX.Element => {
             key={layout.columnCount}
             search={search}
             games={games}
+            ratingSummaries={ratingSummaries}
             columnCount={layout.columnCount}
             offsetTop={layout.offsetTop}
             hasMore={hasMore}

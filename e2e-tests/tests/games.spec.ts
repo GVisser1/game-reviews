@@ -39,3 +39,12 @@ test("opens a game and goes back to the same search", async ({ page, gamesPage, 
   await expect(page).toHaveURL("/app?q=portal");
   await expect(gamesPage.searchInput).toHaveValue("portal");
 });
+
+test("shows community ratings in the list", async ({ gamesPage }) => {
+  await gamesPage.goto();
+
+  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("★ 4.5 (2)");
+  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("Community rating: 4.5/5 from 2 ratings");
+  await expect(gamesPage.gameTile("Portal 2")).toContainText("★ 5.0 (1)");
+  await expect(gamesPage.gameTile("Grand Theft Auto V")).not.toContainText("Community rating");
+});

@@ -14,6 +14,8 @@ type GamesPage = {
 
 type GamesState = {
   games: Game[];
+  // The ids of each loaded page, so data fetched per page (like rating summaries) doesn't refetch earlier pages.
+  gameIdsByPage: number[][];
   isLoading: boolean;
   hasMore: boolean;
   error: string | null;
@@ -46,6 +48,7 @@ export const useGames = (search: string): GamesState => {
 
   return {
     games: data?.pages.flatMap((page) => page.games) ?? [],
+    gameIdsByPage: data?.pages.map((page) => page.games.map((game) => game.id)) ?? [],
     isLoading: isPending || isFetchingNextPage,
     hasMore: hasNextPage,
     error: error?.message ?? null,
