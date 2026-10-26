@@ -6,6 +6,7 @@ import {
   TEST_GAMES,
   TURNSTILE_TEST_TOKEN,
   TWITCH_DISPLAY_NAME,
+  TWITCH_USERNAME,
 } from "./testData";
 
 // Stands in for Supabase (auth, the reviews table and the IGDB edge functions) inside the browser, so tests need no
@@ -228,6 +229,7 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       : backend.reviews
           .filter((review) => review.game_id === gameId && review.body !== null)
           .map((review) => ({
+            username: TWITCH_USERNAME,
             display_name: TWITCH_DISPLAY_NAME,
             avatar_url: null,
             rating: review.rating,
@@ -239,6 +241,53 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       ({ game_id: _gameId, ...review }) => ({ ...review, is_own: false }),
     );
     await json(route, [...ownReviews, ...otherReviews]);
+  });
+
+  // The signed-in player's username; null for anonymous visitors, like the database function.
+  await page.route("**/rest/v1/rpc/get_own_username", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    await json(route, userFromRequest(route).isAnonymous ? null : TWITCH_USERNAME);
+  });
+
+  // The test user's profile and the other player's; no rows for anyone else.
+  await page.route("**/rest/v1/rpc/get_profile", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    const { target_username: username }: { target_username?: string } = route.request().postDataJSON() ?? {};
+    const isSignedInUser = !userFromRequest(route).isAnonymous;
+    const profiles = [
+      { username: TWITCH_USERNAME, display_name: TWITCH_DISPLAY_NAME, avatar_url: null, is_own: isSignedInUser },
+      ...OTHER_PLAYER_REVIEWS.map((review) => ({
+        username: review.username,
+        display_name: review.display_name,
+        avatar_url: review.avatar_url,
+        is_own: false,
+      })),
+    ];
+    await json(route, profiles.filter((profile) => profile.username === username?.toLowerCase()).slice(0, 1));
+  });
+
+  // Everything one player rated, newest first: the test user's saved reviews or the other player's.
+  await page.route("**/rest/v1/rpc/get_profile_reviews", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    const { target_username: username }: { target_username?: string } = route.request().postDataJSON() ?? {};
+    const reviews =
+      username === TWITCH_USERNAME
+        ? backend.reviews.map((review) => ({ ...review, created_at: new Date().toISOString() }))
+        : OTHER_PLAYER_REVIEWS.filter((review) => review.username === username).map((review) => ({
+            game_id: review.game_id,
+            game_name: find(TEST_GAMES, { id: review.game_id })?.name ?? `Game ${review.game_id}`,
+            cover_url: null,
+            rating: review.rating,
+            body: review.body,
+            created_at: review.created_at,
+          }));
+    await json(route, reviews);
   });
 
   // A game's average rating and number of ratings: other players' ratings plus the signed-in user's own.

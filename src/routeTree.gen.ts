@@ -18,6 +18,7 @@ import { Route as AppAccountRouteImport } from './routes/app/account'
 import { Route as AppMyReviewsRouteImport } from './routes/app/my-reviews'
 import { Route as AppTopRatedRouteImport } from './routes/app/top-rated'
 import { Route as AppGamesGameIdRouteImport } from './routes/app/games.$gameId'
+import { Route as AppUsersUsernameRouteImport } from './routes/app/users.$username'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,11 @@ const AppGamesGameIdRoute = AppGamesGameIdRouteImport.update({
   path: '/games/$gameId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppUsersUsernameRoute = AppUsersUsernameRouteImport.update({
+  id: '/users/$username',
+  path: '/users/$username',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/app/top-rated': typeof AppTopRatedRoute
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
+  '/app/users/$username': typeof AppUsersUsernameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/app/top-rated': typeof AppTopRatedRoute
   '/app': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
+  '/app/users/$username': typeof AppUsersUsernameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/app/top-rated': typeof AppTopRatedRoute
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
+  '/app/users/$username': typeof AppUsersUsernameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/app/top-rated'
     | '/app/'
     | '/app/games/$gameId'
+    | '/app/users/$username'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/app/top-rated'
     | '/app'
     | '/app/games/$gameId'
+    | '/app/users/$username'
   id:
     | '__root__'
     | '/'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/app/top-rated'
     | '/app/'
     | '/app/games/$gameId'
+    | '/app/users/$username'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -205,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGamesGameIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/users/$username': {
+      id: '/app/users/$username'
+      path: '/users/$username'
+      fullPath: '/app/users/$username'
+      preLoaderRoute: typeof AppUsersUsernameRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -214,6 +233,7 @@ interface AppRouteChildren {
   AppTopRatedRoute: typeof AppTopRatedRoute
   AppIndexRoute: typeof AppIndexRoute
   AppGamesGameIdRoute: typeof AppGamesGameIdRoute
+  AppUsersUsernameRoute: typeof AppUsersUsernameRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -222,6 +242,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppTopRatedRoute: AppTopRatedRoute,
   AppIndexRoute: AppIndexRoute,
   AppGamesGameIdRoute: AppGamesGameIdRoute,
+  AppUsersUsernameRoute: AppUsersUsernameRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

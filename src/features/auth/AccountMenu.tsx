@@ -1,9 +1,10 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { isNil } from "lodash-es";
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { toErrorMessage } from "../../lib/toErrorMessage";
+import { ownUsernameQueryOptions } from "../profiles/profileQuery";
 import { LOGIN_PATH } from "./loginRedirect";
 import { SignInLink } from "./SignInLink";
 import { useAuthUser } from "./useAuthUser";
@@ -16,6 +17,8 @@ export const AccountMenu = (): React.JSX.Element | null => {
   const queryClient = useQueryClient();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isSignedIn = !isNil(user) && !user.is_anonymous;
+  const { data: username } = useQuery({ ...ownUsernameQueryOptions(user?.id ?? ""), enabled: isSignedIn });
 
   const signOut = async (): Promise<void> => {
     setIsSigningOut(true);
@@ -42,7 +45,11 @@ export const AccountMenu = (): React.JSX.Element | null => {
   const avatarUrl = getAvatarUrl(user);
   return (
     <div className="flex items-center gap-2">
-      <Link to="/app/account" className="flex items-center gap-2 text-sm hover:underline">
+      {/* Your profile, or the account page until your username has loaded (or for a profile that's still being set up). */}
+      <Link
+        {...(isNil(username) ? { to: "/app/account" } : { to: "/app/users/$username", params: { username } })}
+        className="flex items-center gap-2 text-sm hover:underline"
+      >
         {avatarUrl && <img src={avatarUrl} alt="" className="size-6 rounded-full" />}
         {getDisplayName(user)}
       </Link>

@@ -8,6 +8,7 @@ export type Review = {
 
 // A review as shown publicly on a game's page.
 export type GameReview = {
+  username: string;
   displayName: string;
   avatarUrl: string | null;
   rating: number;

@@ -7,6 +7,7 @@ import type { GameReview } from "./types";
 export const GAME_REVIEWS_QUERY_KEY = ["game-reviews"];
 
 type GameReviewRow = {
+  username: string;
   display_name: string;
   avatar_url: string | null;
   rating: number;
@@ -16,6 +17,7 @@ type GameReviewRow = {
 };
 
 const toGameReview = (row: GameReviewRow): GameReview => ({
+  username: row.username,
   displayName: row.display_name,
   avatarUrl: row.avatar_url,
   rating: row.rating,

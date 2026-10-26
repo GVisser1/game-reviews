@@ -26,9 +26,6 @@ const Layout = ({ children }: LayoutProps): React.JSX.Element => (
       <Link to="/app/top-rated" className={NAV_LINK_CLASS_NAME} activeProps={ACTIVE_NAV_LINK_PROPS}>
         Top rated
       </Link>
-      <Link to="/app/my-reviews" className={NAV_LINK_CLASS_NAME} activeProps={ACTIVE_NAV_LINK_PROPS}>
-        My reviews
-      </Link>
       <div className="ml-auto">
         <AccountMenu />
       </div>

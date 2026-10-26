@@ -57,11 +57,13 @@ export const TEST_GAMES: TestGameDetails[] = [
 ];
 
 export const TWITCH_DISPLAY_NAME = "E2E Tester";
+export const TWITCH_USERNAME = "e2e-tester";
 
 // Written reviews from other players, as get_game_reviews returns them.
 export const OTHER_PLAYER_REVIEWS = [
   {
     game_id: 72,
+    username: "other-player",
     display_name: "Other Player",
     avatar_url: null,
     rating: 5,
