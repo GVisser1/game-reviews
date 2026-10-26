@@ -16,7 +16,7 @@ export const Route = createFileRoute("/app/my-reviews")({
       throw redirect({ to: LOGIN_PATH, search: { redirect: MY_REVIEWS_PATH }, replace: true });
     }
 
-    const username = await context.queryClient.ensureQueryData(ownUsernameQueryOptions(user.id));
+    const username = await context.queryClient.query({ ...ownUsernameQueryOptions(user.id), staleTime: "static" });
     throw isNil(username)
       ? redirect({ to: "/app/account", replace: true })
       : redirect({ to: "/app/users/$username", params: { username }, replace: true });
