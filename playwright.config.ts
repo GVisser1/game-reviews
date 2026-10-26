@@ -15,9 +15,7 @@ export default defineConfig({
     { name: "firefox", use: { ...devices["Desktop Firefox"] } },
     { name: "webkit", use: { ...devices["Desktop Safari"] } },
   ],
-  reporter: isCI
-    ? [["html", { outputFolder: "e2e-tests/test-reports", open: "never" }], ["github"], ["list"]]
-    : [["html", { outputFolder: "e2e-tests/test-reports" }]],
+  reporter: isCI ? [["blob"], ["github"], ["list"]] : [["html", { outputFolder: "e2e-tests/test-reports" }]],
   retries: isCI ? 1 : 0,
   testDir: "e2e-tests/tests",
   timeout: seconds(15),

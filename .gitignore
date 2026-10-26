@@ -37,3 +37,7 @@ scripts/search-snapshots/
 
 # Local state from `wrangler pages dev`
 .wrangler/
+
+# Playwright blob reports from CI-style runs (merged into e2e-tests/test-reports)
+blob-report
+all-blob-reports
