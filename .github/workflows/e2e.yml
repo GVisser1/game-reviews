@@ -11,12 +11,18 @@ jobs:
   playwright:
     timeout-minutes: 15
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
     env:
       # The tests fake Supabase in the browser, so the build only needs placeholder values, not real keys.
       VITE_SUPABASE_URL: https://e2e.supabase.invalid
       VITE_SUPABASE_PUBLISHABLE_KEY: e2e-placeholder-key
       # Makes the app run its Turnstile check; the tests replace Cloudflare's script, so any value works.
       VITE_TURNSTILE_SITE_KEY: e2e-placeholder-site-key
+      # A file name per browser, so merging the reports below doesn't overwrite one with another.
+      PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ matrix.project }}.zip
     steps:
       - uses: actions/checkout@v7
       # pnpm has to be installed before setup-node so setup-node can cache the pnpm store.
@@ -29,17 +35,53 @@ jobs:
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
 
-      - name: Install Playwright browsers
+      - name: Install Playwright browser
         # Normally well under a minute; fail fast instead of hanging if a download stalls.
         timeout-minutes: 5
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install --with-deps ${{ matrix.project }}
 
       - name: Run E2E tests
-        run: pnpm test:e2e
+        run: pnpm test:e2e --project=${{ matrix.project }}
+
+      - name: Upload blob report
+        uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-report-${{ matrix.project }}--attempt-${{ github.run_attempt }}
+          path: blob-report
+          retention-days: 1
+
+  # Combines the three browsers' results into one HTML report.
+  merge-reports:
+    if: ${{ !cancelled() }}
+    needs: playwright
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Download blob reports
+        uses: actions/download-artifact@v8
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*--attempt-${{ github.run_attempt }}
+          merge-multiple: true
+
+      - name: Merge into an HTML report
+        run: pnpm exec playwright merge-reports --reporter html ./all-blob-reports
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: e2e-tests/test-reports
+          PLAYWRIGHT_HTML_OPEN: never
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v7
-        if: ${{ !cancelled() }}
         with:
           name: html-report--attempt-${{ github.run_attempt }}
           path: e2e-tests/test-reports
