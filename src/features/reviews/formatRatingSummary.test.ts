@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { formatRatingSummary } from "./formatRatingSummary";
+import { formatRatingSummary, formatShortRatingSummary } from "./formatRatingSummary";
 
 describe("formatRatingSummary", () => {
   it("shows the average with one decimal and the number of ratings", () => {
@@ -16,5 +16,19 @@ describe("formatRatingSummary", () => {
 
   it("says when a game has no ratings", () => {
     expect(formatRatingSummary({ averageRating: null, ratingCount: 0 })).toBe("No ratings yet");
+  });
+});
+
+describe("formatShortRatingSummary", () => {
+  it("shows a star, the average and the number of ratings", () => {
+    expect(formatShortRatingSummary({ averageRating: 4.3, ratingCount: 12 })).toBe("★ 4.3 (12)");
+  });
+
+  it("keeps the decimal for whole averages", () => {
+    expect(formatShortRatingSummary({ averageRating: 5, ratingCount: 1 })).toBe("★ 5.0 (1)");
+  });
+
+  it("returns nothing for a game without ratings", () => {
+    expect(formatShortRatingSummary({ averageRating: null, ratingCount: 0 })).toBeNull();
   });
 });

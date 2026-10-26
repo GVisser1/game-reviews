@@ -1,6 +1,12 @@
 import type { Page, Route } from "@playwright/test";
-import { find, isEmpty, sum } from "lodash-es";
-import { OTHER_PLAYER_REVIEWS, TEST_GAMES, TURNSTILE_TEST_TOKEN, TWITCH_DISPLAY_NAME } from "./testData";
+import { find, groupBy, isEmpty, orderBy, sum } from "lodash-es";
+import {
+  OTHER_PLAYER_RATINGS,
+  OTHER_PLAYER_REVIEWS,
+  TEST_GAMES,
+  TURNSTILE_TEST_TOKEN,
+  TWITCH_DISPLAY_NAME,
+} from "./testData";
 
 // Stands in for Supabase (auth, the reviews table and the IGDB edge functions) inside the browser, so tests need no
 // secrets, create no real users and don't depend on live IGDB results. Saved reviews live for one test.
@@ -100,6 +106,16 @@ const json = (route: Route, body: unknown, status = HTTP_OK): Promise<void> =>
     body: JSON.stringify(body),
   });
 
+type RatingSummaryRow = {
+  average_rating: number | null;
+  rating_count: number;
+};
+
+const toRatingSummaryRow = (ratings: number[]): RatingSummaryRow => ({
+  average_rating: isEmpty(ratings) ? null : Math.round((sum(ratings) / ratings.length) * 10) / 10,
+  rating_count: ratings.length,
+});
+
 const handlePreflight = async (route: Route): Promise<boolean> => {
   if (route.request().method() !== "OPTIONS") {
     return false;
@@ -124,6 +140,15 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
     isAccountDeleted: false,
     isTurnstileLoaded: false,
     anonymousSignInCaptchaToken: undefined,
+  };
+
+  // Every player's star ratings per game id: other players' plus the ones saved during this test.
+  const ratingsByGame = (): Record<string, number[]> => {
+    const ratings = [...OTHER_PLAYER_REVIEWS, ...OTHER_PLAYER_RATINGS, ...backend.reviews];
+    const grouped = groupBy(ratings, (review) => review.game_id);
+    return Object.fromEntries(
+      Object.entries(grouped).map(([gameId, reviews]) => [gameId, reviews.map((r) => r.rating)]),
+    );
   };
 
   // Stands in for Cloudflare's Turnstile script: passes the check straight away with a fixed token.
@@ -222,11 +247,42 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       return;
     }
     const { target_game_id: gameId }: { target_game_id?: number } = route.request().postDataJSON() ?? {};
-    const ratings = [...OTHER_PLAYER_REVIEWS, ...backend.reviews]
-      .filter((review) => review.game_id === gameId)
-      .map((review) => review.rating);
-    const average = isEmpty(ratings) ? null : Math.round((sum(ratings) / ratings.length) * 10) / 10;
-    await json(route, [{ average_rating: average, rating_count: ratings.length }]);
+    await json(route, [toRatingSummaryRow(ratingsByGame()[String(gameId)] ?? [])]);
+  });
+
+  // Summaries for a list of games; games nobody rated are left out, like the database function.
+  await page.route("**/rest/v1/rpc/get_rating_summaries", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    const { target_game_ids: gameIds = [] }: { target_game_ids?: number[] } = route.request().postDataJSON() ?? {};
+    const ratings = ratingsByGame();
+    await json(
+      route,
+      gameIds
+        .filter((gameId) => !isEmpty(ratings[String(gameId)]))
+        .map((gameId) => ({ game_id: gameId, ...toRatingSummaryRow(ratings[String(gameId)] ?? []) })),
+    );
+  });
+
+  // Best average first, ties to the game with more ratings, like the database function.
+  await page.route("**/rest/v1/rpc/get_top_rated_games", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    const { min_ratings: minRatings = 1 }: { min_ratings?: number } = route.request().postDataJSON() ?? {};
+    const games = Object.entries(ratingsByGame())
+      .filter(([, ratings]) => ratings.length >= minRatings)
+      .map(([gameId, ratings]) => {
+        const game = find(TEST_GAMES, { id: Number(gameId) });
+        return {
+          game_id: Number(gameId),
+          game_name: game?.name ?? `Game ${gameId}`,
+          cover_url: game?.coverUrl ?? null,
+          ...toRatingSummaryRow(ratings),
+        };
+      });
+    await json(route, orderBy(games, ["average_rating", "rating_count"], ["desc", "desc"]));
   });
 
   // Mirrors the database function: deletes the signed-in user with their reviews; anonymous users can't.

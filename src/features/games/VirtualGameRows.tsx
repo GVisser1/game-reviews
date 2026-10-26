@@ -3,6 +3,8 @@ import type { VirtualItem } from "@tanstack/react-virtual";
 import { chunk, isNil, last } from "lodash-es";
 import { useEffect } from "react";
 import { GameTile } from "../../shared/GameTile";
+import { ShortRatingSummary } from "../reviews/ShortRatingSummary";
+import type { RatingSummary } from "../reviews/types";
 import type { Game } from "./types";
 
 const ESTIMATED_ROW_HEIGHT = 320;
@@ -15,6 +17,7 @@ const measuredRowsByList = new Map<string, VirtualItem[]>();
 type VirtualGameRowsProps = {
   search: string;
   games: Game[];
+  ratingSummaries: Map<number, RatingSummary>;
   columnCount: number;
   offsetTop: number;
   hasMore: boolean;
@@ -24,6 +27,7 @@ type VirtualGameRowsProps = {
 export const VirtualGameRows = ({
   search,
   games,
+  ratingSummaries,
   columnCount,
   offsetTop,
   hasMore,
@@ -74,7 +78,11 @@ export const VirtualGameRows = ({
         >
           {rows[virtualRow.index].map((game) => (
             <GameTile key={game.id} gameId={game.id} name={game.name} coverUrl={game.coverUrl}>
-              <span className="text-xs text-gray-500">{game.releaseYear}</span>
+              {/* One line for both, so a rating arriving later doesn't change the row's height. */}
+              <span className="flex gap-2 text-xs text-gray-500">
+                {game.releaseYear}
+                <ShortRatingSummary summary={ratingSummaries.get(game.id)} />
+              </span>
             </GameTile>
           ))}
         </ul>
