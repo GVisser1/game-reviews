@@ -32,5 +32,5 @@ export default defineConfig({
         gracefulShutdown: { signal: "SIGTERM", timeout: seconds(10) },
       }
     : undefined,
-  workers: isCI ? 2 : undefined,
+  workers: isCI ? 3 : undefined,
 });
