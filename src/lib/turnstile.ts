@@ -2,14 +2,18 @@ import { isNil } from "lodash-es";
 import { seconds } from "./timeUtil";
 
 const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+// How long the invisible check may take. Once Cloudflare shows the checkbox, the app waits for the visitor instead.
 const TOKEN_TIMEOUT_MS = seconds(30);
 const BLOCKED_MESSAGE =
   "Couldn't confirm you're not a bot. Make sure challenges.cloudflare.com isn't blocked, then reload the page.";
+const FAILED_MESSAGE = "Couldn't confirm you're not a bot. Reload the page to try again.";
 
 type TurnstileRenderOptions = {
   sitekey: string;
   appearance: "always" | "execute" | "interaction-only";
   callback: (token: string) => void;
+  // Called when Cloudflare needs the visitor to click the checkbox.
+  "before-interactive-callback": () => void;
   "error-callback": () => void;
   "expired-callback": () => void;
 };
@@ -58,10 +62,11 @@ export const getTurnstileToken = async (siteKey: string): Promise<string> => {
   let widgetId: string | undefined;
   try {
     return await new Promise<string>((resolve, reject) => {
+      // Without a token or a checkbox in time, the script most likely can't reach Cloudflare.
       const timeout = setTimeout(() => reject(new Error(BLOCKED_MESSAGE)), TOKEN_TIMEOUT_MS);
       const fail = (): void => {
         clearTimeout(timeout);
-        reject(new Error(BLOCKED_MESSAGE));
+        reject(new Error(FAILED_MESSAGE));
       };
       widgetId = turnstile.render(container, {
         sitekey: siteKey,
@@ -70,6 +75,8 @@ export const getTurnstileToken = async (siteKey: string): Promise<string> => {
           clearTimeout(timeout);
           resolve(token);
         },
+        // A person may take a while to notice and tick the checkbox, so stop counting down.
+        "before-interactive-callback": () => clearTimeout(timeout),
         "error-callback": fail,
         "expired-callback": fail,
       });

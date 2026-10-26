@@ -56,23 +56,37 @@ describe("getTurnstileToken", () => {
     expect(renderedOptions).toMatchObject({ sitekey: SITE_KEY, appearance: "interaction-only" });
   });
 
-  it("rejects with an explanation when the check fails", async () => {
+  it("asks to try again when the check fails", async () => {
     installFakeTurnstile((options) => options["error-callback"]());
 
     const token = getTurnstileToken(SITE_KEY);
-    const assertion = expect(token).rejects.toThrow("challenges.cloudflare.com");
+    const assertion = expect(token).rejects.toThrow("Reload the page to try again.");
     await vi.runAllTimersAsync();
 
     await assertion;
   });
 
-  it("gives up when no token arrives in time", async () => {
+  it("points at a blocked Cloudflare when nothing happens in time", async () => {
     installFakeTurnstile(() => {});
 
     const token = getTurnstileToken(SITE_KEY);
-    const assertion = expect(token).rejects.toThrow("Couldn't confirm you're not a bot");
+    const assertion = expect(token).rejects.toThrow("challenges.cloudflare.com");
     await vi.advanceTimersByTimeAsync(TIMEOUT_MS);
 
     await assertion;
+  });
+
+  it("waits for the visitor once the checkbox appears, however long they take", async () => {
+    let options: RenderOptions | undefined;
+    installFakeTurnstile((renderOptions) => {
+      options = renderOptions;
+      renderOptions["before-interactive-callback"]();
+    });
+
+    const token = getTurnstileToken(SITE_KEY);
+    await vi.advanceTimersByTimeAsync(TIMEOUT_MS * 4);
+    options?.callback("token-after-a-while");
+
+    await expect(token).resolves.toBe("token-after-a-while");
   });
 });
