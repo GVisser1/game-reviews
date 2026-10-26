@@ -16,6 +16,7 @@ test("opens the account page from the user's name in the nav", async ({ page, si
   await expect(page).toHaveURL("/app/account");
   await expect(accountPage.heading).toBeVisible();
   await expect(accountPage.deleteAccountButton).toBeVisible();
+  await accountPage.assertMeta("Account - Game Reviews");
   await accountPage.assertPageIsAccessible();
 });
 

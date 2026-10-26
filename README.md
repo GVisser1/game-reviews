@@ -27,7 +27,13 @@ workflow from the Actions tab and pick the branch to deploy. It checks, tests an
 The build writes `index.html` (landing) and `privacy.html` as static HTML, plus `_shell.html`, which renders every
 other page in the browser. `public/_redirects` serves the shell for `/app`, `/app/*` and `/login`, and `404.html` (a
 copy of the shell) shows the app's not-found page. Try a build locally with
-`pnpm build:pages && pnpm exec wrangler pages dev dist/client`.
+`pnpm build:pages && pnpm exec wrangler pages dev dist/client --binding SUPABASE_URL=<Supabase project URL>`.
+
+Game pages go through a Cloudflare Pages Function, `functions/app/games/[gameId].ts`, which `wrangler` deploys along
+with `dist/client`. Link-preview crawlers (Discord, Slack, WhatsApp, etc.) don't run JavaScript, so for them it fills
+the shell's title, description and image with the game's details from the `igdb-game-details` Supabase function.
+That function doesn't require a session (`verify_jwt = false` in `supabase/config.toml`). Browsers get the shell
+unchanged.
 
 The workflow reads these from the `production` environment in the repository settings:
 
@@ -38,6 +44,9 @@ The workflow reads these from the `production` environment in the repository set
 | `VITE_TURNSTILE_SITE_KEY`       | Variable | Cloudflare Turnstile site key                      |
 | `CLOUDFLARE_ACCOUNT_ID`         | Secret   | Cloudflare account ID                              |
 | `CLOUDFLARE_API_TOKEN`          | Secret   | Cloudflare API token with "Cloudflare Pages: Edit" |
+
+The Pages Function reads one setting from the Cloudflare Pages project itself (**Settings → Variables and Secrets**,
+Production): `SUPABASE_URL`, the Supabase project URL. Without it, game links get the site's default preview.
 
 ## Scripts
 

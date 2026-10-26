@@ -6,7 +6,7 @@ test("renders the login page", async ({ loginPage }) => {
   await expect(loginPage.heading).toBeVisible();
   await expect(loginPage.continueWithTwitchButton).toBeVisible();
   await expect(loginPage.backLink).toHaveAttribute("href", "/app/games/72");
-  await loginPage.assertMeta();
+  await loginPage.assertMeta("Sign in - Game Reviews");
   await loginPage.assertPageIsAccessible();
 });
 

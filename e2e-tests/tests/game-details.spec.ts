@@ -7,6 +7,7 @@ test("asks anonymous visitors to sign in before rating", async ({ gameDetailsPag
   await expect(gameDetailsPage.signInPrompt).toBeVisible();
   await expect(gameDetailsPage.starButton(1)).toBeHidden();
   await expect(gameDetailsPage.signInLink).toHaveAttribute("href", "/login?redirect=%2Fapp%2Fgames%2F72");
+  await gameDetailsPage.assertMeta("Portal 2 - Game Reviews");
   await gameDetailsPage.assertPageIsAccessible();
 });
 
