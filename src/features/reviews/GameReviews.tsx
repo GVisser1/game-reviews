@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { isEmpty } from "lodash-es";
 import { toErrorMessage } from "../../lib/toErrorMessage";
 import { StarRating } from "../../shared/StarRating";
@@ -22,13 +23,17 @@ export const GameReviews = ({ gameId }: GameReviewsProps): React.JSX.Element => 
       {reviews && !isEmpty(reviews) && (
         <ul className="flex flex-col gap-4">
           {reviews.map((review) => (
-            <li key={`${review.displayName}-${review.createdAt}`} className="flex flex-col gap-1 border-b pb-4">
+            <li key={review.username} className="flex flex-col gap-1 border-b pb-4">
               <div className="flex items-center gap-2">
                 {review.avatarUrl && <img src={review.avatarUrl} alt="" className="size-6 rounded-full" />}
-                <span className="font-medium">
+                <Link
+                  to="/app/users/$username"
+                  params={{ username: review.username }}
+                  className="font-medium hover:underline"
+                >
                   {review.displayName}
                   {review.isOwn && " (you)"}
-                </span>
+                </Link>
                 <time dateTime={review.createdAt} className="text-sm text-gray-600">
                   {DATE_FORMAT.format(new Date(review.createdAt))}
                 </time>

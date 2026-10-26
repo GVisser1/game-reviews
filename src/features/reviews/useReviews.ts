@@ -2,6 +2,7 @@ import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
+import { PROFILE_QUERY_KEY } from "../profiles/profileQuery";
 import { GAME_REVIEWS_QUERY_KEY } from "./gameReviewsQuery";
 import { RATING_SUMMARY_QUERY_KEY } from "./ratingSummaryQuery";
 import type { Review } from "./types";
@@ -92,12 +93,14 @@ export const useReviews = (): ReviewsState => {
     queryClient.setQueryData(REVIEWS_QUERY_KEY, snapshot?.previousReviews);
   };
 
-  // Your own reviews, the games' public review lists and their community ratings change when you save or remove one.
+  // Your own reviews, the games' public review lists, their community ratings and your profile change when you save or
+  // remove one.
   const refetchReviews = async (): Promise<void> => {
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: REVIEWS_QUERY_KEY }),
       queryClient.invalidateQueries({ queryKey: GAME_REVIEWS_QUERY_KEY }),
       queryClient.invalidateQueries({ queryKey: RATING_SUMMARY_QUERY_KEY }),
+      queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY }),
     ]);
   };
 

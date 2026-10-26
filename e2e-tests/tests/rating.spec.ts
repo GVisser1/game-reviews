@@ -13,11 +13,11 @@ test("signs in from a game and returns to it", async ({ page, gameDetailsPage, l
   await expect(gameDetailsPage.starButton(5)).toBeVisible();
 });
 
-test("rates a game, sees it on My reviews and removes it", async ({
+test("rates a game, sees it on their profile and removes it", async ({
   backend,
   signIn,
   gameDetailsPage,
-  myReviewsPage,
+  profilePage,
 }) => {
   await signIn("/app/games/72");
 
@@ -28,13 +28,13 @@ test("rates a game, sees it on My reviews and removes it", async ({
     .poll(() => backend.reviews)
     .toEqual([{ game_id: 72, game_name: "Portal 2", cover_url: null, rating: 4, body: null }]);
 
-  await myReviewsPage.goto();
+  await gameDetailsPage.navUserName(TWITCH_DISPLAY_NAME).click();
 
-  await expect(myReviewsPage.reviewedGame("Portal 2")).toBeVisible();
-  await expect(myReviewsPage.rating(4)).toBeVisible();
-  await myReviewsPage.assertPageIsAccessible();
+  await expect(profilePage.reviewedGame("Portal 2")).toBeVisible();
+  await expect(profilePage.rating(4)).toBeVisible();
+  await profilePage.assertPageIsAccessible();
 
-  await myReviewsPage.reviewedGame("Portal 2").getByRole("link").click();
+  await profilePage.reviewedGame("Portal 2").getByRole("link").click();
   await gameDetailsPage.removeReviewButton.click();
 
   await expect(gameDetailsPage.removeReviewButton).toBeHidden();
@@ -50,7 +50,7 @@ test("signs out back to an anonymous visitor", async ({ signIn, gameDetailsPage 
   await expect(gameDetailsPage.signInPrompt).toBeVisible();
 });
 
-test("writes, edits and removes a review", async ({ backend, signIn, gameDetailsPage, myReviewsPage }) => {
+test("writes, edits and removes a review", async ({ backend, signIn, gameDetailsPage, profilePage }) => {
   await signIn("/app/games/72");
 
   await expect(gameDetailsPage.saveReviewButton).toBeDisabled();
@@ -72,10 +72,10 @@ test("writes, edits and removes a review", async ({ backend, signIn, gameDetails
   await gameDetailsPage.saveReviewButton.click();
   await expect(ownReview).toContainText("Clever puzzles, but too short.");
 
-  await myReviewsPage.goto();
-  await expect(myReviewsPage.reviewText("Clever puzzles, but too short.")).toBeVisible();
+  await ownReview.getByRole("link", { name: `${TWITCH_DISPLAY_NAME} (you)` }).click();
+  await expect(profilePage.reviewedGame("Portal 2")).toContainText("Clever puzzles, but too short.");
 
-  await myReviewsPage.reviewedGame("Portal 2").getByRole("link").click();
+  await profilePage.reviewedGame("Portal 2").getByRole("link").click();
   await gameDetailsPage.removeReviewButton.click();
 
   await expect(ownReview).toBeHidden();

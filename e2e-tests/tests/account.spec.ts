@@ -8,10 +8,17 @@ test("asks anonymous visitors to sign in", async ({ accountPage }) => {
   await expect(accountPage.deleteAccountButton).toBeHidden();
 });
 
-test("opens the account page from the user's name in the nav", async ({ page, signIn, gamesPage, accountPage }) => {
+test("opens the account page from the user's profile", async ({
+  page,
+  signIn,
+  gamesPage,
+  profilePage,
+  accountPage,
+}) => {
   await signIn("/app");
 
   await gamesPage.navUserName(TWITCH_DISPLAY_NAME).click();
+  await profilePage.accountSettingsLink.click();
 
   await expect(page).toHaveURL("/app/account");
   await expect(accountPage.heading).toBeVisible();

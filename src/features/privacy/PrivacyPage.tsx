@@ -34,13 +34,15 @@ export const PrivacyPage = (): React.JSX.Element => (
           or other personal details. Your browser keeps it in local storage.
         </li>
         <li>
-          <strong>When you sign in with Twitch:</strong> your Twitch account ID, display name, profile picture and the
-          email address Twitch shares at sign-in. Your name and picture are shown next to your reviews. Your email is
-          never shown and isn't used for anything else.
+          <strong>When you sign in with Twitch:</strong> your Twitch account ID, login name, display name, profile
+          picture and the email address Twitch shares at sign-in. Your first sign-in turns your login name into your
+          username for your public profile page. Your name and picture are shown on your profile and next to your
+          reviews. Your email is never shown and isn&apos;t used for anything else.
         </li>
         <li>
-          <strong>Your ratings and reviews:</strong> shown publicly on each game&apos;s page with your name and picture.
-          Your ratings also count towards each game&apos;s average rating.
+          <strong>Your ratings and reviews:</strong> shown publicly on your profile page, and written reviews also on
+          each game&apos;s page, with your name and picture. Your ratings also count towards each game&apos;s average
+          rating.
         </li>
       </ul>
     </Section>

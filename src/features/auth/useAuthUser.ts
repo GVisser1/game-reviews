@@ -2,6 +2,7 @@ import type { User } from "@supabase/supabase-js";
 import { useSyncExternalStore } from "react";
 import { queryClient } from "../../lib/queryClient";
 import { supabase } from "../../lib/supabase";
+import { PROFILE_QUERY_KEY } from "../profiles/profileQuery";
 import { reviewsQueryOptions } from "../reviews/useReviews";
 
 let currentUser: User | null = null;
@@ -15,7 +16,11 @@ supabase.auth.onAuthStateChange((_event, session) => {
 
   if (hasUserChanged) {
     // Deferred: Supabase warns against calling its client from inside this callback, which can deadlock.
-    setTimeout(() => void queryClient.invalidateQueries({ queryKey: reviewsQueryOptions.queryKey }));
+    setTimeout(() => {
+      void queryClient.invalidateQueries({ queryKey: reviewsQueryOptions.queryKey });
+      // Whether a profile is your own depends on who's signed in.
+      void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+    });
   }
 });
 
