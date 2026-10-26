@@ -27,6 +27,28 @@ const KNOWN_GAMES_FILTER = [
   `(game_type = ${STANDALONE_EXPANSION_GAME_TYPE} & ${HAS_STUDIO})`,
 ].join(" | ");
 
+// How the list is ordered. IGDB sorts on one field only, so each option is a single field and direction. Games without
+// that field (no rating yet, no release date) would sort first or last at random, so those options leave them out.
+export const GAMES_SORTS = ["popular", "rating", "newest", "oldest", "name-asc", "name-desc"] as const;
+export type GamesSort = (typeof GAMES_SORTS)[number];
+export const DEFAULT_SORT: GamesSort = "popular";
+
+type SortOption = {
+  sort: string;
+  filter?: string;
+};
+
+const SORTS: Record<GamesSort, SortOption> = {
+  popular: { sort: "total_rating_count desc" },
+  rating: { sort: "total_rating desc", filter: "total_rating != null" },
+  newest: { sort: "first_release_date desc", filter: "first_release_date != null" },
+  oldest: { sort: "first_release_date asc", filter: "first_release_date != null" },
+  "name-asc": { sort: "name asc" },
+  "name-desc": { sort: "name desc" },
+};
+
+const isGamesSort = (value: unknown): value is GamesSort => GAMES_SORTS.includes(value as GamesSort);
+
 export type IgdbGame = {
   id: number;
   name: string;
@@ -57,10 +79,13 @@ export const toGame = (igdbGame: IgdbGame): Game => ({
 export const sanitizeSearch = (search: string): string =>
   search.replace(/["\\]/g, "").trim().slice(0, MAX_SEARCH_LENGTH);
 
-export const buildQuery = (search: string, offset: number): string => {
+export const buildQuery = (search: string, offset: number, sortName: GamesSort = DEFAULT_SORT): string => {
   const pagination = `limit ${PAGE_SIZE}; offset ${offset};`;
+  const { sort, filter } = SORTS[sortName];
+  const sortFilter = filter ? ` & ${filter}` : "";
+  const sortClause = `sort ${sort};`;
   if (search === "") {
-    return `${GAME_FIELDS} where ${OFFICIAL_GAMES_FILTER} & total_rating_count > ${MIN_POPULAR_RATING_COUNT}; sort total_rating_count desc; ${pagination}`;
+    return `${GAME_FIELDS} where ${OFFICIAL_GAMES_FILTER} & total_rating_count > ${MIN_POPULAR_RATING_COUNT}${sortFilter}; ${sortClause} ${pagination}`;
   }
   // IGDB's `search` only matches whole words ("elder scr" finds nothing), so match case-insensitively at the start
   // of any word in the name instead ("elder scr" matches "The Elder Scrolls", but "gta" doesn't match
@@ -70,19 +95,21 @@ export const buildQuery = (search: string, offset: number): string => {
     .map((pattern) => `alternative_names.name ~ ${pattern}`)
     .join(" | ");
   const nameMatches = `(name ~ "${search}"* | name ~ *" ${search}"* | ${alternativeNameMatches})`;
-  return `${GAME_FIELDS} where ${nameMatches} & ${OFFICIAL_GAMES_FILTER} & (${KNOWN_GAMES_FILTER}); sort total_rating_count desc; ${pagination}`;
+  return `${GAME_FIELDS} where ${nameMatches} & ${OFFICIAL_GAMES_FILTER} & (${KNOWN_GAMES_FILTER})${sortFilter}; ${sortClause} ${pagination}`;
 };
 
 type GamesRequest = {
   search: string;
   offset: number;
+  sort: GamesSort;
 };
 
 export const parseGamesRequest = (body: unknown): GamesRequest => {
-  const { search, offset } = (typeof body === "object" && body !== null ? body : {}) as Record<string, unknown>;
+  const { search, offset, sort } = (typeof body === "object" && body !== null ? body : {}) as Record<string, unknown>;
   return {
     search: typeof search === "string" ? sanitizeSearch(search) : "",
     offset: typeof offset === "number" && Number.isInteger(offset) && offset >= 0 ? offset : 0,
+    sort: isGamesSort(sort) ? sort : DEFAULT_SORT,
   };
 };
 

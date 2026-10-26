@@ -4,8 +4,8 @@ import type { GamesPage, IgdbGame } from "./games.ts";
 
 Deno.serve(
   handleRequest(async (request): Promise<GamesPage> => {
-    const { search, offset } = parseGamesRequest(await request.json().catch(() => ({})));
-    const igdbGames = await queryIgdb<IgdbGame>("games", buildQuery(search, offset));
+    const { search, offset, sort } = parseGamesRequest(await request.json().catch(() => ({})));
+    const igdbGames = await queryIgdb<IgdbGame>("games", buildQuery(search, offset, sort));
     return toGamesPage(igdbGames, offset);
   }),
 );

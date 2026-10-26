@@ -86,6 +86,34 @@ describe("buildQuery with a search", () => {
   });
 });
 
+describe("buildQuery with a sort", () => {
+  it.each([
+    ["rating", "sort total_rating desc;", "total_rating != null"],
+    ["newest", "sort first_release_date desc;", "first_release_date != null"],
+    ["oldest", "sort first_release_date asc;", "first_release_date != null"],
+  ] as const)("sorts by %s and leaves out games without that field", (sort, sortClause, filter) => {
+    for (const search of ["", "zelda"]) {
+      const query = buildQuery(search, FIRST_OFFSET, sort);
+      expect(query).toContain(sortClause);
+      expect(query).toContain(`& ${filter};`);
+    }
+  });
+
+  it("sorts by name without leaving any games out", () => {
+    const query = buildQuery("zelda", FIRST_OFFSET, "name-asc");
+    // The search filters end the where clause; nothing is added after them.
+    expect(query).toContain(`${HAS_STUDIO})); sort name asc;`);
+  });
+
+  it("sorts by name in reverse for Z–A", () => {
+    expect(buildQuery("", FIRST_OFFSET, "name-desc")).toContain("sort name desc;");
+  });
+
+  it("keeps the search filters whatever the sort", () => {
+    expect(buildQuery("zelda", FIRST_OFFSET, "rating")).toContain(`total_rating_count >= ${MIN_SEARCH_RATING_COUNT}`);
+  });
+});
+
 describe("sanitizeSearch", () => {
   it("removes quotes and backslashes so the search can't break out of the query string", () => {
     expect(sanitizeSearch('gta" | name ~ *"\\')).toBe("gta | name ~ *");
@@ -105,13 +133,22 @@ describe("parseGamesRequest", () => {
     expect(parseGamesRequest({ search: " gta ", offset: SECOND_PAGE_OFFSET })).toEqual({
       search: "gta",
       offset: SECOND_PAGE_OFFSET,
+      sort: "popular",
     });
+  });
+
+  it("reads a known sort", () => {
+    expect(parseGamesRequest({ search: "", offset: FIRST_OFFSET, sort: "newest" }).sort).toBe("newest");
+  });
+
+  it.each(["random", 3, "toString", null])("falls back to the most popular first for sort %j", (sort) => {
+    expect(parseGamesRequest({ sort }).sort).toBe("popular");
   });
 
   it.each([null, "text", { search: 42, offset: "50" }, { offset: -1 }, { offset: 1.5 }])(
     "falls back to an empty search on the first page for %j",
     (body) => {
-      expect(parseGamesRequest(body)).toEqual({ search: "", offset: FIRST_OFFSET });
+      expect(parseGamesRequest(body)).toEqual({ search: "", offset: FIRST_OFFSET, sort: "popular" });
     },
   );
 });

@@ -1,5 +1,5 @@
 import type { Page, Route } from "@playwright/test";
-import { find, groupBy, isEmpty, orderBy, sum } from "lodash-es";
+import { find, groupBy, isEmpty, isNil, orderBy, sum } from "lodash-es";
 import {
   OTHER_PLAYER_RATINGS,
   OTHER_PLAYER_REVIEWS,
@@ -8,6 +8,7 @@ import {
   TWITCH_DISPLAY_NAME,
   TWITCH_USERNAME,
 } from "./testData";
+import type { TestGameDetails } from "./testData";
 
 // Stands in for Supabase (auth, the reviews table and the IGDB edge functions) inside the browser, so tests need no
 // secrets, create no real users and don't depend on live IGDB results. Saved reviews live for one test.
@@ -34,6 +35,19 @@ const HTTP_NO_CONTENT = 204;
 const HTTP_CREATED = 201;
 const HTTP_FORBIDDEN = 403;
 const HTTP_SERVER_ERROR = 500;
+
+type TestGameSort = {
+  field: keyof TestGameDetails;
+  direction: "asc" | "desc";
+};
+
+const TEST_GAME_SORTS: Record<string, TestGameSort> = {
+  rating: { field: "igdbRating", direction: "desc" },
+  newest: { field: "releaseYear", direction: "desc" },
+  oldest: { field: "releaseYear", direction: "asc" },
+  "name-asc": { field: "name", direction: "asc" },
+  "name-desc": { field: "name", direction: "desc" },
+};
 
 const CORS_HEADERS = {
   "access-control-allow-origin": "*",
@@ -201,10 +215,11 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
     if (await handlePreflight(route)) {
       return;
     }
-    const { search = "" }: { search?: string } = route.request().postDataJSON() ?? {};
-    const games = TEST_GAMES.filter((game) => game.name.toLowerCase().includes(search.toLowerCase())).map(
-      ({ id, name, coverUrl, releaseYear }) => ({ id, name, coverUrl, releaseYear }),
-    );
+    const { search = "", sort = "popular" }: { search?: string; sort?: string } = route.request().postDataJSON() ?? {};
+    const matches = TEST_GAMES.filter((game) => game.name.toLowerCase().includes(search.toLowerCase()));
+    const gameSort = TEST_GAME_SORTS[sort];
+    const sorted = isNil(gameSort) ? matches : orderBy(matches, gameSort.field, gameSort.direction);
+    const games = sorted.map(({ id, name, coverUrl, releaseYear }) => ({ id, name, coverUrl, releaseYear }));
     await json(route, { games, nextOffset: null });
   });
 
