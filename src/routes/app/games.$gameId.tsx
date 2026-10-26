@@ -11,7 +11,8 @@ export const Route = createFileRoute("/app/games/$gameId")({
     parse: ({ gameId }) => ({ gameId: parseGameId(gameId) }),
     stringify: ({ gameId }) => ({ gameId: String(gameId) }),
   },
-  loader: ({ context, params }) => context.queryClient.ensureQueryData(gameDetailsQueryOptions(params.gameId)),
+  loader: ({ context, params }) =>
+    context.queryClient.query({ ...gameDetailsQueryOptions(params.gameId), staleTime: "static" }),
   // No loader data while the game is loading or wasn't found.
   head: ({ loaderData }) => pageHead(loaderData?.name ?? FALLBACK_PAGE_NAME),
   component: GameDetailsPage,

@@ -5,6 +5,6 @@ import { pageHead } from "../../lib/pageHead";
 
 export const Route = createFileRoute("/app/top-rated")({
   head: () => pageHead("Top rated"),
-  loader: ({ context }) => context.queryClient.ensureQueryData(topRatedGamesQueryOptions),
+  loader: ({ context }) => context.queryClient.query({ ...topRatedGamesQueryOptions, staleTime: "static" }),
   component: TopRatedPage,
 });

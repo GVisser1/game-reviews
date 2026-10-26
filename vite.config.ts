@@ -34,6 +34,7 @@ export default defineConfig({
       "react/rules-of-hooks": "error",
       "react/only-export-components": ["warn", { allowConstantExport: true }],
       "vite-plus/prefer-vite-plus-imports": "error",
+      "typescript/no-deprecated": "error",
     },
     overrides: [
       {
