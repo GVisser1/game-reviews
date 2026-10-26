@@ -10,7 +10,7 @@ permissions:
 jobs:
   playwright:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       # The tests fake Supabase in the browser, so the build only needs placeholder values, not real keys.
       VITE_SUPABASE_URL: https://e2e.supabase.invalid
@@ -30,6 +30,8 @@ jobs:
         run: pnpm i --frozen-lockfile
 
       - name: Install Playwright browsers
+        # Normally well under a minute; fail fast instead of hanging if a download stalls.
+        timeout-minutes: 5
         run: pnpm exec playwright install --with-deps
 
       - name: Run E2E tests
