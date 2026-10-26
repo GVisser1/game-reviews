@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PrivacyPage } from "../features/privacy/PrivacyPage";
+import { pageHead } from "../lib/pageHead";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({ meta: [{ title: "Privacy - Game Reviews" }] }),
+  head: () => pageHead("Privacy"),
   component: PrivacyPage,
 });

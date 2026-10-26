@@ -4,6 +4,7 @@ test("asks anonymous visitors to sign in", async ({ myReviewsPage }) => {
   await myReviewsPage.goto();
 
   await expect(myReviewsPage.signInPrompt).toBeVisible();
+  await myReviewsPage.assertMeta("My reviews - Game Reviews");
   await myReviewsPage.assertPageIsAccessible();
 });
 

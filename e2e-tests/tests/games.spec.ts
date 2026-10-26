@@ -5,7 +5,7 @@ test("lists games", async ({ gamesPage }) => {
 
   await expect(gamesPage.gameLink("Portal 2")).toBeVisible();
   await expect(gamesPage.gameLink("Elden Ring")).toBeVisible();
-  await gamesPage.assertMeta();
+  await gamesPage.assertMeta("Games - Game Reviews");
   await gamesPage.assertPageIsAccessible();
 });
 

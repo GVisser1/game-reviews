@@ -72,7 +72,7 @@ export default defineConfig({
   ]),
   test: {
     // Playwright's *.spec.ts files in e2e-tests/ run separately with `pnpm test:e2e`.
-    include: ["src/**/*.test.{ts,tsx}", "supabase/**/*.test.ts"],
+    include: ["src/**/*.test.{ts,tsx}", "supabase/**/*.test.ts", "functions/**/*.test.ts"],
   },
   server: {
     // Supabase only allows the Twitch sign-in to redirect back to this port, so fail instead of picking another.
