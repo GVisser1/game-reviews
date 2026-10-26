@@ -66,6 +66,11 @@
       "description": "TanStack Start requires a matching TanStack Router version, so they always update together.",
       "matchPackageNames": ["@tanstack/react-router", "@tanstack/react-start"],
       "groupName": "tanstack router and start"
+    },
+    {
+      "description": "The vite and vitest overrides in pnpm-workspace.yaml must match vite-plus: https://github.com/voidzero-dev/vite-plus/issues/2356",
+      "matchPackageNames": ["vite-plus", "@voidzero-dev/vite-plus-*", "vitest"],
+      "groupName": "vite-plus"
     }
   ]
 }
