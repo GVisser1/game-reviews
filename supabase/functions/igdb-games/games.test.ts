@@ -89,7 +89,6 @@ describe("buildQuery with a search", () => {
 describe("buildQuery with a sort", () => {
   it.each([
     ["rating", "sort total_rating desc;", "total_rating != null"],
-    ["newest", "sort first_release_date desc;", "first_release_date != null"],
     ["oldest", "sort first_release_date asc;", "first_release_date != null"],
   ] as const)("sorts by %s and leaves out games without that field", (sort, sortClause, filter) => {
     for (const search of ["", "zelda"]) {
@@ -103,6 +102,29 @@ describe("buildQuery with a sort", () => {
     const query = buildQuery("zelda", FIRST_OFFSET, "name-asc");
     // The search filters end the where clause; nothing is added after them.
     expect(query).toContain(`${HAS_STUDIO})); sort name asc;`);
+  });
+
+  it("sorts by newest and only lists games that are already out", () => {
+    const now = 1793000000;
+    for (const search of ["", "zelda"]) {
+      const query = buildQuery(search, FIRST_OFFSET, "newest", now);
+      expect(query).toContain("sort first_release_date desc;");
+      expect(query).toContain(`& first_release_date != null & first_release_date <= ${now};`);
+    }
+  });
+
+  it("includes recent releases with only a few ratings when browsing by newest", () => {
+    const query = buildQuery("", FIRST_OFFSET, "newest");
+    expect(query).not.toContain(`total_rating_count > ${MIN_POPULAR_RATING_COUNT}`);
+    expect(query).toContain(
+      `(total_rating_count >= ${MIN_SEARCH_RATING_COUNT} | (hypes >= ${MIN_SEARCH_HYPES} & ${HAS_STUDIO}))`,
+    );
+  });
+
+  it("keeps the well-known games filter when browsing by the other sorts", () => {
+    for (const sort of ["popular", "rating", "oldest", "name-asc", "name-desc"] as const) {
+      expect(buildQuery("", FIRST_OFFSET, sort)).toContain(`total_rating_count > ${MIN_POPULAR_RATING_COUNT}`);
+    }
   });
 
   it("sorts by name in reverse for Z–A", () => {

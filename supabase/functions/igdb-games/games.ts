@@ -1,6 +1,7 @@
 import { toCoverUrl, toReleaseYear } from "../_shared/format.ts";
 
 export const PAGE_SIZE = 50;
+const MS_PER_SECOND = 1000;
 export const MIN_POPULAR_RATING_COUNT = 10;
 export const MAX_SEARCH_LENGTH = 100;
 const GAME_FIELDS = "fields name, cover.image_id, first_release_date;";
@@ -26,6 +27,12 @@ const KNOWN_GAMES_FILTER = [
   `game_type = (${ADD_ON_GAME_TYPES.join(",")})`,
   `(game_type = ${STANDALONE_EXPANSION_GAME_TYPE} & ${HAS_STUDIO})`,
 ].join(" | ");
+// Recent releases haven't collected many ratings yet, so browsing by newest can't require as many as the popular list.
+// Unlike KNOWN_GAMES_FILTER it doesn't let every add-on through: without a search, small DLC would flood the list.
+const RECENT_GAMES_FILTER = [
+  `total_rating_count >= ${MIN_SEARCH_RATING_COUNT}`,
+  `(hypes >= ${MIN_SEARCH_HYPES} & ${HAS_STUDIO})`,
+].join(" | ");
 
 // How the list is ordered. IGDB sorts on one field only, so each option is a single field and direction. Games without
 // that field (no rating yet, no release date) would sort first or last at random, so those options leave them out.
@@ -35,14 +42,21 @@ export const DEFAULT_SORT: GamesSort = "popular";
 
 type SortOption = {
   sort: string;
-  filter?: string;
+  filter?: (nowSeconds: number) => string;
+  // Without a search, show recent games with only a few ratings instead of just the well-known ones.
+  includesRecentGames?: boolean;
 };
 
 const SORTS: Record<GamesSort, SortOption> = {
   popular: { sort: "total_rating_count desc" },
-  rating: { sort: "total_rating desc", filter: "total_rating != null" },
-  newest: { sort: "first_release_date desc", filter: "first_release_date != null" },
-  oldest: { sort: "first_release_date asc", filter: "first_release_date != null" },
+  rating: { sort: "total_rating desc", filter: () => "total_rating != null" },
+  // Only games that are out: upcoming ones have (often placeholder) future dates and would fill the top.
+  newest: {
+    sort: "first_release_date desc",
+    filter: (nowSeconds) => `first_release_date != null & first_release_date <= ${nowSeconds}`,
+    includesRecentGames: true,
+  },
+  oldest: { sort: "first_release_date asc", filter: () => "first_release_date != null" },
   "name-asc": { sort: "name asc" },
   "name-desc": { sort: "name desc" },
 };
@@ -79,13 +93,21 @@ export const toGame = (igdbGame: IgdbGame): Game => ({
 export const sanitizeSearch = (search: string): string =>
   search.replace(/["\\]/g, "").trim().slice(0, MAX_SEARCH_LENGTH);
 
-export const buildQuery = (search: string, offset: number, sortName: GamesSort = DEFAULT_SORT): string => {
+export const buildQuery = (
+  search: string,
+  offset: number,
+  sortName: GamesSort = DEFAULT_SORT,
+  nowSeconds = Math.floor(Date.now() / MS_PER_SECOND),
+): string => {
   const pagination = `limit ${PAGE_SIZE}; offset ${offset};`;
-  const { sort, filter } = SORTS[sortName];
-  const sortFilter = filter ? ` & ${filter}` : "";
+  const { sort, filter, includesRecentGames } = SORTS[sortName];
+  const sortFilter = filter ? ` & ${filter(nowSeconds)}` : "";
   const sortClause = `sort ${sort};`;
   if (search === "") {
-    return `${GAME_FIELDS} where ${OFFICIAL_GAMES_FILTER} & total_rating_count > ${MIN_POPULAR_RATING_COUNT}${sortFilter}; ${sortClause} ${pagination}`;
+    const browseFilter = includesRecentGames
+      ? `(${RECENT_GAMES_FILTER})`
+      : `total_rating_count > ${MIN_POPULAR_RATING_COUNT}`;
+    return `${GAME_FIELDS} where ${OFFICIAL_GAMES_FILTER} & ${browseFilter}${sortFilter}; ${sortClause} ${pagination}`;
   }
   // IGDB's `search` only matches whole words ("elder scr" finds nothing), so match case-insensitively at the start
   // of any word in the name instead ("elder scr" matches "The Elder Scrolls", but "gta" doesn't match
