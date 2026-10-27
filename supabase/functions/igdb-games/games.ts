@@ -35,8 +35,9 @@ const RECENT_GAMES_FILTER = [
 ].join(" | ");
 
 // How the list is ordered. IGDB sorts on one field only, so each option is a single field and direction. Games without
-// that field (no rating yet, no release date) would sort first or last at random, so those options leave them out.
-export const GAMES_SORTS = ["popular", "rating", "newest", "oldest", "name-asc", "name-desc"] as const;
+// that field (no release date) would sort first or last at random, so those options leave them out.
+// The app's "Highest rated" sort uses this site's own ratings, so it doesn't come through here.
+export const GAMES_SORTS = ["popular", "newest", "oldest", "name-asc", "name-desc"] as const;
 export type GamesSort = (typeof GAMES_SORTS)[number];
 export const DEFAULT_SORT: GamesSort = "popular";
 
@@ -49,7 +50,6 @@ type SortOption = {
 
 const SORTS: Record<GamesSort, SortOption> = {
   popular: { sort: "total_rating_count desc" },
-  rating: { sort: "total_rating desc", filter: () => "total_rating != null" },
   // Only games that are out: upcoming ones have (often placeholder) future dates and would fill the top.
   newest: {
     sort: "first_release_date desc",

@@ -8,7 +8,7 @@ import type { Review } from "./types";
 const NO_RATING = 0;
 
 type YourReviewProps = {
-  game: { id: number; name: string; coverUrl: string | null };
+  game: { id: number; name: string; coverUrl: string | null; releaseYear: number | null };
   review: Review | undefined;
   error: string | null;
   onSave: (review: Review) => void;
@@ -22,7 +22,14 @@ export const YourReview = ({ game, review, error, onSave, onRemove }: YourReview
   const hasUnsavedText = draftBody !== savedBody;
 
   const save = (rating: number, body: string | null): void => {
-    onSave({ gameId: game.id, gameName: game.name, coverUrl: game.coverUrl, rating, body });
+    onSave({
+      gameId: game.id,
+      gameName: game.name,
+      coverUrl: game.coverUrl,
+      releaseYear: game.releaseYear,
+      rating,
+      body,
+    });
   };
 
   return (

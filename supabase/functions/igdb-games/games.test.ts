@@ -87,14 +87,11 @@ describe("buildQuery with a search", () => {
 });
 
 describe("buildQuery with a sort", () => {
-  it.each([
-    ["rating", "sort total_rating desc;", "total_rating != null"],
-    ["oldest", "sort first_release_date asc;", "first_release_date != null"],
-  ] as const)("sorts by %s and leaves out games without that field", (sort, sortClause, filter) => {
+  it("sorts by oldest and leaves out games without a release date", () => {
     for (const search of ["", "zelda"]) {
-      const query = buildQuery(search, FIRST_OFFSET, sort);
-      expect(query).toContain(sortClause);
-      expect(query).toContain(`& ${filter};`);
+      const query = buildQuery(search, FIRST_OFFSET, "oldest");
+      expect(query).toContain("sort first_release_date asc;");
+      expect(query).toContain("& first_release_date != null;");
     }
   });
 
@@ -122,7 +119,7 @@ describe("buildQuery with a sort", () => {
   });
 
   it("keeps the well-known games filter when browsing by the other sorts", () => {
-    for (const sort of ["popular", "rating", "oldest", "name-asc", "name-desc"] as const) {
+    for (const sort of ["popular", "oldest", "name-asc", "name-desc"] as const) {
       expect(buildQuery("", FIRST_OFFSET, sort)).toContain(`total_rating_count > ${MIN_POPULAR_RATING_COUNT}`);
     }
   });
@@ -132,7 +129,7 @@ describe("buildQuery with a sort", () => {
   });
 
   it("keeps the search filters whatever the sort", () => {
-    expect(buildQuery("zelda", FIRST_OFFSET, "rating")).toContain(`total_rating_count >= ${MIN_SEARCH_RATING_COUNT}`);
+    expect(buildQuery("zelda", FIRST_OFFSET, "name-asc")).toContain(`total_rating_count >= ${MIN_SEARCH_RATING_COUNT}`);
   });
 });
 
@@ -163,7 +160,7 @@ describe("parseGamesRequest", () => {
     expect(parseGamesRequest({ search: "", offset: FIRST_OFFSET, sort: "newest" }).sort).toBe("newest");
   });
 
-  it.each(["random", 3, "toString", null])("falls back to the most popular first for sort %j", (sort) => {
+  it.each(["random", 3, "toString", null, "rating"])("falls back to the most popular first for sort %j", (sort) => {
     expect(parseGamesRequest({ sort }).sort).toBe("popular");
   });
 

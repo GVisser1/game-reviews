@@ -17,6 +17,7 @@ type StoredReview = {
   game_id: number;
   game_name: string;
   cover_url: string | null;
+  release_year: number | null;
   rating: number;
   body: string | null;
 };
@@ -42,7 +43,6 @@ type TestGameSort = {
 };
 
 const TEST_GAME_SORTS: Record<string, TestGameSort> = {
-  rating: { field: "igdbRating", direction: "desc" },
   newest: { field: "releaseYear", direction: "desc" },
   oldest: { field: "releaseYear", direction: "asc" },
   "name-asc": { field: "name", direction: "asc" },
@@ -165,6 +165,23 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       Object.entries(grouped).map(([gameId, reviews]) => [gameId, reviews.map((r) => r.rating)]),
     );
   };
+
+  // Every rated game with its name, cover and rating summary, best average first and ties to more ratings.
+  const ratedGames = () =>
+    orderBy(
+      Object.entries(ratingsByGame()).map(([gameId, ratings]) => {
+        const game = find(TEST_GAMES, { id: Number(gameId) });
+        return {
+          game_id: Number(gameId),
+          game_name: game?.name ?? `Game ${gameId}`,
+          cover_url: game?.coverUrl ?? null,
+          release_year: game?.releaseYear ?? null,
+          ...toRatingSummaryRow(ratings),
+        };
+      }),
+      ["average_rating", "rating_count"],
+      ["desc", "desc"],
+    );
 
   // Stands in for Cloudflare's Turnstile script: passes the check straight away with a fixed token.
   await page.route("https://challenges.cloudflare.com/turnstile/**", async (route) => {
@@ -335,18 +352,24 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       return;
     }
     const { min_ratings: minRatings = 1 }: { min_ratings?: number } = route.request().postDataJSON() ?? {};
-    const games = Object.entries(ratingsByGame())
-      .filter(([, ratings]) => ratings.length >= minRatings)
-      .map(([gameId, ratings]) => {
-        const game = find(TEST_GAMES, { id: Number(gameId) });
-        return {
-          game_id: Number(gameId),
-          game_name: game?.name ?? `Game ${gameId}`,
-          cover_url: game?.coverUrl ?? null,
-          ...toRatingSummaryRow(ratings),
-        };
-      });
-    await json(route, orderBy(games, ["average_rating", "rating_count"], ["desc", "desc"]));
+    await json(
+      route,
+      ratedGames().filter((game) => game.rating_count >= minRatings),
+    );
+  });
+
+  // The games list sorted by players' ratings: every rated game, best first, optionally narrowed by a search that
+  // matches at the start of any word in the name, like the database function.
+  await page.route("**/rest/v1/rpc/get_rated_games", async (route) => {
+    if (await handlePreflight(route)) {
+      return;
+    }
+    const { search_text: search = "" }: { search_text?: string } = route.request().postDataJSON() ?? {};
+    const term = search.trim().toLowerCase();
+    await json(
+      route,
+      ratedGames().filter((game) => term === "" || ` ${game.game_name.toLowerCase()}`.includes(` ${term}`)),
+    );
   });
 
   // Mirrors the database function: deletes the signed-in user with their reviews; anonymous users can't.

@@ -80,3 +80,22 @@ test("sorts the games and keeps the sort and search in the URL", async ({ page, 
   await gamesPage.sortSelect.selectOption({ label: "Most popular" });
   await expect(page).toHaveURL("/app?q=the");
 });
+
+test("sorts by players' ratings, best first, with and without a search", async ({ page, gamesPage }) => {
+  await gamesPage.goto();
+
+  await gamesPage.sortSelect.selectOption({ label: "Highest rated" });
+
+  await expect(page).toHaveURL("/app?sort=rating");
+  // GTA V has no ratings from players here, so it isn't listed.
+  await expect(gamesPage.gameNames).toHaveText(["Portal 2", "The Witcher 3: Wild Hunt", "Elden Ring"]);
+  // The same details as the other sorts: release year and community rating.
+  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("2015");
+  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("★ 4.5 (2)");
+
+  await gamesPage.searchInput.fill("wit");
+  await expect(gamesPage.gameNames).toHaveText(["The Witcher 3: Wild Hunt"]);
+
+  await gamesPage.searchInput.fill("grand");
+  await expect(page.getByText("No rated games found.")).toBeVisible();
+});
