@@ -26,7 +26,7 @@ test("rates a game, sees it on their profile and removes it", async ({
   await expect(gameDetailsPage.removeReviewButton).toBeVisible();
   await expect
     .poll(() => backend.reviews)
-    .toEqual([{ game_id: 72, game_name: "Portal 2", cover_url: null, rating: 4, body: null }]);
+    .toEqual([{ game_id: 72, game_name: "Portal 2", cover_url: null, release_year: 2011, rating: 4, body: null }]);
 
   await gameDetailsPage.navUserName(TWITCH_DISPLAY_NAME).click();
 

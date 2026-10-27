@@ -13,6 +13,7 @@ type ReviewRow = {
   game_id: number;
   game_name: string;
   cover_url: string | null;
+  release_year: number | null;
   rating: number;
   body: string | null;
 };
@@ -33,6 +34,7 @@ const toReview = (row: ReviewRow): Review => ({
   gameId: row.game_id,
   gameName: row.game_name,
   coverUrl: row.cover_url,
+  releaseYear: row.release_year,
   rating: row.rating,
   body: row.body,
 });
@@ -41,6 +43,7 @@ const toReviewRow = (review: Review): ReviewRow => ({
   game_id: review.gameId,
   game_name: review.gameName,
   cover_url: review.coverUrl,
+  release_year: review.releaseYear,
   rating: review.rating,
   body: review.body,
 });
@@ -57,7 +60,7 @@ const throwIfError = ({ error }: { error: Error | null }): void => {
 const fetchReviews = async (): Promise<Review[]> => {
   const { data, error }: PostgrestSingleResponse<ReviewRow[]> = await supabase
     .from("reviews")
-    .select("game_id, game_name, cover_url, rating, body")
+    .select("game_id, game_name, cover_url, release_year, rating, body")
     .order("created_at", { ascending: false })
     .overrideTypes<ReviewRow[], { merge: false }>();
   throwIfError({ error });

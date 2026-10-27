@@ -55,7 +55,7 @@ export const GameDetailsPage = (): React.JSX.Element => {
           {user && !user.is_anonymous && !isLoadingReviews && (
             <YourReview
               key={gameId}
-              game={{ id: gameId, name: game.name, coverUrl: game.coverUrl }}
+              game={{ id: gameId, name: game.name, coverUrl: game.coverUrl, releaseYear: game.releaseYear }}
               review={review}
               error={reviewError}
               onSave={saveReview}
