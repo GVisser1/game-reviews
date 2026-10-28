@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { topRatedGamesQueryOptions } from "../../features/reviews/topRatedGamesQuery";
 import { TopRatedPage } from "../../features/reviews/TopRatedPage";
-import { pageHead } from "../../lib/pageHead";
+import { pageHead } from "../../utils/pageHeadUtil";
 
 export const Route = createFileRoute("/app/top-rated")({
   head: () => pageHead("Top rated"),

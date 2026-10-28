@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { SITE_DESCRIPTION } from "../../lib/pageHead";
 import { StarRating } from "../../shared/StarRating";
+import { SITE_DESCRIPTION } from "../../utils/pageHeadUtil";
 
 const EXAMPLE_RATING = 4;
 

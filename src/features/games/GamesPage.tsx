@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useDebouncedValue } from "../../shared/useDebouncedValue";
 import { GameGrid } from "./GameGrid";
-import { DEFAULT_GAMES_SORT, GAMES_SORT_OPTIONS, isGamesSort } from "./gamesSort";
+import { DEFAULT_GAMES_SORT, GAMES_SORT_OPTIONS, isGamesSort } from "./utils/gameUtil";
 
 const SEARCH_DEBOUNCE_MS = 300;
 

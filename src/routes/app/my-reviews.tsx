@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { isNil } from "lodash-es";
-import { LOGIN_PATH } from "../../features/auth/loginRedirect";
+import { LOGIN_PATH } from "../../features/auth/utils/authUtil";
 import { ownUsernameQueryOptions } from "../../features/profiles/profileQuery";
 import { supabase } from "../../lib/supabase";
 

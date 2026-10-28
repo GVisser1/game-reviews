@@ -1,5 +1,5 @@
 import { isNil, truncate } from "lodash-es";
-import { SITE_DESCRIPTION, toPageTitle } from "../../src/lib/pageHead";
+import { SITE_DESCRIPTION, toPageTitle } from "../../src/utils/pageHeadUtil";
 
 const MAX_DESCRIPTION_LENGTH = 200;
 const REQUEST_TIMEOUT_MS = 3000;

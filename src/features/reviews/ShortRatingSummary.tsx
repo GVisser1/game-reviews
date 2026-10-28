@@ -1,6 +1,6 @@
 import { isNil } from "lodash-es";
-import { formatRatingSummary, formatShortRatingSummary } from "./formatRatingSummary";
 import type { RatingSummary } from "./types";
+import { formatRatingSummary, formatShortRatingSummary } from "./utils/reviewUtil";
 
 type ShortRatingSummaryProps = {
   summary: RatingSummary | undefined;

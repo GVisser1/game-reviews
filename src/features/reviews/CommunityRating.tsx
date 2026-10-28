@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { formatRatingSummary } from "./formatRatingSummary";
 import { ratingSummaryQueryOptions } from "./ratingSummaryQuery";
+import { formatRatingSummary } from "./utils/reviewUtil";
 
 type CommunityRatingProps = {
   gameId: number;

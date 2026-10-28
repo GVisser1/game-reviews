@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { isEmpty } from "lodash-es";
-import { toErrorMessage } from "../../lib/toErrorMessage";
 import { StarRating } from "../../shared/StarRating";
+import { toErrorMessage } from "../../utils/errorUtil";
 import { gameReviewsQueryOptions } from "./gameReviewsQuery";
 
 const DATE_FORMAT = new Intl.DateTimeFormat("en", { dateStyle: "medium" });

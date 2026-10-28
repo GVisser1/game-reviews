@@ -2,11 +2,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { isNil } from "lodash-es";
 import { useState } from "react";
-import { toErrorMessage } from "../../lib/toErrorMessage";
+import { toErrorMessage } from "../../utils/errorUtil";
 import { deleteAccount } from "./deleteAccount";
 import { SignInPrompt } from "./SignInPrompt";
 import { useAuthUser } from "./useAuthUser";
-import { getAvatarUrl, getDisplayName } from "./userProfile";
+import { getAvatarUrl, getDisplayName } from "./utils/authUtil";
 
 const BUTTON_CLASS_NAME = "rounded border px-3 py-1 text-sm hover:bg-gray-100 disabled:opacity-50";
 

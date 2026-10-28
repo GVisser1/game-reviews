@@ -3,12 +3,11 @@ import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { isNil } from "lodash-es";
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { toErrorMessage } from "../../lib/toErrorMessage";
+import { toErrorMessage } from "../../utils/errorUtil";
 import { ownUsernameQueryOptions } from "../profiles/profileQuery";
-import { LOGIN_PATH } from "./loginRedirect";
 import { SignInLink } from "./SignInLink";
 import { useAuthUser } from "./useAuthUser";
-import { getAvatarUrl, getDisplayName } from "./userProfile";
+import { getAvatarUrl, getDisplayName, LOGIN_PATH } from "./utils/authUtil";
 
 export const AccountMenu = (): React.JSX.Element | null => {
   const user = useAuthUser();

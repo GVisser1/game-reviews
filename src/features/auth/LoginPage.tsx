@@ -1,7 +1,7 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { authRedirectErrorCode } from "../../lib/supabase";
-import { toErrorMessage } from "../../lib/toErrorMessage";
+import { toErrorMessage } from "../../utils/errorUtil";
 import { signInWithTwitch } from "./twitchSignIn";
 
 const HOME_PATH = "/";

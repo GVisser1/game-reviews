@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
-import { seconds } from "../timeUtil";
+import { seconds } from "../../utils/timeUtil";
 import { getTurnstileToken } from "../turnstile";
 
 type RenderOptions = Parameters<NonNullable<Window["turnstile"]>["render"]>[1];

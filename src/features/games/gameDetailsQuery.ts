@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
-import { toFunctionError } from "../../lib/toFunctionError";
+import { toFunctionError } from "../../utils/errorUtil";
 import type { GameDetails } from "./types";
 
 const fetchGameDetails = async (id: number): Promise<GameDetails> => {

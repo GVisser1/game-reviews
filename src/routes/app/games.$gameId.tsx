@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GameDetailsError, GameDetailsPage, GameDetailsPending } from "../../features/games/GameDetailsPage";
 import { gameDetailsQueryOptions } from "../../features/games/gameDetailsQuery";
-import { parseGameId } from "../../features/games/routeParams";
-import { pageHead } from "../../lib/pageHead";
+import { parseGameId } from "../../features/games/utils/gameUtil";
+import { pageHead } from "../../utils/pageHeadUtil";
 
 const FALLBACK_PAGE_NAME = "Game";
 

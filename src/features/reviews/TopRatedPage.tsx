@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { isEmpty } from "lodash-es";
 import { GameTile } from "../../shared/GameTile";
-import { formatRatingSummary } from "./formatRatingSummary";
 import { MIN_TOP_RATED_RATINGS, topRatedGamesQueryOptions } from "./topRatedGamesQuery";
+import { formatRatingSummary } from "./utils/reviewUtil";
 
 const TopRatedGames = (): React.JSX.Element => {
   const { data: games, isPending, error } = useQuery(topRatedGamesQueryOptions);

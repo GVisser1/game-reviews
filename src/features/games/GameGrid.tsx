@@ -2,8 +2,8 @@ import { isEmpty, isNil } from "lodash-es";
 import { useRef } from "react";
 import { useGridLayout } from "../../shared/useGridLayout";
 import { useRatingSummaries } from "../reviews/useRatingSummaries";
-import type { GamesSort } from "./gamesSort";
 import { useGames } from "./useGames";
+import type { GamesSort } from "./utils/gameUtil";
 import { VirtualGameRows } from "./VirtualGameRows";
 
 const MIN_TILE_WIDTH = 160;

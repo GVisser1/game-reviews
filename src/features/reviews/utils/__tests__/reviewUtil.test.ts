@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { formatRatingSummary, formatShortRatingSummary } from "../formatRatingSummary";
+import { formatRatingSummary, formatShortRatingSummary, normalizeReviewBody } from "../reviewUtil";
 
 describe("formatRatingSummary", () => {
   it("shows the average with one decimal and the number of ratings", () => {
@@ -30,5 +30,19 @@ describe("formatShortRatingSummary", () => {
 
   it("returns nothing for a game without ratings", () => {
     expect(formatShortRatingSummary({ averageRating: null, ratingCount: 0 })).toBeNull();
+  });
+});
+
+describe("normalizeReviewBody", () => {
+  it("trims surrounding whitespace", () => {
+    expect(normalizeReviewBody("  Great puzzles.\n")).toBe("Great puzzles.");
+  });
+
+  it("keeps line breaks inside the text", () => {
+    expect(normalizeReviewBody("Great puzzles.\n\nShort, though.")).toBe("Great puzzles.\n\nShort, though.");
+  });
+
+  it.each(["", "   ", "\n\t"])("turns blank text %j into null", (text) => {
+    expect(normalizeReviewBody(text)).toBeNull();
   });
 });

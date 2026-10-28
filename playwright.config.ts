@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { minutes, seconds } from "./src/lib/timeUtil";
+import { minutes, seconds } from "./src/utils/timeUtil";
 
 const baseURL = process.env.E2E_BASE_URL || "http://localhost:5173";
 const usesLocalDevServer = new URL(baseURL).hostname === "localhost";

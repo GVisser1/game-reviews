@@ -1,8 +1,16 @@
 import { isNil } from "lodash-es";
-import type { RatingSummary } from "./types";
+import type { RatingSummary } from "../types";
 
+// Matches the check on reviews.body in the database.
+export const MAX_REVIEW_LENGTH = 2000;
 const MAX_STARS = 5;
 const AVERAGE_DECIMALS = 1;
+
+// Blank text means "no written review", stored as null.
+export const normalizeReviewBody = (text: string): string | null => {
+  const trimmed = text.trim();
+  return trimmed === "" ? null : trimmed;
+};
 
 export const formatRatingSummary = ({ averageRating, ratingCount }: RatingSummary): string => {
   if (isNil(averageRating) || ratingCount === 0) {
