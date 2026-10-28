@@ -1,12 +1,15 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-// Runs a fixed set of searches against the deployed igdb-games function, so you can see what a filter change does.
-//   node --env-file=.env.local scripts/compareSearch.ts save before
-//   (change the filters in supabase/functions/igdb-games/games.ts and deploy)
-//   node --env-file=.env.local scripts/compareSearch.ts save after
-//   node --env-file=.env.local scripts/compareSearch.ts compare before after
-import { createClient } from "@supabase/supabase-js";
-import type { SupabaseClient, SupportedStorage } from "@supabase/supabase-js";
+import { setTimeout as sleep } from "node:timers/promises";
+// Runs a fixed set of searches straight against IGDB with the igdb-games function's own query code, so you can see
+// what a filter change in supabase/functions/igdb-games/games.ts does before deploying it:
+//   pnpm compare-search save before
+//   (change the filters in games.ts)
+//   pnpm compare-search save after
+//   pnpm compare-search compare before after
+// Saving needs TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET, which the script reads from supabase/functions/.env.
+import { buildQuery, toGamesPage } from "../supabase/functions/igdb-games/games.ts";
+import type { GamesPage, IgdbGame } from "../supabase/functions/igdb-games/games.ts";
 
 const SEARCHES = [
   "gta",
@@ -57,60 +60,63 @@ const SEARCHES = [
 ];
 const MAX_RESULTS_PER_SEARCH = 100;
 const SNAPSHOT_DIR = join(import.meta.dirname, "search-snapshots");
-// Reusing the anonymous session avoids creating a new Supabase user on every run.
-const SESSION_FILE = join(SNAPSHOT_DIR, ".session.json");
-
-type GamesPage = {
-  games: { name: string }[];
-  nextOffset: number | null;
-};
+const TWITCH_TOKEN_URL = "https://id.twitch.tv/oauth2/token";
+const IGDB_GAMES_URL = "https://api.igdb.com/v4/games";
+// IGDB allows 4 requests per second.
+const REQUEST_INTERVAL_MS = 250;
 
 type Snapshot = Record<string, string[]>;
+
+type TwitchTokenResponse = {
+  access_token: string;
+};
+
+type IgdbCredentials = {
+  clientId: string;
+  accessToken: string;
+};
 
 const readJson = <T>(path: string, fallback: T): T =>
   existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : fallback;
 
-const fileStorage: SupportedStorage = {
-  getItem: (key) => readJson<Record<string, string>>(SESSION_FILE, {})[key] ?? null,
-  setItem: (key, value) => {
-    writeFileSync(SESSION_FILE, JSON.stringify({ ...readJson(SESSION_FILE, {}), [key]: value }));
-  },
-  removeItem: (key) => {
-    const { [key]: _removed, ...rest } = readJson<Record<string, string>>(SESSION_FILE, {});
-    writeFileSync(SESSION_FILE, JSON.stringify(rest));
-  },
+const getIgdbCredentials = async (): Promise<IgdbCredentials> => {
+  const clientId = process.env.TWITCH_CLIENT_ID;
+  const clientSecret = process.env.TWITCH_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    throw new Error("Set TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET in supabase/functions/.env");
+  }
+  const params = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    grant_type: "client_credentials",
+  });
+  const response = await fetch(`${TWITCH_TOKEN_URL}?${params.toString()}`, { method: "POST" });
+  if (!response.ok) {
+    throw new Error(`Twitch token request failed: ${response.status}`);
+  }
+  const { access_token: accessToken } = (await response.json()) as TwitchTokenResponse;
+  return { clientId, accessToken };
 };
 
-const createSupabase = async (): Promise<SupabaseClient> => {
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) {
-    throw new Error("Run with --env-file=.env.local so VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY are set");
+const fetchGamesPage = async (credentials: IgdbCredentials, search: string, offset: number): Promise<GamesPage> => {
+  await sleep(REQUEST_INTERVAL_MS);
+  const response = await fetch(IGDB_GAMES_URL, {
+    method: "POST",
+    headers: { "Client-ID": credentials.clientId, Authorization: `Bearer ${credentials.accessToken}` },
+    body: buildQuery(search, offset),
+  });
+  if (!response.ok) {
+    throw new Error(`Search "${search}" failed: IGDB answered ${response.status}`);
   }
-  const supabase = createClient(url, key, { auth: { storage: fileStorage, persistSession: true } });
-  const { data } = await supabase.auth.getSession();
-  if (!data.session) {
-    const { error } = await supabase.auth.signInAnonymously();
-    if (error) {
-      throw error;
-    }
-  }
-  return supabase;
+  const igdbGames = (await response.json()) as IgdbGame[];
+  return toGamesPage(igdbGames, offset);
 };
 
-const fetchGamesPage = async (supabase: SupabaseClient, search: string, offset: number): Promise<GamesPage> => {
-  const { data, error } = await supabase.functions.invoke<GamesPage>("igdb-games", { body: { search, offset } });
-  if (error || !data) {
-    throw new Error(`Search "${search}" failed: ${error?.message ?? "no data"}`);
-  }
-  return data;
-};
-
-const fetchSearchResults = async (supabase: SupabaseClient, search: string): Promise<string[]> => {
+const fetchSearchResults = async (credentials: IgdbCredentials, search: string): Promise<string[]> => {
   const names: string[] = [];
   let offset: number | null = 0;
   while (offset !== null && names.length < MAX_RESULTS_PER_SEARCH) {
-    const page = await fetchGamesPage(supabase, search, offset);
+    const page = await fetchGamesPage(credentials, search, offset);
     names.push(...page.games.map((game) => game.name));
     offset = page.nextOffset;
   }
@@ -118,10 +124,10 @@ const fetchSearchResults = async (supabase: SupabaseClient, search: string): Pro
 };
 
 const saveSnapshot = async (name: string): Promise<void> => {
-  const supabase = await createSupabase();
+  const credentials = await getIgdbCredentials();
   const snapshot: Snapshot = {};
   for (const search of SEARCHES) {
-    snapshot[search] = await fetchSearchResults(supabase, search);
+    snapshot[search] = await fetchSearchResults(credentials, search);
     process.stdout.write(".");
   }
   writeFileSync(join(SNAPSHOT_DIR, `${name}.json`), JSON.stringify(snapshot, null, 2));
