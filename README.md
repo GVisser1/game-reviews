@@ -6,17 +6,16 @@
 
 ## Routes
 
-| Path                 | Page                            | Rendering                                  |
-| -------------------- | ------------------------------- | ------------------------------------------ |
-| `/`                  | Landing page                    | Prerendered to static HTML at build time   |
-| `/privacy`           | Privacy page                    | Prerendered to static HTML at build time   |
-| `/login`             | Sign in                         | In the browser                             |
-| `/app`               | Games list and search           | In the browser, signs in anonymously first |
-| `/app/games/:gameId` | Game details and rating         | In the browser                             |
-| `/app/top-rated`     | Redirects to `/app?sort=rating` | In the browser                             |
-| `/app/users/:name`   | A player's profile and reviews  | In the browser                             |
-| `/app/my-reviews`    | Redirects to your profile       | In the browser                             |
-| `/app/account`       | Account and account deletion    | In the browser                             |
+| Path                 | Page                           | Rendering                                  |
+| -------------------- | ------------------------------ | ------------------------------------------ |
+| `/`                  | Landing page                   | Prerendered to static HTML at build time   |
+| `/privacy`           | Privacy page                   | Prerendered to static HTML at build time   |
+| `/login`             | Sign in                        | In the browser                             |
+| `/app`               | Games list and search          | In the browser, signs in anonymously first |
+| `/app/games/:gameId` | Game details and rating        | In the browser                             |
+| `/app/users/:name`   | A player's profile and reviews | In the browser                             |
+| `/app/my-reviews`    | Redirects to your profile      | In the browser                             |
+| `/app/account`       | Account and account deletion   | In the browser                             |
 
 Routes are files in `src/routes/`; `src/routeTree.gen.ts` is generated from them by the dev server and build.
 
