@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { isLinkPreviewCrawler, parseGameId, toGamePreviewTags } from "./gamePreview";
+import { isLinkPreviewCrawler, parseGameId, toGamePreviewTags } from "../gamePreview";
 
 describe("isLinkPreviewCrawler", () => {
   it.each([

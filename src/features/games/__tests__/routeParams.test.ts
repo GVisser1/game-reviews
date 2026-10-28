@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { parseGameId, validateGamesSearch } from "./routeParams";
+import { parseGameId, validateGamesSearch } from "../routeParams";
 
 describe("parseGameId", () => {
   it("parses a numeric game id", () => {

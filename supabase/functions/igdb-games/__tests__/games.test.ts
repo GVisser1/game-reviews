@@ -10,8 +10,8 @@ import {
   sanitizeSearch,
   toGame,
   toGamesPage,
-} from "./games.ts";
-import type { IgdbGame } from "./games.ts";
+} from "../games.ts";
+import type { IgdbGame } from "../games.ts";
 
 const FIRST_OFFSET = 0;
 const SECOND_PAGE_OFFSET = 50;

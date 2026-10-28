@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { normalizeReviewBody } from "./reviewBody";
+import { normalizeReviewBody } from "../reviewBody";
 
 describe("normalizeReviewBody", () => {
   it("trims surrounding whitespace", () => {

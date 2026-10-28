@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { formatRatingSummary, formatShortRatingSummary } from "./formatRatingSummary";
+import { formatRatingSummary, formatShortRatingSummary } from "../formatRatingSummary";
 
 describe("formatRatingSummary", () => {
   it("shows the average with one decimal and the number of ratings", () => {

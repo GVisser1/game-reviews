@@ -1,6 +1,6 @@
 import type { User, UserIdentity } from "@supabase/supabase-js";
 import { describe, expect, it } from "vite-plus/test";
-import { getAvatarUrl, getDisplayName } from "./userProfile";
+import { getAvatarUrl, getDisplayName } from "../userProfile";
 
 const createUser = (userMetadata: Record<string, unknown>, identities: UserIdentity[] = []): User => ({
   id: "user-id",

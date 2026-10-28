@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { pageHead, toPageTitle } from "./pageHead";
+import { pageHead, toPageTitle } from "../pageHead";
 
 describe("toPageTitle", () => {
   it("returns the site name without a page name", () => {
