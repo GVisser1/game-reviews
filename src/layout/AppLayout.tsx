@@ -1,8 +1,8 @@
 import { Link, Outlet } from "@tanstack/react-router";
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { AccountMenu } from "./features/auth/AccountMenu";
-import { toErrorMessage } from "./utils/errorUtil";
+import { AccountMenu } from "../features/auth/AccountMenu";
+import { toErrorMessage } from "../utils/errorUtil";
 
 const NAV_LINK_CLASS_NAME = "hover:underline";
 const ACTIVE_NAV_LINK_PROPS = { className: "font-bold underline" };
