@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { toSafeRedirectPath } from "./loginRedirect";
+import { toSafeRedirectPath } from "./utils/authUtil";
 
 export const SignInLink = (): React.JSX.Element => {
   const currentPath = useLocation({ select: (location) => location.href });

@@ -1,6 +1,6 @@
 import { isNil } from "lodash-es";
 import { supabase } from "../../lib/supabase";
-import { LOGIN_PATH } from "./loginRedirect";
+import { LOGIN_PATH } from "./utils/authUtil";
 
 const TWITCH_PROVIDER = "twitch";
 

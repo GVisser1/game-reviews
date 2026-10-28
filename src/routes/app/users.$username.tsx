@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { noop } from "lodash-es";
 import { ProfilePage } from "../../features/profiles/ProfilePage";
 import { profileQueryOptions, profileReviewsQueryOptions } from "../../features/profiles/profileQuery";
-import { pageHead } from "../../lib/pageHead";
+import { pageHead } from "../../utils/pageHeadUtil";
 
 const NOT_FOUND_PAGE_NAME = "Player not found";
 

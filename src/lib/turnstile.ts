@@ -1,5 +1,5 @@
 import { isNil } from "lodash-es";
-import { seconds } from "./timeUtil";
+import { seconds } from "../utils/timeUtil";
 
 const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 // How long the invisible check may take. Once Cloudflare shows the checkbox, the app waits for the visitor instead.

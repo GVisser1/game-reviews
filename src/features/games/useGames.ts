@@ -3,10 +3,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { isNil } from "lodash-es";
 import { useCallback } from "react";
 import { supabase } from "../../lib/supabase";
-import { toFunctionError } from "../../lib/toFunctionError";
+import { toFunctionError } from "../../utils/errorUtil";
 import { RATING_SUMMARY_QUERY_KEY } from "../reviews/ratingSummaryQuery";
-import type { GamesSort } from "./gamesSort";
 import type { Game } from "./types";
+import type { GamesSort } from "./utils/gameUtil";
 
 const FIRST_OFFSET = 0;
 const RATED_GAMES_PAGE_SIZE = 50;

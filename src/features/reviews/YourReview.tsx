@@ -2,8 +2,8 @@ import { isNil } from "lodash-es";
 import { useState } from "react";
 import { StarRating } from "../../shared/StarRating";
 import { RemoveReviewButton } from "./RemoveReviewButton";
-import { MAX_REVIEW_LENGTH, normalizeReviewBody } from "./reviewBody";
 import type { Review } from "./types";
+import { MAX_REVIEW_LENGTH, normalizeReviewBody } from "./utils/reviewUtil";
 
 const NO_RATING = 0;
 

@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { LoginPage } from "../features/auth/LoginPage";
-import { validateLoginSearch } from "../features/auth/loginRedirect";
-import { pageHead } from "../lib/pageHead";
+import { validateLoginSearch } from "../features/auth/utils/authUtil";
 import { supabase } from "../lib/supabase";
+import { pageHead } from "../utils/pageHeadUtil";
 
 const APP_PATH = "/app";
 

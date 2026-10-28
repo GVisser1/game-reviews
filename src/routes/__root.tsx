@@ -1,8 +1,8 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext } from "@tanstack/react-router";
-import { SITE_DESCRIPTION, SITE_NAME, toPageTitle } from "../lib/pageHead";
 import { NotFoundPage } from "../NotFoundPage";
 import { RootDocument } from "../RootDocument";
+import { SITE_DESCRIPTION, SITE_NAME, toPageTitle } from "../utils/pageHeadUtil";
 import appCss from "../index.css?url";
 
 type RouterContext = {

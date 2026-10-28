@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "@tanstack/react-router";
 import { isEmpty, isNil } from "lodash-es";
-import { toErrorMessage } from "../../lib/toErrorMessage";
 import { GameTile } from "../../shared/GameTile";
 import { StarRating } from "../../shared/StarRating";
+import { toErrorMessage } from "../../utils/errorUtil";
 import { profileQueryOptions, profileReviewsQueryOptions } from "./profileQuery";
 import type { Profile } from "./types";
 
