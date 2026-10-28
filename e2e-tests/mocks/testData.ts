@@ -73,7 +73,7 @@ export const OTHER_PLAYER_REVIEWS = [
 ];
 
 // Star ratings from other players without written text. Together with OTHER_PLAYER_REVIEWS: The Witcher 3 has 4.5
-// from 2 ratings, Elden Ring 3.5 from 2, Portal 2 5.0 from 1 (too few for Top rated) and GTA V none.
+// from 2 ratings, Elden Ring 3.5 from 2, Portal 2 5.0 from 1 and GTA V none.
 export const OTHER_PLAYER_RATINGS = [
   { game_id: 1942, rating: 4 },
   { game_id: 1942, rating: 5 },

@@ -10,6 +10,7 @@ export type ProfileReview = {
   gameId: number;
   gameName: string;
   coverUrl: string | null;
+  releaseYear: number | null;
   rating: number;
   body: string | null;
   createdAt: string;

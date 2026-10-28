@@ -18,6 +18,7 @@ type ProfileReviewRow = {
   game_id: number;
   game_name: string;
   cover_url: string | null;
+  release_year: number | null;
   rating: number;
   body: string | null;
   created_at: string;
@@ -50,6 +51,7 @@ const fetchProfileReviews = async (username: string): Promise<ProfileReview[]> =
     gameId: row.game_id,
     gameName: row.game_name,
     coverUrl: row.cover_url,
+    releaseYear: row.release_year,
     rating: row.rating,
     body: row.body,
     createdAt: row.created_at,
