@@ -16,7 +16,6 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppAccountRouteImport } from './routes/app/account'
 import { Route as AppMyReviewsRouteImport } from './routes/app/my-reviews'
-import { Route as AppTopRatedRouteImport } from './routes/app/top-rated'
 import { Route as AppGamesGameIdRouteImport } from './routes/app/games.$gameId'
 import { Route as AppUsersUsernameRouteImport } from './routes/app/users.$username'
 
@@ -55,11 +54,6 @@ const AppMyReviewsRoute = AppMyReviewsRouteImport.update({
   path: '/my-reviews',
   getParentRoute: () => AppRoute,
 } as any)
-const AppTopRatedRoute = AppTopRatedRouteImport.update({
-  id: '/top-rated',
-  path: '/top-rated',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppGamesGameIdRoute = AppGamesGameIdRouteImport.update({
   id: '/games/$gameId',
   path: '/games/$gameId',
@@ -78,7 +72,6 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
-  '/app/top-rated': typeof AppTopRatedRoute
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
@@ -89,7 +82,6 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
-  '/app/top-rated': typeof AppTopRatedRoute
   '/app': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
@@ -102,7 +94,6 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
-  '/app/top-rated': typeof AppTopRatedRoute
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
@@ -116,7 +107,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/app/account'
     | '/app/my-reviews'
-    | '/app/top-rated'
     | '/app/'
     | '/app/games/$gameId'
     | '/app/users/$username'
@@ -127,7 +117,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/app/account'
     | '/app/my-reviews'
-    | '/app/top-rated'
     | '/app'
     | '/app/games/$gameId'
     | '/app/users/$username'
@@ -139,7 +128,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/app/account'
     | '/app/my-reviews'
-    | '/app/top-rated'
     | '/app/'
     | '/app/games/$gameId'
     | '/app/users/$username'
@@ -203,13 +191,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMyReviewsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/top-rated': {
-      id: '/app/top-rated'
-      path: '/top-rated'
-      fullPath: '/app/top-rated'
-      preLoaderRoute: typeof AppTopRatedRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/app/games/$gameId': {
       id: '/app/games/$gameId'
       path: '/games/$gameId'
@@ -230,7 +211,6 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAccountRoute: typeof AppAccountRoute
   AppMyReviewsRoute: typeof AppMyReviewsRoute
-  AppTopRatedRoute: typeof AppTopRatedRoute
   AppIndexRoute: typeof AppIndexRoute
   AppGamesGameIdRoute: typeof AppGamesGameIdRoute
   AppUsersUsernameRoute: typeof AppUsersUsernameRoute
@@ -239,7 +219,6 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAccountRoute: AppAccountRoute,
   AppMyReviewsRoute: AppMyReviewsRoute,
-  AppTopRatedRoute: AppTopRatedRoute,
   AppIndexRoute: AppIndexRoute,
   AppGamesGameIdRoute: AppGamesGameIdRoute,
   AppUsersUsernameRoute: AppUsersUsernameRoute,

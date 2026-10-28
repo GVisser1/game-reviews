@@ -114,10 +114,3 @@ test("includes the user's own rating when sorting by highest rated", async ({
 
   await expect(gamesPage.gameTile("Portal 2")).toContainText("★ 5.0 (2)");
 });
-
-test("sends old Top rated links to the games list sorted by rating", async ({ page, gamesPage }) => {
-  await page.goto("/app/top-rated");
-
-  await expect(page).toHaveURL("/app?sort=rating");
-  await expect(gamesPage.sortSelect).toHaveValue("rating");
-});
