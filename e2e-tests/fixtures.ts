@@ -9,7 +9,6 @@ import { LoginPage } from "./page-objects/pages/loginPage";
 import { NotFoundPage } from "./page-objects/pages/notFoundPage";
 import { PrivacyPage } from "./page-objects/pages/privacyPage";
 import { ProfilePage } from "./page-objects/pages/profilePage";
-import { TopRatedPage } from "./page-objects/pages/topRatedPage";
 
 type Fixtures = {
   backend: FakeBackend;
@@ -21,7 +20,6 @@ type Fixtures = {
   accountPage: AccountPage;
   privacyPage: PrivacyPage;
   profilePage: ProfilePage;
-  topRatedPage: TopRatedPage;
   // Signs in with (fake) Twitch from the login page and ends up back on `redirectPath`, an /app page.
   signIn: (redirectPath: string) => Promise<void>;
 };
@@ -37,7 +35,6 @@ export const test = base.extend<Fixtures>({
   accountPage: async ({ page }, use) => use(new AccountPage(page)),
   privacyPage: async ({ page }, use) => use(new PrivacyPage(page)),
   profilePage: async ({ page }, use) => use(new ProfilePage(page)),
-  topRatedPage: async ({ page }, use) => use(new TopRatedPage(page)),
   signIn: async ({ page, loginPage }, use) =>
     use(async (redirectPath) => {
       await loginPage.goto(`?redirect=${encodeURIComponent(redirectPath)}`);

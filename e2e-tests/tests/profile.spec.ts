@@ -27,6 +27,7 @@ test("opens another player's profile from their review", async ({ page, gameDeta
   await expect(page).toHaveURL("/app/users/other-player");
   await expect(profilePage.heading("Other Player")).toBeVisible();
   await expect(profilePage.reviewedGame("Portal 2")).toContainText("Best co-op puzzles ever made.");
+  await expect(profilePage.reviewedGame("Portal 2")).toContainText("2011");
   await expect(profilePage.rating(5)).toBeVisible();
   await expect(profilePage.accountSettingsLink).toBeHidden();
   await profilePage.assertPageIsAccessible();

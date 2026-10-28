@@ -22,10 +22,3 @@ export type RatingSummary = {
   averageRating: number | null;
   ratingCount: number;
 };
-
-export type TopRatedGame = {
-  gameId: number;
-  gameName: string;
-  coverUrl: string | null;
-  ratingSummary: RatingSummary;
-};

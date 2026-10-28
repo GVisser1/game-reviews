@@ -315,6 +315,7 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
             game_id: review.game_id,
             game_name: find(TEST_GAMES, { id: review.game_id })?.name ?? `Game ${review.game_id}`,
             cover_url: null,
+            release_year: find(TEST_GAMES, { id: review.game_id })?.releaseYear ?? null,
             rating: review.rating,
             body: review.body,
             created_at: review.created_at,
@@ -343,18 +344,6 @@ export const installFakeBackend = async (page: Page): Promise<FakeBackend> => {
       gameIds
         .filter((gameId) => !isEmpty(ratings[String(gameId)]))
         .map((gameId) => ({ game_id: gameId, ...toRatingSummaryRow(ratings[String(gameId)] ?? []) })),
-    );
-  });
-
-  // Best average first, ties to the game with more ratings, like the database function.
-  await page.route("**/rest/v1/rpc/get_top_rated_games", async (route) => {
-    if (await handlePreflight(route)) {
-      return;
-    }
-    const { min_ratings: minRatings = 1 }: { min_ratings?: number } = route.request().postDataJSON() ?? {};
-    await json(
-      route,
-      ratedGames().filter((game) => game.rating_count >= minRatings),
     );
   });
 

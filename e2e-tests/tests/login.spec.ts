@@ -27,7 +27,7 @@ test("shows a failed sign-in and removes the error from the URL", async ({ page,
 test("sends signed-in visitors on to where they came from", async ({ page, signIn, loginPage }) => {
   await signIn("/app");
 
-  await loginPage.goto("?redirect=%2Fapp%2Ftop-rated");
+  await loginPage.goto("?redirect=%2Fapp%2Fgames%2F72");
 
-  await expect(page).toHaveURL("/app/top-rated");
+  await expect(page).toHaveURL("/app/games/72");
 });

@@ -99,3 +99,25 @@ test("sorts by players' ratings, best first, with and without a search", async (
   await gamesPage.searchInput.fill("grand");
   await expect(page.getByText("No rated games found.")).toBeVisible();
 });
+
+test("includes the user's own rating when sorting by highest rated", async ({
+  page,
+  signIn,
+  gameDetailsPage,
+  gamesPage,
+}) => {
+  await signIn("/app/games/72");
+
+  await gameDetailsPage.starButton(5).click();
+  await expect(gameDetailsPage.removeReviewButton).toBeVisible();
+  await page.goto("/app?sort=rating");
+
+  await expect(gamesPage.gameTile("Portal 2")).toContainText("★ 5.0 (2)");
+});
+
+test("sends old Top rated links to the games list sorted by rating", async ({ page, gamesPage }) => {
+  await page.goto("/app/top-rated");
+
+  await expect(page).toHaveURL("/app?sort=rating");
+  await expect(gamesPage.sortSelect).toHaveValue("rating");
+});
