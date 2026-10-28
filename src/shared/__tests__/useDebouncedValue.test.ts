@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
-import { useDebouncedValue } from "./useDebouncedValue";
+import { useDebouncedValue } from "../useDebouncedValue";
 
 const DELAY_MS = 300;
 const JUST_BEFORE_DELAY_MS = DELAY_MS - 1;

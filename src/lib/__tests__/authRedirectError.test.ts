@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from "vite-plus/test";
-import { takeAuthRedirectErrorCode } from "./authRedirectError";
+import { takeAuthRedirectErrorCode } from "../authRedirectError";
 
 const visit = (path: string): void => window.history.replaceState(null, "", path);
 

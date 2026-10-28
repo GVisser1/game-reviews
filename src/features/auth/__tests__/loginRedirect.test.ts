@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { toSafeRedirectPath, validateLoginSearch } from "./loginRedirect";
+import { toSafeRedirectPath, validateLoginSearch } from "../loginRedirect";
 
 describe("toSafeRedirectPath", () => {
   it.each(["/", "/games/72", "/my-reviews", "/?q=zelda", "/games/72#reviews"])("keeps the app path %j", (path) => {

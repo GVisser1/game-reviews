@@ -1,6 +1,6 @@
 import { FunctionsHttpError } from "@supabase/supabase-js";
 import { describe, expect, it } from "vite-plus/test";
-import { toFunctionError } from "./toFunctionError";
+import { toFunctionError } from "../toFunctionError";
 
 const INTERNAL_SERVER_ERROR = 500;
 
