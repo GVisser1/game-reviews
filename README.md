@@ -62,7 +62,7 @@ Production): `SUPABASE_URL`, the Supabase project URL. Without it, game links ge
 | `pnpm test:e2e`                                | Run the Playwright end-to-end tests in Chromium, Firefox and WebKit |
 | `pnpm test:e2e-ui`                             | Open Playwright's UI to run and debug E2E tests                     |
 | `pnpm test:e2e-report`                         | Open the report of the last E2E run                                 |
-| `pnpm compare-search save <name>`              | Snapshot 45 searches against the deployed `igdb-games` function     |
+| `pnpm compare-search save <name>`              | Snapshot 45 searches straight from IGDB with the local search rules |
 | `pnpm compare-search compare <before> <after>` | Show which games each search gained or lost between two snapshots   |
 
 ### End-to-end tests
@@ -75,11 +75,13 @@ IGDB results. That also means they don't catch a broken real backend; use `pnpm 
 ### Tuning search
 
 The search rules live in `supabase/functions/igdb-games/games.ts` and are covered by `games.test.ts`.
-Unit tests only check the query we send; to see what IGDB actually returns, snapshot before and after a change:
+Unit tests only check the query we send; to see what IGDB actually returns, snapshot before and after a change. The
+script runs the local `games.ts` against IGDB, so there's nothing to deploy in between. It needs `TWITCH_CLIENT_ID` and
+`TWITCH_CLIENT_SECRET` in `supabase/functions/.env`, the same Twitch app the edge functions use:
 
 ```bash
 pnpm compare-search save before
-# edit games.ts, then: pnpm exec supabase functions deploy igdb-games
+# edit games.ts
 pnpm compare-search save after
 pnpm compare-search compare before after
 ```

@@ -12,7 +12,7 @@
     "check": "vp check",
     "fmt": "vp fmt",
     "test": "vp test",
-    "compare-search": "node --env-file=.env.local scripts/compareSearch.ts",
+    "compare-search": "node --env-file-if-exists=supabase/functions/.env scripts/compareSearch.ts",
     "test:e2e": "playwright test",
     "test:e2e-ui": "playwright test --ui",
     "test:e2e-report": "playwright show-report e2e-tests/test-reports",
