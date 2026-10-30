@@ -4,6 +4,33 @@
 
 [Vite+](https://viteplus.dev) + React with [TanStack Start](https://tanstack.com/start), Supabase back end, game data from IGDB.
 
+## Local development
+
+`pnpm dev` runs against a local Supabase in Docker, never against production:
+
+```bash
+pnpm exec supabase start   # database, auth and edge functions; applies every migration in supabase/migrations
+pnpm dev
+```
+
+`.env.development` points the dev server at it (`http://localhost:54321`, the CLI's fixed local publishable key) and
+turns Turnstile off, since local auth doesn't check captchas. Vite ranks that file above `.env.local` in development
+only, so builds keep their production values. Local data lives in Docker: Supabase Studio is at http://localhost:54323,
+`pnpm exec supabase db reset` starts over from the migrations, and `pnpm exec supabase stop` shuts everything down.
+
+Two git-ignored files hold the local credentials:
+
+| File                      | Variables                                                                         | Used for                                               |
+| ------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `supabase/functions/.env` | `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`                                        | IGDB in local edge functions and `pnpm compare-search` |
+| `.env` (project root)     | `SUPABASE_AUTH_EXTERNAL_TWITCH_CLIENT_ID`, `SUPABASE_AUTH_EXTERNAL_TWITCH_SECRET` | Twitch sign-in, read by `supabase/config.toml`         |
+
+For local Twitch sign-in, the Twitch app also needs `http://localhost:54321/auth/v1/callback` as an OAuth redirect URL.
+Without these files, browsing works but the games list can't reach IGDB, and Twitch sign-in fails.
+
+New database changes are migrations: `pnpm exec supabase migration new <name>`, then `pnpm exec supabase db reset` to
+apply them locally. They reach production with the next **Deploy to PROD**.
+
 ## Routes
 
 | Path                 | Page                           | Rendering                                  |
@@ -22,8 +49,10 @@ Routes are files in `src/routes/`; `src/routeTree.gen.ts` is generated from them
 ### Hosting
 
 Production runs on Cloudflare Pages at https://game-reviews-ccu.pages.dev. Deploys are manual: run the **Deploy to PROD**
-workflow from the Actions tab and pick the branch to deploy. It checks, tests and builds with `pnpm build:pages`, then uploads
-`dist/client` with `wrangler`.
+workflow from the Actions tab and pick the branch to deploy. It checks, tests and builds with `pnpm build:pages`, pushes
+new database migrations and deploys the edge functions to the production Supabase project, then uploads `dist/client`
+with `wrangler`. Pushing migrations fails if production already has one the branch doesn't, so an old branch can't be
+deployed over a newer database.
 
 The build writes `index.html` (landing) and `privacy.html` as static HTML, plus `_shell.html`, which renders every
 other page in the browser. `public/_redirects` serves the shell for `/app`, `/app/*` and `/login`, and `404.html` (a
@@ -43,6 +72,9 @@ The workflow reads these from the `production` environment in the repository set
 | `VITE_SUPABASE_URL`             | Variable | Supabase project URL                               |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Variable | Supabase publishable key                           |
 | `VITE_TURNSTILE_SITE_KEY`       | Variable | Cloudflare Turnstile site key                      |
+| `SUPABASE_PROJECT_REF`          | Variable | Supabase project ref                               |
+| `SUPABASE_ACCESS_TOKEN`         | Secret   | Supabase personal access token                     |
+| `SUPABASE_DB_PASSWORD`          | Secret   | Production database password                       |
 | `CLOUDFLARE_ACCOUNT_ID`         | Secret   | Cloudflare account ID                              |
 | `CLOUDFLARE_API_TOKEN`          | Secret   | Cloudflare API token with "Cloudflare Pages: Edit" |
 
@@ -76,7 +108,7 @@ IGDB results. That also means they don't catch a broken real backend; use `pnpm 
 The search rules live in `supabase/functions/igdb-games/games.ts` and are covered by `games.test.ts`.
 Unit tests only check the query we send; to see what IGDB actually returns, snapshot before and after a change. The
 script runs the local `games.ts` against IGDB, so there's nothing to deploy in between. It needs `TWITCH_CLIENT_ID` and
-`TWITCH_CLIENT_SECRET` in `supabase/functions/.env`, the same Twitch app the edge functions use:
+`TWITCH_CLIENT_SECRET` in `supabase/functions/.env` (see [Local development](#local-development)):
 
 ```bash
 pnpm compare-search save before
