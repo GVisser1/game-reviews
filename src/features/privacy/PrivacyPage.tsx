@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { Heading } from "../../shared/Heading";
 
 const LAST_UPDATED = "October 18, 2026";
 const CONTACT_URL = "https://github.com/GVisser1";
@@ -11,7 +12,9 @@ type SectionProps = {
 
 const Section = ({ title, children }: SectionProps): React.JSX.Element => (
   <section className="flex flex-col gap-2">
-    <h2 className="text-xl font-bold">{title}</h2>
+    <Heading as="h2" className="text-xl font-bold">
+      {title}
+    </Heading>
     {children}
   </section>
 );
@@ -21,7 +24,9 @@ export const PrivacyPage = (): React.JSX.Element => (
     <Link to="/" className="self-start text-sm hover:underline">
       ← Home
     </Link>
-    <h1 className="text-3xl font-bold">Privacy</h1>
+    <Heading as="h1" className="text-3xl font-bold">
+      Privacy
+    </Heading>
     <p>
       Game Reviews is a personal project. This page explains what it stores about you, why, and how to delete it. Last
       updated {LAST_UPDATED}.

@@ -1,6 +1,7 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { authRedirectErrorCode } from "../../lib/supabase";
+import { Heading } from "../../shared/Heading";
 import { toErrorMessage } from "../../utils/errorUtil";
 import { signInWithTwitch } from "./twitchSignIn";
 
@@ -30,7 +31,9 @@ export const LoginPage = (): React.JSX.Element => {
       <a href={redirect ?? HOME_PATH} className="self-start text-sm hover:underline">
         ← Back
       </a>
-      <h1 className="text-2xl font-bold">Sign in</h1>
+      <Heading as="h1" className="text-2xl font-bold">
+        Sign in
+      </Heading>
       <p className="text-gray-600">Sign in to rate games and keep track of your reviews.</p>
       <button
         type="button"

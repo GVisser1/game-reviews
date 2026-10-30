@@ -1,1 +1,10 @@
 @import "tailwindcss";
+@import "@fontsource-variable/sora";
+@import "@fontsource-variable/roboto";
+
+@theme inline {
+  --font-*: initial;
+  --font-body: "Roboto Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Sora Variable", ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-body);
+}

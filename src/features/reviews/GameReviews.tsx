@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { isEmpty } from "lodash-es";
+import { Heading } from "../../shared/Heading";
 import { StarRating } from "../../shared/StarRating";
 import { toErrorMessage } from "../../utils/errorUtil";
 import { gameReviewsQueryOptions } from "./gameReviewsQuery";
@@ -16,7 +17,9 @@ export const GameReviews = ({ gameId }: GameReviewsProps): React.JSX.Element => 
 
   return (
     <section className="flex max-w-2xl flex-col gap-4">
-      <h2 className="text-xl font-bold">Reviews</h2>
+      <Heading as="h2" className="text-xl font-bold">
+        Reviews
+      </Heading>
       {isPending && <p>Loading reviews…</p>}
       {error && <p className="text-red-600">Could not load reviews: {toErrorMessage(error)}</p>}
       {reviews && isEmpty(reviews) && <p className="text-gray-600">No written reviews yet.</p>}

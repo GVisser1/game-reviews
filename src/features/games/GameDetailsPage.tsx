@@ -4,6 +4,7 @@ import type { ErrorComponentProps } from "@tanstack/react-router";
 import { isEmpty, isNil } from "lodash-es";
 import type { ReactNode } from "react";
 import { BackLink } from "../../shared/BackLink";
+import { Heading } from "../../shared/Heading";
 import { toErrorMessage } from "../../utils/errorUtil";
 import { SignInPrompt } from "../auth/SignInPrompt";
 import { useAuthUser } from "../auth/useAuthUser";
@@ -48,9 +49,9 @@ export const GameDetailsPage = (): React.JSX.Element => {
       <article className="flex flex-col gap-6 sm:flex-row">
         {game.coverUrl && <img src={game.coverUrl} alt={game.name} className="w-48 self-start rounded" />}
         <div className="flex max-w-2xl flex-col gap-3">
-          <h1 className="text-2xl font-bold">
+          <Heading as="h1" className="text-2xl font-bold">
             {game.name} {game.releaseYear && <span className="text-gray-500">({game.releaseYear})</span>}
-          </h1>
+          </Heading>
           {user?.is_anonymous && <SignInPrompt message="Sign in to rate this game." />}
           {user && !user.is_anonymous && !isLoadingReviews && (
             <YourReview
