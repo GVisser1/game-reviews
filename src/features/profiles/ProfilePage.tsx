@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "@tanstack/react-router";
 import { isEmpty, isNil } from "lodash-es";
 import { GameTile } from "../../shared/GameTile";
+import { Heading } from "../../shared/Heading";
 import { StarRating } from "../../shared/StarRating";
 import { toErrorMessage } from "../../utils/errorUtil";
 import { profileQueryOptions, profileReviewsQueryOptions } from "./profileQuery";
@@ -52,14 +53,20 @@ export const ProfilePage = (): React.JSX.Element => {
     return <p className="text-red-600">Could not load this profile: {toErrorMessage(error)}</p>;
   }
   if (isNil(profile)) {
-    return <h1 className="text-2xl font-bold">Player not found</h1>;
+    return (
+      <Heading as="h1" className="text-2xl font-bold">
+        Player not found
+      </Heading>
+    );
   }
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
         {profile.avatarUrl && <img src={profile.avatarUrl} alt="" className="size-12 rounded-full" />}
-        <h1 className="text-2xl font-bold">{profile.displayName}</h1>
+        <Heading as="h1" className="text-2xl font-bold">
+          {profile.displayName}
+        </Heading>
         {profile.isOwn && (
           <Link to="/app/account" className="ml-auto text-sm hover:underline">
             Account settings

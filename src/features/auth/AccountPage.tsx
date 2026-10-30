@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { isNil } from "lodash-es";
 import { useState } from "react";
+import { Heading } from "../../shared/Heading";
 import { toErrorMessage } from "../../utils/errorUtil";
 import { deleteAccount } from "./deleteAccount";
 import { SignInPrompt } from "./SignInPrompt";
@@ -42,7 +43,9 @@ export const AccountPage = (): React.JSX.Element | null => {
 
   return (
     <div className="flex max-w-xl flex-col gap-6">
-      <h1 className="text-2xl font-bold">Account</h1>
+      <Heading as="h1" className="text-2xl font-bold">
+        Account
+      </Heading>
       <div className="flex items-center gap-3">
         {avatarUrl && <img src={avatarUrl} alt="" className="size-10 rounded-full" />}
         <div className="flex flex-col">
@@ -52,7 +55,9 @@ export const AccountPage = (): React.JSX.Element | null => {
       </div>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-bold">Delete account</h2>
+        <Heading as="h2" className="text-lg font-bold">
+          Delete account
+        </Heading>
         <p>
           Deletes your account, your profile and all your ratings and reviews. This can't be undone. See the{" "}
           <Link to="/privacy" className="underline">
