@@ -59,6 +59,18 @@ describe("parseDesignTokens", () => {
     expect(() => parseDesignTokens(css)).toThrow(`"#fff" isn't a palette colour`);
   });
 
+  it("fails on a colour that isn't a role", () => {
+    const css = ":root { --violet: #7c3aed; } @theme inline { --color-brand: #7c3aed; }";
+    expect(() => parseDesignTokens(css)).toThrow(
+      `--color-brand should point at a role, like var(--brand), not "#7c3aed"`,
+    );
+  });
+
+  it("fails on a role outside the plain :root block", () => {
+    const css = ":root, :host { --page: #ffffff; } @theme inline { --color-page: var(--page); }";
+    expect(() => parseDesignTokens(css)).toThrow("--color-page uses --page, which isn't in the plain :root block");
+  });
+
   it("fails on a text role without a line height", () => {
     expect(() => parseDesignTokens("@theme { --text-body: 1rem; }")).toThrow("--text-body has no line height");
   });

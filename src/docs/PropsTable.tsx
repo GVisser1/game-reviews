@@ -14,7 +14,11 @@ const HEADERS = ["Prop", "Type", "Default", "Description"];
 
 // The component's props, read from its TypeScript types and their JSDoc comments, so it can't drift from the code.
 export const PropsTable = ({ docs, component }: PropsTableProps): React.JSX.Element => {
-  const documentation = docs.find((entry) => entry.displayName === component) ?? docs[0];
+  const documentation = isNil(component) ? docs[0] : docs.find((entry) => entry.displayName === component);
+  // Throws rather than showing another component's props, so the docs page tests catch a typo or a rename.
+  if (!isNil(component) && isNil(documentation)) {
+    throw new Error(`There's no component called "${component}" in this file`);
+  }
   const props = Object.entries(documentation?.props ?? {});
   if (isEmpty(props)) {
     return <p className="text-muted">This component takes no props.</p>;

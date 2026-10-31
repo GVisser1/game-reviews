@@ -2,7 +2,8 @@ import { isNil } from "lodash-es";
 
 const MAX_STARS = 5;
 const STAR_VALUES = Array.from({ length: MAX_STARS }, (_, index) => index + 1);
-const STAR_CLASS_NAME = "text-heading text-rating";
+// The stars are icons, not text, so they have their own size instead of a text role: 24px glyphs on a 32px line.
+const STAR_CLASS_NAME = "text-[1.5rem] leading-8 text-rating";
 
 type StarRatingProps = {
   /** The number of filled stars, from 0 to 5. */
