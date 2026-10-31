@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as DevRouteImport } from './routes/dev'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AppIndexRouteImport } from './routes/app/index'
@@ -18,6 +19,8 @@ import { Route as AppAccountRouteImport } from './routes/app/account'
 import { Route as AppMyReviewsRouteImport } from './routes/app/my-reviews'
 import { Route as AppGamesGameIdRouteImport } from './routes/app/games.$gameId'
 import { Route as AppUsersUsernameRouteImport } from './routes/app/users.$username'
+import { Route as DevComponentsIndexRouteImport } from './routes/dev/components/index'
+import { Route as DevComponentsNameRouteImport } from './routes/dev/components/$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevRoute = DevRouteImport.update({
+  id: '/dev',
+  path: '/dev',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -64,10 +72,21 @@ const AppUsersUsernameRoute = AppUsersUsernameRouteImport.update({
   path: '/users/$username',
   getParentRoute: () => AppRoute,
 } as any)
+const DevComponentsIndexRoute = DevComponentsIndexRouteImport.update({
+  id: '/components/',
+  path: '/components/',
+  getParentRoute: () => DevRoute,
+} as any)
+const DevComponentsNameRoute = DevComponentsNameRouteImport.update({
+  id: '/components/$name',
+  path: '/components/$name',
+  getParentRoute: () => DevRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/dev': typeof DevRouteWithChildren
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
@@ -75,9 +94,12 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
+  '/dev/components/$name': typeof DevComponentsNameRoute
+  '/dev/components/': typeof DevComponentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dev': typeof DevRouteWithChildren
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
@@ -85,11 +107,14 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
+  '/dev/components/$name': typeof DevComponentsNameRoute
+  '/dev/components': typeof DevComponentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/dev': typeof DevRouteWithChildren
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
@@ -97,12 +122,15 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
+  '/dev/components/$name': typeof DevComponentsNameRoute
+  '/dev/components/': typeof DevComponentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/app'
+    | '/dev'
     | '/login'
     | '/privacy'
     | '/app/account'
@@ -110,9 +138,12 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/games/$gameId'
     | '/app/users/$username'
+    | '/dev/components/$name'
+    | '/dev/components/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dev'
     | '/login'
     | '/privacy'
     | '/app/account'
@@ -120,10 +151,13 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/games/$gameId'
     | '/app/users/$username'
+    | '/dev/components/$name'
+    | '/dev/components'
   id:
     | '__root__'
     | '/'
     | '/app'
+    | '/dev'
     | '/login'
     | '/privacy'
     | '/app/account'
@@ -131,11 +165,14 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/games/$gameId'
     | '/app/users/$username'
+    | '/dev/components/$name'
+    | '/dev/components/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  DevRoute: typeof DevRouteWithChildren
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
 }
@@ -154,6 +191,13 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev': {
+      id: '/dev'
+      path: '/dev'
+      fullPath: '/dev'
+      preLoaderRoute: typeof DevRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -205,6 +249,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppUsersUsernameRouteImport
       parentRoute: typeof AppRoute
     }
+    '/dev/components/': {
+      id: '/dev/components/'
+      path: '/components'
+      fullPath: '/dev/components/'
+      preLoaderRoute: typeof DevComponentsIndexRouteImport
+      parentRoute: typeof DevRoute
+    }
+    '/dev/components/$name': {
+      id: '/dev/components/$name'
+      path: '/components/$name'
+      fullPath: '/dev/components/$name'
+      preLoaderRoute: typeof DevComponentsNameRouteImport
+      parentRoute: typeof DevRoute
+    }
   }
 }
 
@@ -226,9 +284,22 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface DevRouteChildren {
+  DevComponentsNameRoute: typeof DevComponentsNameRoute
+  DevComponentsIndexRoute: typeof DevComponentsIndexRoute
+}
+
+const DevRouteChildren: DevRouteChildren = {
+  DevComponentsNameRoute: DevComponentsNameRoute,
+  DevComponentsIndexRoute: DevComponentsIndexRoute,
+}
+
+const DevRouteWithChildren = DevRoute._addFileChildren(DevRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  DevRoute: DevRouteWithChildren,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
 }
