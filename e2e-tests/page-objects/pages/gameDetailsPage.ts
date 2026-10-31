@@ -14,7 +14,7 @@ export class GameDetailsPage extends BasePage {
   public constructor(page: Page) {
     super(page);
 
-    this.backLink = page.getByRole("link", { name: "← All games" });
+    this.backLink = page.getByRole("link", { name: "All games" });
     this.signInPrompt = page.getByText("Sign in to rate this game.");
     this.signInLink = page.getByRole("main").getByRole("link", { name: "Sign in" });
     this.removeReviewButton = page.getByRole("button", { name: "Remove review" });

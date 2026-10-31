@@ -20,7 +20,7 @@ type GamePageLayoutProps = {
 
 const GamePageLayout = ({ children }: GamePageLayoutProps): React.JSX.Element => (
   <div className="flex flex-col gap-4">
-    <BackLink>← All games</BackLink>
+    <BackLink>All games</BackLink>
     {children}
   </div>
 );

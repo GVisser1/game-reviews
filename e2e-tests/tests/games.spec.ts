@@ -43,9 +43,9 @@ test("opens a game and goes back to the same search", async ({ page, gamesPage, 
 test("shows community ratings in the list", async ({ gamesPage }) => {
   await gamesPage.goto();
 
-  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("★ 4.5 (2)");
+  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("4.5 (2)");
   await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("Community rating: 4.5/5 from 2 ratings");
-  await expect(gamesPage.gameTile("Portal 2")).toContainText("★ 5.0 (1)");
+  await expect(gamesPage.gameTile("Portal 2")).toContainText("5.0 (1)");
   await expect(gamesPage.gameTile("Grand Theft Auto V")).not.toContainText("Community rating");
 });
 
@@ -91,7 +91,7 @@ test("sorts by players' ratings, best first, with and without a search", async (
   await expect(gamesPage.gameNames).toHaveText(["Portal 2", "The Witcher 3: Wild Hunt", "Elden Ring"]);
   // The same details as the other sorts: release year and community rating.
   await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("2015");
-  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("★ 4.5 (2)");
+  await expect(gamesPage.gameTile("The Witcher 3: Wild Hunt")).toContainText("4.5 (2)");
 
   await gamesPage.searchInput.fill("wit");
   await expect(gamesPage.gameNames).toHaveText(["The Witcher 3: Wild Hunt"]);
@@ -112,5 +112,5 @@ test("includes the user's own rating when sorting by highest rated", async ({
   await expect(gameDetailsPage.removeReviewButton).toBeVisible();
   await page.goto("/app?sort=rating");
 
-  await expect(gamesPage.gameTile("Portal 2")).toContainText("★ 5.0 (2)");
+  await expect(gamesPage.gameTile("Portal 2")).toContainText("5.0 (2)");
 });

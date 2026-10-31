@@ -1,7 +1,9 @@
 import { Link, useSearch } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { authRedirectErrorCode } from "../../lib/supabase";
 import { Heading } from "../../shared/Heading";
+import { Icon } from "../../shared/Icon";
 import { toErrorMessage } from "../../utils/errorUtil";
 import { signInWithTwitch } from "./twitchSignIn";
 
@@ -28,8 +30,9 @@ export const LoginPage = (): React.JSX.Element => {
   return (
     <div className="mx-auto mt-12 flex max-w-sm flex-col gap-4 px-4">
       {/* A plain link: the redirect is an already-validated path, which the typed router <Link> can't take as a string. */}
-      <a href={redirect ?? HOME_PATH} className="self-start text-small hover:underline">
-        ← Back
+      <a href={redirect ?? HOME_PATH} className="inline-flex items-center gap-1 self-start text-small hover:underline">
+        <Icon icon={ArrowLeft} />
+        Back
       </a>
       <Heading as="h1" className="text-title">
         Sign in

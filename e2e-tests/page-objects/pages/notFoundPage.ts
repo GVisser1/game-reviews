@@ -9,6 +9,6 @@ export class NotFoundPage extends BasePage {
     super(page);
 
     this.heading = page.getByRole("heading", { name: "Page not found", level: 1 });
-    this.homeLink = page.getByRole("link", { name: "← Back to the home page" });
+    this.homeLink = page.getByRole("link", { name: "Back to the home page" });
   }
 }

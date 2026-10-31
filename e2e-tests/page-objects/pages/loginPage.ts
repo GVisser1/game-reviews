@@ -12,7 +12,7 @@ export class LoginPage extends BasePage {
 
     this.heading = page.getByRole("heading", { name: "Sign in", level: 1 });
     this.continueWithTwitchButton = page.getByRole("button", { name: "Continue with Twitch" });
-    this.backLink = page.getByRole("link", { name: "← Back" });
+    this.backLink = page.getByRole("link", { name: "Back", exact: true });
     this.signInFailed = page.getByText("Sign-in didn't complete. Please try again.");
   }
 

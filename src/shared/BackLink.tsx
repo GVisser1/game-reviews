@@ -1,8 +1,10 @@
 import { Link, useCanGoBack, useRouter } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
+import { Icon } from "./Icon";
 
 type BackLinkProps = {
-  /** The link text, like "← All games". */
+  /** The link text, like "All games". The back arrow comes before it. */
   children: ReactNode;
 };
 
@@ -21,8 +23,9 @@ export const BackLink = ({ children }: BackLinkProps): React.JSX.Element => {
           router.history.back();
         }
       }}
-      className="self-start text-small hover:underline"
+      className="inline-flex items-center gap-1 self-start text-small hover:underline"
     >
+      <Icon icon={ArrowLeft} />
       {children}
     </Link>
   );

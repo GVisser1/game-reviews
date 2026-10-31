@@ -1,0 +1,47 @@
+---
+title: Icon
+group: Components
+description: A Lucide icon, sized like the text around it and in its colour.
+---
+
+import { ArrowLeft, Star, TriangleAlert } from "lucide-react";
+import { Icon } from "../Icon";
+import docs from "../Icon.tsx?docgen";
+
+Icons come from [Lucide](https://lucide.dev/icons). Import the one you need by name from `lucide-react` and show it
+with `Icon`, which sizes it like the text it sits in and gives it the text's colour.
+
+<Demo>
+  <span className="inline-flex items-center gap-1 text-caption">
+    <Icon icon={ArrowLeft} />
+    text-caption
+  </span>
+  <span className="inline-flex items-center gap-1">
+    <Icon icon={ArrowLeft} />
+    text-body
+  </span>
+  <span className="inline-flex items-center gap-1 text-heading">
+    <Icon icon={ArrowLeft} />
+    text-heading
+  </span>
+  <span className="flex items-center gap-3 text-heading">
+    <Icon icon={Star} className="text-rating" />
+    <Icon icon={Star} isFilled className="text-rating" />
+    <Icon icon={TriangleAlert} label="Warning" className="text-danger" />
+  </span>
+</Demo>
+
+## Usage
+
+- Use `Icon` rather than a Lucide icon on its own, so every icon gets the same size, colour and accessibility.
+- Set the size with a text role and the colour with a colour role on the icon or its parent, like `text-heading` and
+  `text-muted`. Don't give the icon a size of its own.
+- Next to text, put both in an `inline-flex items-center gap-1` element, like the back links.
+- Leave `label` out when text next to the icon already says what it means: the icon is then hidden from screen
+  readers. Give a `label` when the icon is the only thing that says it, like a warning icon on its own.
+- For a button with only an icon, put the label on the button as `aria-label` and leave the icon without one.
+- The app uses `ArrowLeft` for links back and `Star` for ratings. Use the same icon for the same meaning.
+
+## API reference
+
+<PropsTable docs={docs} />
