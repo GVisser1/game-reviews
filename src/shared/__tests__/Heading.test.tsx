@@ -16,12 +16,12 @@ describe("Heading", () => {
 
   it("adds its own classes to the heading font", () => {
     render(
-      <Heading as="h1" className="text-2xl font-bold">
+      <Heading as="h1" className="text-title">
         Portal 2
       </Heading>,
     );
 
-    expect(screen.getByRole("heading").className).toBe("font-heading text-2xl font-bold");
+    expect(screen.getByRole("heading").className).toBe("font-heading text-title");
   });
 
   it("passes other props to the element", () => {

@@ -2,7 +2,7 @@ import { isNil } from "lodash-es";
 
 const MAX_STARS = 5;
 const STAR_VALUES = Array.from({ length: MAX_STARS }, (_, index) => index + 1);
-const STAR_CLASS_NAME = "text-2xl text-rating";
+const STAR_CLASS_NAME = "text-heading text-rating";
 
 type StarRatingProps = {
   rating: number;

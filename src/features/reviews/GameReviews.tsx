@@ -17,7 +17,7 @@ export const GameReviews = ({ gameId }: GameReviewsProps): React.JSX.Element => 
 
   return (
     <section className="flex max-w-2xl flex-col gap-4">
-      <Heading as="h2" className="text-xl font-bold">
+      <Heading as="h2" className="text-heading">
         Reviews
       </Heading>
       {isPending && <p>Loading reviews…</p>}
@@ -37,7 +37,7 @@ export const GameReviews = ({ gameId }: GameReviewsProps): React.JSX.Element => 
                   {review.displayName}
                   {review.isOwn && " (you)"}
                 </Link>
-                <time dateTime={review.createdAt} className="text-sm text-muted">
+                <time dateTime={review.createdAt} className="text-small text-muted">
                   {DATE_FORMAT.format(new Date(review.createdAt))}
                 </time>
               </div>

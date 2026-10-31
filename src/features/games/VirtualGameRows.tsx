@@ -80,7 +80,7 @@ export const VirtualGameRows = ({
           {rows[virtualRow.index].map((game) => (
             <GameTile key={game.id} gameId={game.id} name={game.name} coverUrl={game.coverUrl}>
               {/* One line for both, so a rating arriving later doesn't change the row's height. */}
-              <span className="flex gap-2 text-xs text-muted">
+              <span className="flex gap-2 text-caption text-muted">
                 {game.releaseYear}
                 <ShortRatingSummary summary={ratingSummaries.get(game.id)} />
               </span>

@@ -8,7 +8,7 @@ export const SignInLink = (): React.JSX.Element => {
     <Link
       to="/login"
       search={{ redirect: toSafeRedirectPath(currentPath) }}
-      className="rounded border px-3 py-1 text-sm hover:bg-surface-raised"
+      className="rounded border px-3 py-1 text-small hover:bg-surface-raised"
     >
       Sign in
     </Link>

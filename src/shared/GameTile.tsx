@@ -16,7 +16,7 @@ export const GameTile = ({ gameId, name, coverUrl, children }: GameTileProps): R
       ) : (
         <div className="aspect-3/4 w-full rounded bg-surface-raised" />
       )}
-      <span className="text-sm font-medium">{name}</span>
+      <span className="text-small font-medium">{name}</span>
     </Link>
     {children}
   </li>

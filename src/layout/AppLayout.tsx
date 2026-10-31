@@ -41,7 +41,7 @@ export const AppLayout = (): React.JSX.Element => (
 export const AppPending = (): React.JSX.Element => (
   <Layout>
     <p>Checking your browser…</p>
-    <p className="text-sm text-muted">If a checkbox appears in the corner, tick it to continue.</p>
+    <p className="text-small text-muted">If a checkbox appears in the corner, tick it to continue.</p>
   </Layout>
 );
 

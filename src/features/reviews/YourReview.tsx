@@ -34,11 +34,11 @@ export const YourReview = ({ game, review, error, onSave, onRemove }: YourReview
 
   return (
     <section className="flex flex-col gap-2">
-      <span className="text-sm font-medium">Your rating</span>
+      <span className="text-small font-medium">Your rating</span>
       {/* Changing the stars keeps the saved text, not the unsaved draft. */}
       <StarRating rating={review?.rating ?? NO_RATING} onChange={(rating) => save(rating, savedBody)} />
       <label className="flex flex-col gap-1">
-        <span className="text-sm font-medium">Your review (optional)</span>
+        <span className="text-small font-medium">Your review (optional)</span>
         <textarea
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
@@ -52,15 +52,17 @@ export const YourReview = ({ game, review, error, onSave, onRemove }: YourReview
           type="button"
           disabled={isNil(review) || !hasUnsavedText}
           onClick={() => !isNil(review) && save(review.rating, draftBody)}
-          className="rounded border px-3 py-1 text-sm hover:bg-surface-raised disabled:opacity-50"
+          className="rounded border px-3 py-1 text-small hover:bg-surface-raised disabled:opacity-50"
         >
           Save review
         </button>
-        <span className="text-xs text-muted">
+        <span className="text-caption text-muted">
           {draft.length}/{MAX_REVIEW_LENGTH}
         </span>
-        {isNil(review) && <span className="text-xs text-muted">Pick a star rating to save your review.</span>}
-        {!isNil(review) && !hasUnsavedText && !isNil(savedBody) && <span className="text-xs text-muted">Saved</span>}
+        {isNil(review) && <span className="text-caption text-muted">Pick a star rating to save your review.</span>}
+        {!isNil(review) && !hasUnsavedText && !isNil(savedBody) && (
+          <span className="text-caption text-muted">Saved</span>
+        )}
       </div>
       {!isNil(review) && <RemoveReviewButton onClick={() => onRemove(game.id)} />}
       {error && <p className="text-danger">Could not update review: {error}</p>}

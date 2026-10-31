@@ -49,7 +49,7 @@ export const GameDetailsPage = (): React.JSX.Element => {
       <article className="flex flex-col gap-6 sm:flex-row">
         {game.coverUrl && <img src={game.coverUrl} alt={game.name} className="w-48 self-start rounded" />}
         <div className="flex max-w-2xl flex-col gap-3">
-          <Heading as="h1" className="text-2xl font-bold">
+          <Heading as="h1" className="text-title">
             {game.name} {game.releaseYear && <span className="text-muted">({game.releaseYear})</span>}
           </Heading>
           {user?.is_anonymous && <SignInPrompt message="Sign in to rate this game." />}
