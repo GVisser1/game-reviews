@@ -1,6 +1,6 @@
 import { expect, test } from "../fixtures";
 
-test("lists games", async ({ gamesPage }) => {
+test("renders the games page", async ({ gamesPage }) => {
   await gamesPage.goto();
 
   await expect(gamesPage.gameLink("Portal 2")).toBeVisible();
