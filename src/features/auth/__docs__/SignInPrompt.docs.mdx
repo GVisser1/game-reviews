@@ -1,0 +1,21 @@
+---
+title: Sign-in prompt
+group: Components
+description: Asks visitors who aren't signed in to sign in, with a link that brings them back.
+---
+
+import { SignInPrompt } from "../SignInPrompt";
+import docs from "../SignInPrompt.tsx?docgen";
+
+<Demo>
+  <SignInPrompt message="Sign in to rate this game." />
+</Demo>
+
+## Usage
+
+- Show it in place of something only signed-in people can do, like rating a game.
+- The sign-in link brings people back to the page they were on.
+
+## API reference
+
+<PropsTable docs={docs} />

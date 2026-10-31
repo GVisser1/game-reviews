@@ -1,4 +1,5 @@
 type RemoveReviewButtonProps = {
+  /** Removes the review. The button doesn't ask for confirmation itself. */
   onClick: () => void;
 };
 

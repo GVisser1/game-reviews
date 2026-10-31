@@ -1,7 +1,12 @@
+import mdx from "@mdx-js/rollup";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig, lazyPlugins } from "vite-plus";
+import { docgenPlugin } from "./scripts/vite/docgenPlugin.ts";
+import { remarkUnwrapJsxText } from "./scripts/vite/remarkUnwrapJsxText.ts";
 
 export default defineConfig({
   staged: {
@@ -55,6 +60,10 @@ export default defineConfig({
     ],
   },
   plugins: lazyPlugins(() => [
+    // The component docs: *.docs.mdx pages (with their frontmatter as `frontmatter`) and `?docgen` props for their
+    // props tables. Only the development-only /dev pages import them.
+    { enforce: "pre", ...mdx({ remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, remarkUnwrapJsxText] }) },
+    docgenPlugin(),
     // Start's plugin has to come before React's.
     tanstackStart({
       // Pages render in the browser like a regular single-page app, except the ones listed in `pages`.
@@ -68,12 +77,15 @@ export default defineConfig({
         { path: "/privacy", prerender: { enabled: true, outputPath: "/privacy.html" } },
       ],
     }),
-    react(),
+    // Includes .mdx, so editing a docs page updates it in place.
+    react({ include: /\.(mdx|[jt]sx?)$/ }),
     tailwindcss(),
   ]),
   test: {
     // Playwright's *.spec.ts files in e2e-tests/ run separately with `pnpm test:e2e`.
     include: ["src/**/*.test.{ts,tsx}", "supabase/**/*.test.ts", "functions/**/*.test.ts"],
+    // Vitest empties CSS imports, but the docs' design tokens are read from index.css as text, and tests check them.
+    css: { include: [/\/src\/index\.css\?raw$/] },
   },
   server: {
     // Supabase only allows the Twitch sign-in to redirect back to this port, so fail instead of picking another.

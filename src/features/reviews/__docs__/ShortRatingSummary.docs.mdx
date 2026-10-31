@@ -1,0 +1,24 @@
+---
+title: Short rating summary
+group: Components
+description: A game's community rating in tight spaces like the games list. Renders nothing without ratings.
+---
+
+import { ShortRatingSummary } from "../ShortRatingSummary";
+import docs from "../ShortRatingSummary.tsx?docgen";
+
+Shows “★ 4.3 (12)”. Screen readers hear “Community rating: 4.3/5 from 12 ratings” instead.
+
+<Demo>
+  <ShortRatingSummary summary={{ averageRating: 4.3, ratingCount: 12 }} />
+</Demo>
+
+## Usage
+
+- It renders nothing while the summary is loading or when a game has no ratings yet, so there's no empty state to
+  handle.
+- For a single review's rating, use `StarRating` instead.
+
+## API reference
+
+<PropsTable docs={docs} />

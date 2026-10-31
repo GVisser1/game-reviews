@@ -5,8 +5,9 @@ const STAR_VALUES = Array.from({ length: MAX_STARS }, (_, index) => index + 1);
 const STAR_CLASS_NAME = "text-heading text-rating";
 
 type StarRatingProps = {
+  /** The number of filled stars, from 0 to 5. */
   rating: number;
-  // Leave out to show the rating read-only.
+  /** Called with the star a user picks, from 1 to 5. Leave it out to show the rating read-only. */
   onChange?: (rating: number) => void;
 };
 

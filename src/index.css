@@ -6,6 +6,7 @@
   --font-*: initial;
   --font-body: "Roboto Variable", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Sora Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --default-font-family: var(--font-body);
 }
 

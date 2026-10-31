@@ -1,4 +1,5 @@
 /// <reference types="vite-plus/client" />
+/// <reference types="mdx" />
 
 type ImportMetaEnv = {
   readonly VITE_SUPABASE_URL: string;
@@ -10,3 +11,14 @@ type ImportMetaEnv = {
 type ImportMeta = {
   readonly env: ImportMetaEnv;
 };
+
+// Props of the components a file exports, from scripts/vite/docgenPlugin.ts.
+declare module "*?docgen" {
+  const docs: import("react-docgen").Documentation[];
+  export default docs;
+}
+
+// A *.docs.mdx page's frontmatter, exported by remark-mdx-frontmatter.
+declare module "*.docs.mdx" {
+  export const frontmatter: { title: string; group: string; description: string };
+}

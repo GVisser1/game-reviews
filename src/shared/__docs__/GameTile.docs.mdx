@@ -1,0 +1,35 @@
+---
+title: Game tile
+group: Components
+description: A game's cover and name, linking to its page, with details underneath.
+---
+
+import { ShortRatingSummary } from "../../features/reviews/ShortRatingSummary";
+import { GameTile } from "../GameTile";
+import docs from "../GameTile.tsx?docgen";
+
+A game in a grid, like the games list and profiles. The cover and name link to the game's page; whatever you pass as
+children shows underneath.
+
+<Demo>
+  <ul className="grid grid-cols-3 gap-4">
+    <GameTile gameId={72} name="Portal 2" coverUrl="https://images.igdb.com/igdb/image/upload/t_cover_big/co1rs4.jpg">
+      <span className="flex gap-2 text-caption text-muted">
+        2011 <ShortRatingSummary summary={{ averageRating: 4.3, ratingCount: 12 }} />
+      </span>
+    </GameTile>
+    <GameTile gameId={1} name="A game without a cover or ratings" coverUrl={null}>
+      <span className="text-caption text-muted">2024</span>
+    </GameTile>
+  </ul>
+</Demo>
+
+## Usage
+
+- It renders an `li`, so put tiles in a `ul`.
+- Without a cover, a placeholder of the same size keeps the grid even.
+- Keep the details short: the release year and `ShortRatingSummary` fit, a sentence doesn't.
+
+## API reference
+
+<PropsTable docs={docs} />

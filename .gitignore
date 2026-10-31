@@ -41,3 +41,6 @@ scripts/search-snapshots/
 # Playwright blob reports from CI-style runs (merged into e2e-tests/test-reports)
 blob-report
 all-blob-reports
+
+# Tanstack files
+.tanstack/

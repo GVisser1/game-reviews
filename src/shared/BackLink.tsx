@@ -2,6 +2,7 @@ import { Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 type BackLinkProps = {
+  /** The link text, like "← All games". */
   children: ReactNode;
 };
 
