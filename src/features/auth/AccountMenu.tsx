@@ -47,7 +47,7 @@ export const AccountMenu = (): React.JSX.Element | null => {
       {/* Your profile, or the account page until your username has loaded (or for a profile that's still being set up). */}
       <Link
         {...(isNil(username) ? { to: "/app/account" } : { to: "/app/users/$username", params: { username } })}
-        className="flex items-center gap-2 text-sm hover:underline"
+        className="flex items-center gap-2 text-small hover:underline"
       >
         {avatarUrl && <img src={avatarUrl} alt="" className="size-6 rounded-full" />}
         {getDisplayName(user)}
@@ -56,11 +56,11 @@ export const AccountMenu = (): React.JSX.Element | null => {
         type="button"
         disabled={isSigningOut}
         onClick={() => void signOut()}
-        className="rounded border px-3 py-1 text-sm hover:bg-surface-raised disabled:opacity-50"
+        className="rounded border px-3 py-1 text-small hover:bg-surface-raised disabled:opacity-50"
       >
         Sign out
       </button>
-      {error && <span className="text-sm text-danger">{error}</span>}
+      {error && <span className="text-small text-danger">{error}</span>}
     </div>
   );
 };

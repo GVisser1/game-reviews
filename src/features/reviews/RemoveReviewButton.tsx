@@ -3,7 +3,11 @@ type RemoveReviewButtonProps = {
 };
 
 export const RemoveReviewButton = ({ onClick }: RemoveReviewButtonProps): React.JSX.Element => (
-  <button type="button" onClick={onClick} className="self-start text-xs text-muted hover:text-danger hover:underline">
+  <button
+    type="button"
+    onClick={onClick}
+    className="self-start text-caption text-muted hover:text-danger hover:underline"
+  >
     Remove review
   </button>
 );

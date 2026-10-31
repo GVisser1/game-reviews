@@ -28,10 +28,10 @@ export const LoginPage = (): React.JSX.Element => {
   return (
     <div className="mx-auto mt-12 flex max-w-sm flex-col gap-4 px-4">
       {/* A plain link: the redirect is an already-validated path, which the typed router <Link> can't take as a string. */}
-      <a href={redirect ?? HOME_PATH} className="self-start text-sm hover:underline">
+      <a href={redirect ?? HOME_PATH} className="self-start text-small hover:underline">
         ← Back
       </a>
-      <Heading as="h1" className="text-2xl font-bold">
+      <Heading as="h1" className="text-title">
         Sign in
       </Heading>
       <p className="text-muted">Sign in to rate games and keep track of your reviews.</p>
@@ -43,8 +43,8 @@ export const LoginPage = (): React.JSX.Element => {
       >
         Continue with Twitch
       </button>
-      {error && <p className="text-sm text-danger">{error}</p>}
-      <p className="text-sm text-muted">
+      {error && <p className="text-small text-danger">{error}</p>}
+      <p className="text-small text-muted">
         See the{" "}
         <Link to="/privacy" className="underline">
           privacy page

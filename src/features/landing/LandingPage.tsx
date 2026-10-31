@@ -7,10 +7,10 @@ const EXAMPLE_RATING = 4;
 
 export const LandingPage = (): React.JSX.Element => (
   <main className="mx-auto flex max-w-2xl flex-col items-start gap-4 p-8">
-    <Heading as="h1" className="text-4xl font-bold">
+    <Heading as="h1" className="text-display">
       Game Reviews
     </Heading>
-    <p className="text-lg text-muted">{SITE_DESCRIPTION}</p>
+    <p className="text-lead text-muted">{SITE_DESCRIPTION}</p>
     <StarRating rating={EXAMPLE_RATING} />
     <div className="flex gap-3">
       <Link

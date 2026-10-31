@@ -12,7 +12,7 @@ type SectionProps = {
 
 const Section = ({ title, children }: SectionProps): React.JSX.Element => (
   <section className="flex flex-col gap-2">
-    <Heading as="h2" className="text-xl font-bold">
+    <Heading as="h2" className="text-heading">
       {title}
     </Heading>
     {children}
@@ -21,10 +21,10 @@ const Section = ({ title, children }: SectionProps): React.JSX.Element => (
 
 export const PrivacyPage = (): React.JSX.Element => (
   <main className="mx-auto flex max-w-2xl flex-col gap-6 p-8">
-    <Link to="/" className="self-start text-sm hover:underline">
+    <Link to="/" className="self-start text-small hover:underline">
       ← Home
     </Link>
-    <Heading as="h1" className="text-3xl font-bold">
+    <Heading as="h1" className="text-title">
       Privacy
     </Heading>
     <p>

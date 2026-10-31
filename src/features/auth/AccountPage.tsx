@@ -10,7 +10,7 @@ import { SignInPrompt } from "./SignInPrompt";
 import { useAuthUser } from "./useAuthUser";
 import { getAvatarUrl, getDisplayName } from "./utils/authUtil";
 
-const BUTTON_CLASS_NAME = "rounded border px-3 py-1 text-sm hover:bg-surface-raised disabled:opacity-50";
+const BUTTON_CLASS_NAME = "rounded border px-3 py-1 text-small hover:bg-surface-raised disabled:opacity-50";
 
 export const AccountPage = (): React.JSX.Element | null => {
   const user = useAuthUser();
@@ -44,26 +44,26 @@ export const AccountPage = (): React.JSX.Element | null => {
 
   return (
     <div className="flex max-w-xl flex-col gap-6">
-      <Heading as="h1" className="text-2xl font-bold">
+      <Heading as="h1" className="text-title">
         Account
       </Heading>
       <div className="flex items-center gap-3">
         {avatarUrl && <img src={avatarUrl} alt="" className="size-10 rounded-full" />}
         <div className="flex flex-col">
           <span className="font-medium">{getDisplayName(user)}</span>
-          <span className="text-sm text-muted">Signed in with Twitch</span>
+          <span className="text-small text-muted">Signed in with Twitch</span>
         </div>
       </div>
 
       <section className="flex flex-col gap-2">
-        <Heading as="h2" className="text-lg font-bold">
+        <Heading as="h2" className="text-heading">
           Appearance
         </Heading>
         <ThemeSwitch />
       </section>
 
       <section className="flex flex-col gap-2">
-        <Heading as="h2" className="text-lg font-bold">
+        <Heading as="h2" className="text-heading">
           Delete account
         </Heading>
         <p>
@@ -73,7 +73,7 @@ export const AccountPage = (): React.JSX.Element | null => {
           </Link>{" "}
           for what's stored.
         </p>
-        <p className="text-sm text-muted">
+        <p className="text-small text-muted">
           This doesn't remove the app from your Twitch account. To do that, disconnect it in Twitch under Settings →
           Connections.
         </p>
@@ -90,7 +90,7 @@ export const AccountPage = (): React.JSX.Element | null => {
                 type="button"
                 disabled={isDeleting}
                 onClick={() => void confirmDelete()}
-                className="rounded bg-danger-solid px-3 py-1 text-sm text-on-danger hover:bg-danger-solid-hover disabled:opacity-50"
+                className="rounded bg-danger-solid px-3 py-1 text-small text-on-danger hover:bg-danger-solid-hover disabled:opacity-50"
               >
                 Yes, delete my account
               </button>

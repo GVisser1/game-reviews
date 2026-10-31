@@ -20,7 +20,7 @@ export const BackLink = ({ children }: BackLinkProps): React.JSX.Element => {
           router.history.back();
         }
       }}
-      className="self-start text-sm hover:underline"
+      className="self-start text-small hover:underline"
     >
       {children}
     </Link>

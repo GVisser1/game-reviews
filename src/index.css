@@ -9,6 +9,38 @@
   --default-font-family: var(--font-body);
 }
 
+/* Text sizes by role, each with its line height (and weight and tracking where the role needs them). Tailwind's own
+   sizes are off, so `text-sm` and friends don't exist; `font-*` weights still work on top of a role. */
+@theme {
+  --text-*: initial;
+
+  --text-display: 3rem;
+  --text-display--line-height: 3.25rem;
+  --text-display--font-weight: 700;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-title: 1.875rem;
+  --text-title--line-height: 2.25rem;
+  --text-title--font-weight: 700;
+  --text-title--letter-spacing: -0.01em;
+
+  --text-heading: 1.25rem;
+  --text-heading--line-height: 1.75rem;
+  --text-heading--font-weight: 600;
+
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.75rem;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.25rem;
+
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+}
+
 /* Tailwind's built-in colours are off; the only colour classes are the roles below. */
 @theme {
   --color-*: initial;
@@ -181,7 +213,7 @@
 
 @layer base {
   body {
-    @apply bg-page text-foreground;
+    @apply bg-page text-body text-foreground;
   }
 
   /* Tailwind v4 draws a bare `border` in the text colour; give every border the divider colour instead. */
