@@ -1,0 +1,34 @@
+---
+title: Colours
+group: Foundations
+description: The colour roles components use. The palette itself is never used directly.
+---
+
+Components use colour roles, like `bg-surface` or `text-muted`, never palette shades like `gray-700`. Each role has a
+light and a dark value, so dark mode comes for free. Everything on this page is read from `src/index.css`, so it always
+matches the stylesheet.
+
+## Roles
+
+Each role works with every colour utility: `bg-accent`, `text-accent`, `border-accent` and so on.
+
+<ColorRoles />
+
+## Contrast
+
+The roles meant to go together, with their WCAG contrast in each mode. Text needs 4.5:1, and the stars 3:1. These
+pairs live in `src/docs/contrastPairs.ts`, and a unit test fails when one falls short.
+
+<ContrastTable />
+
+## Palette
+
+The shades the roles pick from. A • marks the shades a role uses.
+
+<Palette />
+
+## Adding a role
+
+1. Add its light and dark value to `:root` in `src/index.css`, like `--name: light-dark(var(--gray-50), var(--gray-900))`.
+2. Map it in the `@theme inline` block, like `--color-name: var(--name)`. It then shows up on this page.
+3. If it's for text, or sits behind text, add its pairs to `src/docs/contrastPairs.ts`.

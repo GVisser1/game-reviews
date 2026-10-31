@@ -3,6 +3,7 @@ import type { RatingSummary } from "./types";
 import { formatRatingSummary, formatShortRatingSummary } from "./utils/reviewUtil";
 
 type ShortRatingSummaryProps = {
+  /** The game's average rating and number of ratings. Nothing renders while it's undefined or has no ratings. */
   summary: RatingSummary | undefined;
 };
 

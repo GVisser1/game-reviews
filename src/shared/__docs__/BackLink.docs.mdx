@@ -1,0 +1,21 @@
+---
+title: Back link
+group: Components
+description: Goes back in history when it can, so the previous search and scroll position stay.
+---
+
+import { BackLink } from "../BackLink";
+import docs from "../BackLink.tsx?docgen";
+
+<Demo>
+  <BackLink>← All games</BackLink>
+</Demo>
+
+## Usage
+
+- Use it at the top of a page people reach from the games list, like a game's page.
+- When there's no page to go back to, like after opening a shared link, it links to the games list instead.
+
+## API reference
+
+<PropsTable docs={docs} />

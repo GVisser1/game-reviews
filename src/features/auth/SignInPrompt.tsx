@@ -1,6 +1,7 @@
 import { SignInLink } from "./SignInLink";
 
 type SignInPromptProps = {
+  /** Says what signing in is for, like "Sign in to rate this game." */
   message: string;
 };
 

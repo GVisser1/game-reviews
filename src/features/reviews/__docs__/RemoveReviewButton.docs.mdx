@@ -1,0 +1,22 @@
+---
+title: Remove review button
+group: Components
+description: A quiet link-style button that removes your rating and review of a game.
+---
+
+import { noop } from "lodash-es";
+import { RemoveReviewButton } from "../RemoveReviewButton";
+import docs from "../RemoveReviewButton.tsx?docgen";
+
+<Demo>
+  <RemoveReviewButton onClick={noop} />
+</Demo>
+
+## Usage
+
+- It's muted on purpose, so it doesn't compete with saving a review. It turns red on hover.
+- It doesn't ask for confirmation; `onClick` does whatever removing needs.
+
+## API reference
+
+<PropsTable docs={docs} />

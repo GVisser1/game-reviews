@@ -1,0 +1,17 @@
+---
+title: Text sizes
+group: Foundations
+description: The text roles. The three heading sizes use the heading font.
+---
+
+Text sizes are named by role, each with its own line height, and the larger ones with a weight and tracking.
+Tailwind's own sizes like `text-sm` don't exist. `font-*` weights still work on top of a role. The list below is read
+from `src/index.css`, so it always matches the stylesheet.
+
+<TextRoles />
+
+## Usage
+
+- `text-display` is for the landing page only, `text-title` for page titles and `text-heading` for sections.
+- Use them with `Heading`, which adds the heading font.
+- `text-body` is the default, so body text needs no class.

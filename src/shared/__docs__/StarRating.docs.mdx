@@ -1,0 +1,39 @@
+---
+title: Star rating
+group: Components
+description: A 1–5 star rating, read-only or editable.
+---
+
+import { StarRating } from "../StarRating";
+import docs from "../StarRating.tsx?docgen";
+import { EditableStarRating } from "./EditableStarRating";
+
+Shows a rating as five stars, filled up to the rating. Pass `onChange` to let people pick a rating themselves.
+
+## Read-only
+
+Without `onChange`, the stars are one image that screen readers announce as “Rated 3 out of 5”.
+
+<Demo>
+  <StarRating rating={3} />
+</Demo>
+
+## Editable
+
+With `onChange`, each star is a button. Picking a star calls `onChange` with its value; the component doesn't keep the
+rating itself, so keep it in state.
+
+<Demo>
+  <EditableStarRating />
+</Demo>
+
+## Usage
+
+- Use it for a single review's rating. For an average over many reviews, show the number with
+  `ShortRatingSummary` instead, since stars can't show fractions.
+- Each star button is 32px, above the 24px minimum target size, so don't shrink it.
+- Stars use the `rating` colour, which has at least 3:1 contrast against the page in both modes.
+
+## API reference
+
+<PropsTable docs={docs} />

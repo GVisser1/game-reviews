@@ -17,10 +17,11 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppAccountRouteImport } from './routes/app/account'
 import { Route as AppMyReviewsRouteImport } from './routes/app/my-reviews'
+import { Route as DevDocsRouteImport } from './routes/dev/docs'
 import { Route as AppGamesGameIdRouteImport } from './routes/app/games.$gameId'
 import { Route as AppUsersUsernameRouteImport } from './routes/app/users.$username'
-import { Route as DevComponentsIndexRouteImport } from './routes/dev/components/index'
-import { Route as DevComponentsNameRouteImport } from './routes/dev/components/$name'
+import { Route as DevDocsIndexRouteImport } from './routes/dev/docs/index'
+import { Route as DevDocsNameRouteImport } from './routes/dev/docs/$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -62,6 +63,11 @@ const AppMyReviewsRoute = AppMyReviewsRouteImport.update({
   path: '/my-reviews',
   getParentRoute: () => AppRoute,
 } as any)
+const DevDocsRoute = DevDocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => DevRoute,
+} as any)
 const AppGamesGameIdRoute = AppGamesGameIdRouteImport.update({
   id: '/games/$gameId',
   path: '/games/$gameId',
@@ -72,15 +78,15 @@ const AppUsersUsernameRoute = AppUsersUsernameRouteImport.update({
   path: '/users/$username',
   getParentRoute: () => AppRoute,
 } as any)
-const DevComponentsIndexRoute = DevComponentsIndexRouteImport.update({
-  id: '/components/',
-  path: '/components/',
-  getParentRoute: () => DevRoute,
+const DevDocsIndexRoute = DevDocsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DevDocsRoute,
 } as any)
-const DevComponentsNameRoute = DevComponentsNameRouteImport.update({
-  id: '/components/$name',
-  path: '/components/$name',
-  getParentRoute: () => DevRoute,
+const DevDocsNameRoute = DevDocsNameRouteImport.update({
+  id: '/$name',
+  path: '/$name',
+  getParentRoute: () => DevDocsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -91,11 +97,12 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
+  '/dev/docs': typeof DevDocsRouteWithChildren
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
-  '/dev/components/$name': typeof DevComponentsNameRoute
-  '/dev/components/': typeof DevComponentsIndexRoute
+  '/dev/docs/$name': typeof DevDocsNameRoute
+  '/dev/docs/': typeof DevDocsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,8 +114,8 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
-  '/dev/components/$name': typeof DevComponentsNameRoute
-  '/dev/components': typeof DevComponentsIndexRoute
+  '/dev/docs/$name': typeof DevDocsNameRoute
+  '/dev/docs': typeof DevDocsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -119,11 +126,12 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/app/account': typeof AppAccountRoute
   '/app/my-reviews': typeof AppMyReviewsRoute
+  '/dev/docs': typeof DevDocsRouteWithChildren
   '/app/': typeof AppIndexRoute
   '/app/games/$gameId': typeof AppGamesGameIdRoute
   '/app/users/$username': typeof AppUsersUsernameRoute
-  '/dev/components/$name': typeof DevComponentsNameRoute
-  '/dev/components/': typeof DevComponentsIndexRoute
+  '/dev/docs/$name': typeof DevDocsNameRoute
+  '/dev/docs/': typeof DevDocsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -135,11 +143,12 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/app/account'
     | '/app/my-reviews'
+    | '/dev/docs'
     | '/app/'
     | '/app/games/$gameId'
     | '/app/users/$username'
-    | '/dev/components/$name'
-    | '/dev/components/'
+    | '/dev/docs/$name'
+    | '/dev/docs/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -151,8 +160,8 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/games/$gameId'
     | '/app/users/$username'
-    | '/dev/components/$name'
-    | '/dev/components'
+    | '/dev/docs/$name'
+    | '/dev/docs'
   id:
     | '__root__'
     | '/'
@@ -162,11 +171,12 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/app/account'
     | '/app/my-reviews'
+    | '/dev/docs'
     | '/app/'
     | '/app/games/$gameId'
     | '/app/users/$username'
-    | '/dev/components/$name'
-    | '/dev/components/'
+    | '/dev/docs/$name'
+    | '/dev/docs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -235,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMyReviewsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/dev/docs': {
+      id: '/dev/docs'
+      path: '/docs'
+      fullPath: '/dev/docs'
+      preLoaderRoute: typeof DevDocsRouteImport
+      parentRoute: typeof DevRoute
+    }
     '/app/games/$gameId': {
       id: '/app/games/$gameId'
       path: '/games/$gameId'
@@ -249,19 +266,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppUsersUsernameRouteImport
       parentRoute: typeof AppRoute
     }
-    '/dev/components/': {
-      id: '/dev/components/'
-      path: '/components'
-      fullPath: '/dev/components/'
-      preLoaderRoute: typeof DevComponentsIndexRouteImport
-      parentRoute: typeof DevRoute
+    '/dev/docs/': {
+      id: '/dev/docs/'
+      path: '/'
+      fullPath: '/dev/docs/'
+      preLoaderRoute: typeof DevDocsIndexRouteImport
+      parentRoute: typeof DevDocsRoute
     }
-    '/dev/components/$name': {
-      id: '/dev/components/$name'
-      path: '/components/$name'
-      fullPath: '/dev/components/$name'
-      preLoaderRoute: typeof DevComponentsNameRouteImport
-      parentRoute: typeof DevRoute
+    '/dev/docs/$name': {
+      id: '/dev/docs/$name'
+      path: '/$name'
+      fullPath: '/dev/docs/$name'
+      preLoaderRoute: typeof DevDocsNameRouteImport
+      parentRoute: typeof DevDocsRoute
     }
   }
 }
@@ -284,14 +301,25 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface DevDocsRouteChildren {
+  DevDocsNameRoute: typeof DevDocsNameRoute
+  DevDocsIndexRoute: typeof DevDocsIndexRoute
+}
+
+const DevDocsRouteChildren: DevDocsRouteChildren = {
+  DevDocsNameRoute: DevDocsNameRoute,
+  DevDocsIndexRoute: DevDocsIndexRoute,
+}
+
+const DevDocsRouteWithChildren =
+  DevDocsRoute._addFileChildren(DevDocsRouteChildren)
+
 interface DevRouteChildren {
-  DevComponentsNameRoute: typeof DevComponentsNameRoute
-  DevComponentsIndexRoute: typeof DevComponentsIndexRoute
+  DevDocsRoute: typeof DevDocsRouteWithChildren
 }
 
 const DevRouteChildren: DevRouteChildren = {
-  DevComponentsNameRoute: DevComponentsNameRoute,
-  DevComponentsIndexRoute: DevComponentsIndexRoute,
+  DevDocsRoute: DevDocsRouteWithChildren,
 }
 
 const DevRouteWithChildren = DevRoute._addFileChildren(DevRouteChildren)

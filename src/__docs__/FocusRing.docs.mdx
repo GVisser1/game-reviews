@@ -1,0 +1,22 @@
+---
+title: Focus ring
+group: Foundations
+description: Shown on keyboard focus only. Press Tab to move through the examples.
+---
+
+Every focusable element gets a 2px `accent` outline on `:focus-visible`, so it shows for the keyboard but not for
+mouse clicks. It's set once in `src/index.css`.
+
+<Demo>
+  <div className="flex gap-3">
+    <button type="button" className="rounded border px-3 py-1 text-small hover:bg-surface-raised">
+      A button
+    </button>
+    <input aria-label="A text field" placeholder="A text field" className="rounded border px-3 py-1" />
+  </div>
+</Demo>
+
+## Usage
+
+- Don't remove the outline. If a design needs a different ring, change it in `src/index.css` so it stays the same
+  everywhere.

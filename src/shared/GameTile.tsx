@@ -2,9 +2,13 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 type GameTileProps = {
+  /** The IGDB id of the game the tile links to. */
   gameId: number;
+  /** Shown under the cover, and the cover's alt text. */
   name: string;
+  /** The cover image; a plain placeholder of the same size without one. */
   coverUrl: string | null;
+  /** Details under the name, like the release year and rating. Outside the link. */
   children: ReactNode;
 };
 

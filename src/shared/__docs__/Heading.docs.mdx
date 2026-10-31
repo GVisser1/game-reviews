@@ -1,0 +1,31 @@
+---
+title: Heading
+group: Components
+description: A heading of a chosen level in the heading font; sizes come from the text roles.
+---
+
+import { Heading } from "../Heading";
+import docs from "../Heading.tsx?docgen";
+
+Renders `h1` to `h6` in the heading font. It sets nothing else, so the level and the size stay separate choices.
+
+<Demo>
+  <Heading as="h1" className="text-title">
+    Page title (h1)
+  </Heading>
+  <Heading as="h2" className="text-heading">
+    Section heading (h2)
+  </Heading>
+  <Heading as="h3">Smaller heading (h3)</Heading>
+</Demo>
+
+## Usage
+
+- Every page has one `h1`, usually with `text-title`. Sections use `h2` with `text-heading`.
+- Give the size with a text role in `className`, like `text-title` or `text-heading`. Without one, a heading has the
+  body size.
+- It takes every prop an `h1` takes, like `id`, and passes them on.
+
+## API reference
+
+<PropsTable docs={docs} />
