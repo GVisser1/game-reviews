@@ -21,8 +21,8 @@ export const GameReviews = ({ gameId }: GameReviewsProps): React.JSX.Element => 
         Reviews
       </Heading>
       {isPending && <p>Loading reviews…</p>}
-      {error && <p className="text-red-600">Could not load reviews: {toErrorMessage(error)}</p>}
-      {reviews && isEmpty(reviews) && <p className="text-gray-600">No written reviews yet.</p>}
+      {error && <p className="text-danger">Could not load reviews: {toErrorMessage(error)}</p>}
+      {reviews && isEmpty(reviews) && <p className="text-muted">No written reviews yet.</p>}
       {reviews && !isEmpty(reviews) && (
         <ul className="flex flex-col gap-4">
           {reviews.map((review) => (
@@ -37,7 +37,7 @@ export const GameReviews = ({ gameId }: GameReviewsProps): React.JSX.Element => 
                   {review.displayName}
                   {review.isOwn && " (you)"}
                 </Link>
-                <time dateTime={review.createdAt} className="text-sm text-gray-600">
+                <time dateTime={review.createdAt} className="text-sm text-muted">
                   {DATE_FORMAT.format(new Date(review.createdAt))}
                 </time>
               </div>

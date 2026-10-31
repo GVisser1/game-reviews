@@ -52,18 +52,18 @@ export const YourReview = ({ game, review, error, onSave, onRemove }: YourReview
           type="button"
           disabled={isNil(review) || !hasUnsavedText}
           onClick={() => !isNil(review) && save(review.rating, draftBody)}
-          className="rounded border px-3 py-1 text-sm hover:bg-gray-100 disabled:opacity-50"
+          className="rounded border px-3 py-1 text-sm hover:bg-surface-raised disabled:opacity-50"
         >
           Save review
         </button>
-        <span className="text-xs text-gray-600">
+        <span className="text-xs text-muted">
           {draft.length}/{MAX_REVIEW_LENGTH}
         </span>
-        {isNil(review) && <span className="text-xs text-gray-600">Pick a star rating to save your review.</span>}
-        {!isNil(review) && !hasUnsavedText && !isNil(savedBody) && <span className="text-xs text-gray-600">Saved</span>}
+        {isNil(review) && <span className="text-xs text-muted">Pick a star rating to save your review.</span>}
+        {!isNil(review) && !hasUnsavedText && !isNil(savedBody) && <span className="text-xs text-muted">Saved</span>}
       </div>
       {!isNil(review) && <RemoveReviewButton onClick={() => onRemove(game.id)} />}
-      {error && <p className="text-red-600">Could not update review: {error}</p>}
+      {error && <p className="text-danger">Could not update review: {error}</p>}
     </section>
   );
 };

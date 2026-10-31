@@ -41,12 +41,12 @@ export const AppLayout = (): React.JSX.Element => (
 export const AppPending = (): React.JSX.Element => (
   <Layout>
     <p>Checking your browser…</p>
-    <p className="text-sm text-gray-600">If a checkbox appears in the corner, tick it to continue.</p>
+    <p className="text-sm text-muted">If a checkbox appears in the corner, tick it to continue.</p>
   </Layout>
 );
 
 export const AppError = ({ error }: ErrorComponentProps): React.JSX.Element => (
   <Layout>
-    <p className="text-red-600">Something went wrong: {toErrorMessage(error)}</p>
+    <p className="text-danger">Something went wrong: {toErrorMessage(error)}</p>
   </Layout>
 );

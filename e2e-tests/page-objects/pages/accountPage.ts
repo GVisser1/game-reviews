@@ -19,4 +19,9 @@ export class AccountPage extends BasePage {
   }
 
   public goto = async (): Promise<Response | null> => this.page.goto("/app/account");
+
+  // One of the theme switch's radio buttons: "System", "Light" or "Dark".
+  public themeOption(name: string): Locator {
+    return this.page.getByRole("radio", { name });
+  }
 }

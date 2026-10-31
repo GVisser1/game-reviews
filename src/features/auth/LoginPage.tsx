@@ -34,17 +34,17 @@ export const LoginPage = (): React.JSX.Element => {
       <Heading as="h1" className="text-2xl font-bold">
         Sign in
       </Heading>
-      <p className="text-gray-600">Sign in to rate games and keep track of your reviews.</p>
+      <p className="text-muted">Sign in to rate games and keep track of your reviews.</p>
       <button
         type="button"
         disabled={isRedirecting}
         onClick={() => void continueWithTwitch()}
-        className="rounded border px-4 py-2 hover:bg-gray-100 disabled:opacity-50"
+        className="rounded border px-4 py-2 hover:bg-surface-raised disabled:opacity-50"
       >
         Continue with Twitch
       </button>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <p className="text-sm text-gray-600">
+      {error && <p className="text-sm text-danger">{error}</p>}
+      <p className="text-sm text-muted">
         See the{" "}
         <Link to="/privacy" className="underline">
           privacy page

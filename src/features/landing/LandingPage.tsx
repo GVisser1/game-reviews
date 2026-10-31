@@ -10,10 +10,14 @@ export const LandingPage = (): React.JSX.Element => (
     <Heading as="h1" className="text-4xl font-bold">
       Game Reviews
     </Heading>
-    <p className="text-lg text-gray-600">{SITE_DESCRIPTION}</p>
+    <p className="text-lg text-muted">{SITE_DESCRIPTION}</p>
     <StarRating rating={EXAMPLE_RATING} />
     <div className="flex gap-3">
-      <Link to="/app" search={{ q: undefined }} className="rounded bg-black px-4 py-2 text-white">
+      <Link
+        to="/app"
+        search={{ q: undefined }}
+        className="rounded bg-accent px-4 py-2 text-on-accent hover:bg-accent-hover"
+      >
         Browse games
       </Link>
       <Link to="/login" search={{ redirect: undefined }} className="rounded border px-4 py-2">

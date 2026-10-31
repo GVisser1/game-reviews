@@ -3,6 +3,8 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 import { isEmpty } from "lodash-es";
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+
+type ColorScheme = "light" | "dark";
 const APP_TITLE = "Game Reviews";
 
 export abstract class BasePage {
@@ -29,16 +31,26 @@ export abstract class BasePage {
     return this.page.getByRole("navigation").getByText(name);
   }
 
-  public assertPageIsAccessible = async (): Promise<void> => {
+  private readonly checkAccessibility = async (colorScheme: ColorScheme): Promise<void> => {
+    await this.page.emulateMedia({ colorScheme });
     const results = await new AxeBuilder({ page: this.page }).withTags(WCAG_TAGS).analyze();
 
     if (!isEmpty(results.violations)) {
-      await test
-        .info()
-        .attach("axe-results.json", { body: JSON.stringify(results, null, 2), contentType: "application/json" });
+      await test.info().attach(`axe-results-${colorScheme}.json`, {
+        body: JSON.stringify(results, null, 2),
+        contentType: "application/json",
+      });
     }
 
-    expect.soft(results.violations).toEqual([]);
+    expect.soft(results.violations, `accessibility in ${colorScheme} mode`).toEqual([]);
+  };
+
+  // Checks the page as shown in light and in dark mode
+  public assertPageIsAccessible = async (): Promise<void> => {
+    await this.checkAccessibility("light");
+    await this.checkAccessibility("dark");
+    // Back to the browser's own setting for the rest of the test.
+    await this.page.emulateMedia({ colorScheme: null });
   };
 
   public assertMeta = async (title = APP_TITLE): Promise<void> => {
