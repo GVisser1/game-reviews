@@ -1,5 +1,14 @@
 import { expect, test } from "../fixtures";
 
+test("renders the game page", async ({ gameDetailsPage }) => {
+  await gameDetailsPage.goto(72);
+
+  await expect(gameDetailsPage.heading("Portal 2 (2011)")).toBeVisible();
+  await expect(gameDetailsPage.publicReview("Other Player")).toBeVisible();
+  await gameDetailsPage.assertMeta("Portal 2 - Game Reviews");
+  await gameDetailsPage.assertPageIsAccessible();
+});
+
 test("asks anonymous visitors to sign in before rating", async ({ gameDetailsPage }) => {
   await gameDetailsPage.goto(72);
 
@@ -7,8 +16,6 @@ test("asks anonymous visitors to sign in before rating", async ({ gameDetailsPag
   await expect(gameDetailsPage.signInPrompt).toBeVisible();
   await expect(gameDetailsPage.starButton(1)).toBeHidden();
   await expect(gameDetailsPage.signInLink).toHaveAttribute("href", "/login?redirect=%2Fapp%2Fgames%2F72");
-  await gameDetailsPage.assertMeta("Portal 2 - Game Reviews");
-  await gameDetailsPage.assertPageIsAccessible();
 });
 
 test("shows an error for a game that doesn't exist", async ({ gameDetailsPage }) => {

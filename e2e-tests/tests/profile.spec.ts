@@ -1,6 +1,15 @@
 import { expect, test } from "../fixtures";
 import { TWITCH_DISPLAY_NAME, TWITCH_USERNAME } from "../mocks/testData";
 
+test("renders the profile page", async ({ profilePage }) => {
+  await profilePage.goto("other-player");
+
+  await expect(profilePage.heading("Other Player")).toBeVisible();
+  await expect(profilePage.reviewedGame("Portal 2")).toContainText("Best co-op puzzles ever made.");
+  await profilePage.assertMeta("Other Player - Game Reviews");
+  await profilePage.assertPageIsAccessible();
+});
+
 test("opens the signed-in user's own profile from their name in the nav", async ({
   page,
   signIn,
@@ -30,7 +39,6 @@ test("opens another player's profile from their review", async ({ page, gameDeta
   await expect(profilePage.reviewedGame("Portal 2")).toContainText("2011");
   await expect(profilePage.rating(5)).toBeVisible();
   await expect(profilePage.accountSettingsLink).toBeHidden();
-  await profilePage.assertPageIsAccessible();
 });
 
 test("says when a player doesn't exist", async ({ profilePage }) => {

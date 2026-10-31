@@ -1,6 +1,6 @@
 import { expect, test } from "../fixtures";
 
-// Every page is checked in light and dark mode by assertPageIsAccessible; these test the theme switch itself.
+// Every page is checked in light and dark mode by the chromium-dark project; these test the theme switch itself.
 test.describe("with a dark system setting", () => {
   test.use({ colorScheme: "dark" });
 

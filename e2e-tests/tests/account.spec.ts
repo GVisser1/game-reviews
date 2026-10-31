@@ -1,6 +1,16 @@
 import { expect, test } from "../fixtures";
 import { TWITCH_DISPLAY_NAME } from "../mocks/testData";
 
+test("renders the account page", async ({ signIn, accountPage }) => {
+  await signIn("/app/account");
+
+  await expect(accountPage.heading).toBeVisible();
+  await expect(accountPage.themeOption("System")).toBeChecked();
+  await expect(accountPage.deleteAccountButton).toBeVisible();
+  await accountPage.assertMeta("Account - Game Reviews");
+  await accountPage.assertPageIsAccessible();
+});
+
 test("asks anonymous visitors to sign in", async ({ accountPage }) => {
   await accountPage.goto();
 
@@ -22,9 +32,6 @@ test("opens the account page from the user's profile", async ({
 
   await expect(page).toHaveURL("/app/account");
   await expect(accountPage.heading).toBeVisible();
-  await expect(accountPage.deleteAccountButton).toBeVisible();
-  await accountPage.assertMeta("Account - Game Reviews");
-  await accountPage.assertPageIsAccessible();
 });
 
 test("can cancel deleting the account", async ({ backend, signIn, accountPage }) => {
