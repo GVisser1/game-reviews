@@ -56,11 +56,11 @@ export const AccountMenu = (): React.JSX.Element | null => {
         type="button"
         disabled={isSigningOut}
         onClick={() => void signOut()}
-        className="rounded border px-3 py-1 text-sm hover:bg-gray-100 disabled:opacity-50"
+        className="rounded border px-3 py-1 text-sm hover:bg-surface-raised disabled:opacity-50"
       >
         Sign out
       </button>
-      {error && <span className="text-sm text-red-600">{error}</span>}
+      {error && <span className="text-sm text-danger">{error}</span>}
     </div>
   );
 };

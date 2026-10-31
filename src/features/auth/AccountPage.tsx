@@ -4,12 +4,13 @@ import { isNil } from "lodash-es";
 import { useState } from "react";
 import { Heading } from "../../shared/Heading";
 import { toErrorMessage } from "../../utils/errorUtil";
+import { ThemeSwitch } from "../theme/ThemeSwitch";
 import { deleteAccount } from "./deleteAccount";
 import { SignInPrompt } from "./SignInPrompt";
 import { useAuthUser } from "./useAuthUser";
 import { getAvatarUrl, getDisplayName } from "./utils/authUtil";
 
-const BUTTON_CLASS_NAME = "rounded border px-3 py-1 text-sm hover:bg-gray-100 disabled:opacity-50";
+const BUTTON_CLASS_NAME = "rounded border px-3 py-1 text-sm hover:bg-surface-raised disabled:opacity-50";
 
 export const AccountPage = (): React.JSX.Element | null => {
   const user = useAuthUser();
@@ -50,9 +51,16 @@ export const AccountPage = (): React.JSX.Element | null => {
         {avatarUrl && <img src={avatarUrl} alt="" className="size-10 rounded-full" />}
         <div className="flex flex-col">
           <span className="font-medium">{getDisplayName(user)}</span>
-          <span className="text-sm text-gray-600">Signed in with Twitch</span>
+          <span className="text-sm text-muted">Signed in with Twitch</span>
         </div>
       </div>
+
+      <section className="flex flex-col gap-2">
+        <Heading as="h2" className="text-lg font-bold">
+          Appearance
+        </Heading>
+        <ThemeSwitch />
+      </section>
 
       <section className="flex flex-col gap-2">
         <Heading as="h2" className="text-lg font-bold">
@@ -65,7 +73,7 @@ export const AccountPage = (): React.JSX.Element | null => {
           </Link>{" "}
           for what's stored.
         </p>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted">
           This doesn't remove the app from your Twitch account. To do that, disconnect it in Twitch under Settings →
           Connections.
         </p>
@@ -75,14 +83,14 @@ export const AccountPage = (): React.JSX.Element | null => {
           </button>
         )}
         {isConfirming && (
-          <div className="flex flex-col gap-2 rounded border border-red-300 p-3">
+          <div className="flex flex-col gap-2 rounded border border-danger p-3">
             <p className="font-medium">Delete your account and all your reviews for good?</p>
             <div className="flex gap-2">
               <button
                 type="button"
                 disabled={isDeleting}
                 onClick={() => void confirmDelete()}
-                className="rounded bg-red-700 px-3 py-1 text-sm text-white hover:bg-red-800 disabled:opacity-50"
+                className="rounded bg-danger-solid px-3 py-1 text-sm text-on-danger hover:bg-danger-solid-hover disabled:opacity-50"
               >
                 Yes, delete my account
               </button>
@@ -97,7 +105,7 @@ export const AccountPage = (): React.JSX.Element | null => {
             </div>
           </div>
         )}
-        {error && <p className="text-red-600">Could not delete your account: {error}</p>}
+        {error && <p className="text-danger">Could not delete your account: {error}</p>}
       </section>
     </div>
   );

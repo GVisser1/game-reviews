@@ -21,7 +21,7 @@ export const GameGrid = ({ search, sort }: GameGridProps): React.JSX.Element => 
 
   return (
     <>
-      {error && <p className="text-red-600">Could not load games: {error}</p>}
+      {error && <p className="text-danger">Could not load games: {error}</p>}
       {!isLoading && isEmpty(games) && !error && (
         <p>{sort === "rating" ? "No rated games found." : "No games found."}</p>
       )}

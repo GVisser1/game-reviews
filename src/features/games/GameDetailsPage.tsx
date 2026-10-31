@@ -33,7 +33,7 @@ export const GameDetailsPending = (): React.JSX.Element => (
 
 export const GameDetailsError = ({ error }: ErrorComponentProps): React.JSX.Element => (
   <GamePageLayout>
-    <p className="text-red-600">Could not load game: {toErrorMessage(error)}</p>
+    <p className="text-danger">Could not load game: {toErrorMessage(error)}</p>
   </GamePageLayout>
 );
 
@@ -50,7 +50,7 @@ export const GameDetailsPage = (): React.JSX.Element => {
         {game.coverUrl && <img src={game.coverUrl} alt={game.name} className="w-48 self-start rounded" />}
         <div className="flex max-w-2xl flex-col gap-3">
           <Heading as="h1" className="text-2xl font-bold">
-            {game.name} {game.releaseYear && <span className="text-gray-500">({game.releaseYear})</span>}
+            {game.name} {game.releaseYear && <span className="text-muted">({game.releaseYear})</span>}
           </Heading>
           {user?.is_anonymous && <SignInPrompt message="Sign in to rate this game." />}
           {user && !user.is_anonymous && !isLoadingReviews && (
