@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import type { ThemePreference } from "./utils/themeUtil";
-import { readThemePreference, saveThemePreference } from "./utils/themeUtil";
+import { readAppliedThemePreference, saveThemePreference, subscribeToThemePreference } from "./utils/themeUtil";
 
 const OPTIONS: { value: ThemePreference; label: string }[] = [
   { value: "system", label: "System" },
@@ -8,13 +8,16 @@ const OPTIONS: { value: ThemePreference; label: string }[] = [
   { value: "dark", label: "Dark" },
 ];
 
-export const ThemeSwitch = (): React.JSX.Element => {
-  const [preference, setPreference] = useState(readThemePreference);
+// Server renders don't know the visitor's theme; the page corrects it when it hydrates.
+const SERVER_PREFERENCE: ThemePreference = "system";
 
-  const choose = (nextPreference: ThemePreference): void => {
-    saveThemePreference(nextPreference);
-    setPreference(nextPreference);
-  };
+export const ThemeSwitch = (): React.JSX.Element => {
+  // Follows the applied theme, so a choice made in another tab shows here too.
+  const preference = useSyncExternalStore(
+    subscribeToThemePreference,
+    readAppliedThemePreference,
+    () => SERVER_PREFERENCE,
+  );
 
   return (
     <fieldset className="flex flex-col gap-2">
@@ -30,7 +33,7 @@ export const ThemeSwitch = (): React.JSX.Element => {
               name="theme"
               value={option.value}
               checked={preference === option.value}
-              onChange={() => choose(option.value)}
+              onChange={() => saveThemePreference(option.value)}
               className="accent-accent"
             />
             {option.label}

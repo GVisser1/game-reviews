@@ -59,15 +59,21 @@ export const parseDesignTokens = (css: string): DesignTokens => {
     return color;
   };
 
-  const colorRoles = themeDeclarations.flatMap(({ name, value }): ColorRole[] => {
-    const roleName = name.startsWith("color-") ? VAR_PATTERN.exec(value)?.[1] : undefined;
-    const roleValue = isNil(roleName) ? undefined : rootValues.get(roleName);
-    if (isNil(roleName) || isNil(roleValue)) {
-      return [];
-    }
-    const [, light = roleValue, dark = roleValue] = LIGHT_DARK_PATTERN.exec(roleValue) ?? [];
-    return [{ name: roleName, light: toColorValue(light), dark: toColorValue(dark) }];
-  });
+  // Throws for a colour the docs can't resolve, rather than leaving it off the colours page and out of the contrast checks.
+  const colorRoles = themeDeclarations
+    .filter((declaration) => declaration.name.startsWith("color-"))
+    .map(({ name, value }): ColorRole => {
+      const roleName = VAR_PATTERN.exec(value)?.[1];
+      if (isNil(roleName)) {
+        throw new Error(`--${name} should point at a role, like var(--${name.replace("color-", "")}), not "${value}"`);
+      }
+      const roleValue = rootValues.get(roleName);
+      if (isNil(roleValue)) {
+        throw new Error(`--${name} uses --${roleName}, which isn't in the plain :root block`);
+      }
+      const [, light = roleValue, dark = roleValue] = LIGHT_DARK_PATTERN.exec(roleValue) ?? [];
+      return { name: roleName, light: toColorValue(light), dark: toColorValue(dark) };
+    });
 
   const themeValues = new Map(themeDeclarations.map(({ name, value }) => [name, value]));
   const textRoles = themeDeclarations
