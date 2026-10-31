@@ -7,8 +7,9 @@ type MdastNode = { type: string; children?: MdastNode[] };
 //     Page title
 //   </Heading>
 //
-// renders `<h1><p>Page title</p></h1>`. This unwraps a paragraph that's the only thing inside a JSX element, so the
-// text renders as if it were on one line with its tags. Several paragraphs, separated by blank lines, stay paragraphs.
+// renders `<h1><p>Page title</p></h1>`, and an icon followed by its text on the next line renders the text in a `<p>`.
+// This unwraps the paragraph when it's the only one inside a JSX element, so the text renders as if it were on one line
+// with its tags. Several paragraphs, separated by blank lines, are prose and stay paragraphs.
 export const remarkUnwrapJsxText =
   () =>
   (tree: MdastNode): void => {
@@ -17,8 +18,8 @@ export const remarkUnwrapJsxText =
 
 const unwrap = (node: MdastNode): void => {
   node.children?.forEach(unwrap);
-  const [onlyChild, ...otherChildren] = node.children ?? [];
-  if (node.type === "mdxJsxFlowElement" && onlyChild?.type === "paragraph" && otherChildren.length === 0) {
-    node.children = onlyChild.children;
+  const paragraphs = node.children?.filter((child) => child.type === "paragraph") ?? [];
+  if (node.type === "mdxJsxFlowElement" && paragraphs.length === 1) {
+    node.children = node.children?.flatMap((child) => (child.type === "paragraph" ? (child.children ?? []) : [child]));
   }
 };

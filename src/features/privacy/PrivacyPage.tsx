@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import { Heading } from "../../shared/Heading";
+import { Icon } from "../../shared/Icon";
 
 const LAST_UPDATED = "October 18, 2026";
 const CONTACT_URL = "https://github.com/GVisser1";
@@ -21,8 +23,9 @@ const Section = ({ title, children }: SectionProps): React.JSX.Element => (
 
 export const PrivacyPage = (): React.JSX.Element => (
   <main className="mx-auto flex max-w-2xl flex-col gap-6 p-8">
-    <Link to="/" className="self-start text-small hover:underline">
-      ← Home
+    <Link to="/" className="inline-flex items-center gap-1 self-start text-small hover:underline">
+      <Icon icon={ArrowLeft} />
+      Home
     </Link>
     <Heading as="h1" className="text-title">
       Privacy

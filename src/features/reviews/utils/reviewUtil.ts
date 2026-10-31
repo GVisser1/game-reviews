@@ -20,6 +20,7 @@ export const formatRatingSummary = ({ averageRating, ratingCount }: RatingSummar
   return `${averageRating.toFixed(AVERAGE_DECIMALS)}/${MAX_STARS} from ${ratings}`;
 };
 
-// For tight spaces like the games list: "★ 4.3 (12)". Pair it with formatRatingSummary for screen readers.
+// For tight spaces like the games list: "4.3 (12)", shown after a star icon. Pair it with formatRatingSummary for screen
+// readers.
 export const formatShortRatingSummary = ({ averageRating, ratingCount }: RatingSummary): string | null =>
-  isNil(averageRating) || ratingCount === 0 ? null : `★ ${averageRating.toFixed(AVERAGE_DECIMALS)} (${ratingCount})`;
+  isNil(averageRating) || ratingCount === 0 ? null : `${averageRating.toFixed(AVERAGE_DECIMALS)} (${ratingCount})`;

@@ -27,7 +27,8 @@ describe("StarRating", () => {
   it("fills the stars up to the rating", () => {
     render(<StarRating rating={3} onChange={vi.fn()} />);
 
-    expect(screen.getAllByRole("button").map((button) => button.textContent)).toEqual(["★", "★", "★", "☆", "☆"]);
+    const fills = screen.getAllByRole("button").map((button) => button.querySelector("svg")?.getAttribute("fill"));
+    expect(fills).toEqual(["currentColor", "currentColor", "currentColor", "none", "none"]);
   });
 
   it("is read-only without onChange", () => {

@@ -20,12 +20,12 @@ describe("formatRatingSummary", () => {
 });
 
 describe("formatShortRatingSummary", () => {
-  it("shows a star, the average and the number of ratings", () => {
-    expect(formatShortRatingSummary({ averageRating: 4.3, ratingCount: 12 })).toBe("★ 4.3 (12)");
+  it("shows the average and the number of ratings", () => {
+    expect(formatShortRatingSummary({ averageRating: 4.3, ratingCount: 12 })).toBe("4.3 (12)");
   });
 
   it("keeps the decimal for whole averages", () => {
-    expect(formatShortRatingSummary({ averageRating: 5, ratingCount: 1 })).toBe("★ 5.0 (1)");
+    expect(formatShortRatingSummary({ averageRating: 5, ratingCount: 1 })).toBe("5.0 (1)");
   });
 
   it("returns nothing for a game without ratings", () => {
