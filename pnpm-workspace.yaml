@@ -2,7 +2,7 @@
 # Two Vite copies can break runtime identity checks, like the TanStack Start 404s in https://github.com/voidzero-dev/vite-plus/issues/1391.
 overrides:
   vite@*: npm:@voidzero-dev/vite-plus-core@1.6.0 # Match the installed vite-plus version
-  vitest@*: 5.1.0 # Match the version from `vp toolchain vitest`
+  vitest@*: 5.1.1 # Match the version from `vp toolchain vitest`
 
 # Install scripts pnpm should skip. Both get their binaries from platform-specific packages instead.
 allowBuilds:
