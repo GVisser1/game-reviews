@@ -54,7 +54,7 @@
     "supabase": "2.122.1",
     "tailwindcss": "4.3.5",
     "typescript": "7.0.2",
-    "vite-plus": "1.6.0",
+    "vite-plus": "1.7.0",
     "wrangler": "^4.159.0"
   },
   "packageManager": "pnpm@12.18.0+sha512.9d7882d5dc82147ecfc4e062aa34834e0ad0296710a1837a1115ae012127d36b7109e321ac1598a1dd0a65597681b1e99917e12ed0d749eae91187943363beb3"
