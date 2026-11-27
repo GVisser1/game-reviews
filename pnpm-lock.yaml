@@ -177,11 +177,11 @@ importers:
         specifier: 5.3.0
         version: 5.3.0
       '@supabase/supabase-js':
-        specifier: 2.119.0
-        version: 2.119.0
+        specifier: 2.119.2
+        version: 2.119.2
       '@tanstack/react-query':
         specifier: ^5.104.2
-        version: 5.107.1(@types/react@19.3.0)(react@19.3.1)
+        version: 5.108.2(@types/react@19.3.0)(react@19.3.1)
       '@tanstack/react-router':
         specifier: 1.170.46
         version: 1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -189,8 +189,8 @@ importers:
         specifier: 1.169.5
         version: 1.169.5(@voidzero-dev/vite-plus-core@1.6.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.14)(rollup@4.66.0)(supports-color@10.2.2)
       '@tanstack/react-virtual':
-        specifier: 3.14.26
-        version: 3.14.26(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: 3.14.28
+        version: 3.14.28(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -198,8 +198,8 @@ importers:
         specifier: ^4.18.1
         version: 4.18.1
       lucide-react:
-        specifier: 1.70.0
-        version: 1.70.0(@types/react@19.3.0)(react@19.3.1)
+        specifier: 1.77.0
+        version: 1.77.0(@types/react@19.3.0)(react@19.3.1)
       react:
         specifier: 19.3.1
         version: 19.3.1
@@ -1419,8 +1419,8 @@ packages:
   '@speed-highlight/core@1.2.24':
     resolution: {integrity: sha512-qeW2e1l78afw8VhRPfPQ1Gjj+KU5XFQ/OFV5ti6eTa9bruO7mJyZtA4vw0ofqmA3tKCkROE9xLk3VZoeRc98nw==}
 
-  '@supabase/auth-js@2.119.0':
-    resolution: {integrity: sha512-WI7KqJRxqZjm77PlRO/VfKretL4SG8g8stWfBmpyx9To+fFapZlSbXA8QkduoMvr72rRpIF24ZLrjktBrp+ZFA==}
+  '@supabase/auth-js@2.119.2':
+    resolution: {integrity: sha512-zWi7pGT6XIMWG0Ja5Unvsv9ixwgLTq/pnWNzGVwVXlr/onraf3v4VwepCFSlxGrvNyKRmhn7O6e4CHF1TJg73Q==}
     engines: {node: '>=22.0.0'}
 
   '@supabase/cli-darwin-arm64@2.122.1':
@@ -1467,27 +1467,27 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@supabase/functions-js@2.119.0':
-    resolution: {integrity: sha512-0aOdF/Y4lA+62K02nwZClfAthXmFEml0od42q3yy/9t3bBitomAOYEatTFSnxT/5UeeIDNn2DOnXTdAP0sqGNQ==}
+  '@supabase/functions-js@2.119.2':
+    resolution: {integrity: sha512-0pmNQRKahGbezgUV2m02l7j4t0Wdl7KMNNMWGCMe76beA7e1IfTPihtNssqWWw1IjqMDi0axoqLiDPzcdbPuGw==}
     engines: {node: '>=22.0.0'}
 
   '@supabase/phoenix@0.4.5':
     resolution: {integrity: sha512-aAn9H9ovVyeApKy11OWOrrOGq8DV68yWeH4ud2lN9fzn4aO8Zb5GLL9m1pUg9nLqIcT+ZDfAcsZe0E/nqdv2lw==}
 
-  '@supabase/postgrest-js@2.119.0':
-    resolution: {integrity: sha512-qBmcjEFO7Ptyf5qvOXYJa1s4bfA4zsMIFf2i+h2zd6RRTDLwquX8z1mnS9djNOJjbiO1OGFh5Y2Lc2k2pA8TMw==}
+  '@supabase/postgrest-js@2.119.2':
+    resolution: {integrity: sha512-Q5RIy5wD79jArQSID06JXqS9F+bKLcTr81Yz7hwk2qkMX4fWMru4HLvG3UvoY0FlQzjcjXqVba7+6GeaItq6UQ==}
     engines: {node: '>=22.0.0'}
 
-  '@supabase/realtime-js@2.119.0':
-    resolution: {integrity: sha512-fPzxt+SAYweqsZUCSZma2dvN+HT6lVjwWj8BbkVwapW6wNf1odUi+ATYN7svX4Zm9vt0kz0l0VzINAUAA38FEg==}
+  '@supabase/realtime-js@2.119.2':
+    resolution: {integrity: sha512-1xHRbZ8RgKq8Qn50uNJMnBdkuzK35GQTo1hx2+bC3QvCxbzXnFkbmq2ZyT9xSjOCuLBfD5ve3ZKxJcbWefL3ow==}
     engines: {node: '>=22.0.0'}
 
-  '@supabase/storage-js@2.119.0':
-    resolution: {integrity: sha512-htx1dSCnSJVPlx2BNSgLSUDvLMxuGbYa6pUPl5xoCs4as4cIhBVwuxj78zbggCyPHxLnEXjsV/qvlDsVjpodKw==}
+  '@supabase/storage-js@2.119.2':
+    resolution: {integrity: sha512-dbzPuYKYc3/HGz+cRXAK45zR5FWMEH6lr2Is13ZOExhOBCM3F0iO96Z9VuhlLA64vPLeSQP24O/jesWg1QY6fw==}
     engines: {node: '>=22.0.0'}
 
-  '@supabase/supabase-js@2.119.0':
-    resolution: {integrity: sha512-MKP49G6bJbPhvsZDegZ/IXS/ITApPgplDCF5+F65KZ5kIArS5Y90WFxwvWYALx2bsxdrSuHvkCiXHYr3dU8+sw==}
+  '@supabase/supabase-js@2.119.2':
+    resolution: {integrity: sha512-4HvF4G2DwdqjmwPBpz9RHnXWfdK0wSkw4yBhxe64CdeF8gdxsTF9WZuHFuNWtQnHllq71ZDyAghr4Q8nC0m/NA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0'
@@ -1592,11 +1592,11 @@ packages:
     resolution: {integrity: sha512-w1+YvwmTkwt5n8yUqEH3IWZ9DsmorCZW/EQ3KYHnqEgIkOZpH54NvW6/Epq3Dzb8H0ifIeYX8PExvrNLIH5FIA==}
     engines: {node: '>=20.19'}
 
-  '@tanstack/query-core@5.107.1':
-    resolution: {integrity: sha512-PSyAik11oQBEVOiVy5hjZWHmoUqOXqK1WYy4v55mcxozEfKaQgpUMsgnXhWjuESzSht8JfzqMS1m6M/9CpNgvg==}
+  '@tanstack/query-core@5.108.2':
+    resolution: {integrity: sha512-0l+0xDKqn71hfJBKaAvFP/X7WYM0TbscEk6nK1pHaWQUWUEA+WJD0VlT8wF+HIJANMV9B/DouPWwDnX3w/l9BA==}
 
-  '@tanstack/react-query@5.107.1':
-    resolution: {integrity: sha512-udCOOLp3ZAheUrIHLCe+ZZge6nr2ZUrGMSWcCuXsjY1Bf2JeeE09oxst97PILiCY6N8xo/7bIo3Hvz13zh06FA==}
+  '@tanstack/react-query@5.108.2':
+    resolution: {integrity: sha512-wV6hEjVGTfh9rvu3uREYW0hgBfS9klDejGelhPY575jD5jg6qbAb1nzT7hR1Q+wemR66ZjtE5p9pAGUwqK8zbg==}
     peerDependencies:
       '@types/react': ^18 || ^19
       react: ^18 || ^19
@@ -1665,8 +1665,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@tanstack/react-virtual@3.14.26':
-    resolution: {integrity: sha512-HUDlfsrYH6ko5xH56L62Mcl/uzT+AGVNMHFuDNqDJMdZWc1AQa2oeVKNUvZ/RWBZQ4TYtyQerFrNvLnp39h65A==}
+  '@tanstack/react-virtual@3.14.28':
+    resolution: {integrity: sha512-zoM4eddIVUsOsunOe26ur+h6YJQbvdzU10a2tKzIovThu5P4SvEyQ+cRx0mbeKfgnR0Mz7KR/NwrZ3GzVnUF/g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1735,8 +1735,8 @@ packages:
   '@tanstack/store@0.11.2':
     resolution: {integrity: sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q==}
 
-  '@tanstack/virtual-core@3.19.11':
-    resolution: {integrity: sha512-/5iHb0RHBvj8Di59FDs4ESNm45jls33aZAi4zccVXZjc/6ZvwQP6nzEYeT6weXjTf9E6/vrp2JhYWRyO+ZP13A==}
+  '@tanstack/virtual-core@3.19.13':
+    resolution: {integrity: sha512-CyCvMm7m5JuvPW6eMPZkZBZk6diySrlUQNNRpQPiEnh2vakyghx82Hw3wW2THFUsl6xJ6uM4lSUaiA2T0oYW8w==}
 
   '@tanstack/virtual-file-routes@1.162.0':
     resolution: {integrity: sha512-uhOeFyxLcU41HzvrxsGpiWdcMbScY1EDgbZ5K7DVRMYInbLYWAC0EA/kx9wXAoSM8q82bUG2hRl8+EAjE6XAbA==}
@@ -2661,8 +2661,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@1.70.0:
-    resolution: {integrity: sha512-gCTPPN1MlQUBtUgdsUv+0CAUj+X8hifRUiRBw4E5v7lvDIOIpx0EZezdGQMSimS8pKA6esvullJub4GYr0mCHA==}
+  lucide-react@1.77.0:
+    resolution: {integrity: sha512-VS6sOi8ZUH1qm6swBL/tpI4xAhB6pFTdHvw3pfCJD+DaTJwpyynVzfOS6mdyMZ+OCdY/GMSQbqinOMOPbNSrQA==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -3393,10 +3393,12 @@ packages:
   yuku-core@0.19.0:
     resolution: {integrity: sha512-kYK9e1XdfirNhkipzW0wmMcSWcVF/CWnuugodfVYRCUwvoBefweL9HzB96OiKEhsx78V5WbUxbJqlizMX869Qg==}
     engines: {node: '>=14.18.0'}
+    deprecated: 'Yuku is now one package with one core. Use "yuku" instead: https://yuku.fyi/javascript/. Existing installs keep working but get no more fixes.'
 
   yuku-parser@0.19.0:
     resolution: {integrity: sha512-XrBh9ZiQK5mJVRxZBAvD6LwRyAYrK3MFtH3+onyuxFL5hFD44EC3QOmIC1FjTj6H2MMwq46/NAI+NZxLZPZgxg==}
     engines: {node: '>=14.18.0'}
+    deprecated: 'Yuku is now one package with one core. Use "yuku" instead: https://yuku.fyi/javascript/. Existing installs keep working but get no more fixes.'
 
   zod@4.6.7:
     resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
@@ -4173,7 +4175,7 @@ snapshots:
 
   '@speed-highlight/core@1.2.24': {}
 
-  '@supabase/auth-js@2.119.0':
+  '@supabase/auth-js@2.119.2':
     dependencies:
       tslib: 2.8.1
 
@@ -4201,33 +4203,33 @@ snapshots:
   '@supabase/cli-windows-x64@2.122.1':
     optional: true
 
-  '@supabase/functions-js@2.119.0':
+  '@supabase/functions-js@2.119.2':
     dependencies:
       tslib: 2.8.1
 
   '@supabase/phoenix@0.4.5': {}
 
-  '@supabase/postgrest-js@2.119.0':
+  '@supabase/postgrest-js@2.119.2':
     dependencies:
       tslib: 2.8.1
 
-  '@supabase/realtime-js@2.119.0':
+  '@supabase/realtime-js@2.119.2':
     dependencies:
       '@supabase/phoenix': 0.4.5
       tslib: 2.8.1
 
-  '@supabase/storage-js@2.119.0':
+  '@supabase/storage-js@2.119.2':
     dependencies:
       iceberg-js: 0.8.1
       tslib: 2.8.1
 
-  '@supabase/supabase-js@2.119.0':
+  '@supabase/supabase-js@2.119.2':
     dependencies:
-      '@supabase/auth-js': 2.119.0
-      '@supabase/functions-js': 2.119.0
-      '@supabase/postgrest-js': 2.119.0
-      '@supabase/realtime-js': 2.119.0
-      '@supabase/storage-js': 2.119.0
+      '@supabase/auth-js': 2.119.2
+      '@supabase/functions-js': 2.119.2
+      '@supabase/postgrest-js': 2.119.2
+      '@supabase/realtime-js': 2.119.2
+      '@supabase/storage-js': 2.119.2
 
   '@tailwindcss/node@4.3.5':
     dependencies:
@@ -4299,11 +4301,11 @@ snapshots:
 
   '@tanstack/history@1.162.5': {}
 
-  '@tanstack/query-core@5.107.1': {}
+  '@tanstack/query-core@5.108.2': {}
 
-  '@tanstack/react-query@5.107.1(@types/react@19.3.0)(react@19.3.1)':
+  '@tanstack/react-query@5.108.2(@types/react@19.3.0)(react@19.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.107.1
+      '@tanstack/query-core': 5.108.2
       react: 19.3.1
     optionalDependencies:
       '@types/react': 19.3.0
@@ -4393,9 +4395,9 @@ snapshots:
       react-dom: 19.3.1(react@19.3.1)
       use-sync-external-store: 1.7.0(react@19.3.1)
 
-  '@tanstack/react-virtual@3.14.26(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@tanstack/react-virtual@3.14.28(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@tanstack/virtual-core': 3.19.11
+      '@tanstack/virtual-core': 3.19.13
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
@@ -4519,7 +4521,7 @@ snapshots:
 
   '@tanstack/store@0.11.2': {}
 
-  '@tanstack/virtual-core@3.19.11': {}
+  '@tanstack/virtual-core@3.19.13': {}
 
   '@tanstack/virtual-file-routes@1.162.0': {}
 
@@ -5290,7 +5292,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@1.70.0(@types/react@19.3.0)(react@19.3.1):
+  lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
