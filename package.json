@@ -33,18 +33,18 @@
     "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.14.0",
-    "@cloudflare/workers-types": "5.20261109.1",
+    "@axe-core/playwright": "4.14.1",
+    "@cloudflare/workers-types": "5.20261121.1",
     "@mdx-js/rollup": "3.1.1",
-    "@playwright/test": "1.65.0",
+    "@playwright/test": "1.65.1",
     "@tailwindcss/vite": "4.3.5",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
     "@types/lodash-es": "^4.17.12",
     "@types/mdx": "2.0.14",
-    "@types/node": "24.19.2",
-    "@types/react": "19.3.0",
+    "@types/node": "24.19.3",
+    "@types/react": "19.3.2",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.3.0",
     "jsdom": "^30.1.2",
@@ -55,7 +55,7 @@
     "tailwindcss": "4.3.5",
     "typescript": "7.0.2",
     "vite-plus": "1.6.0",
-    "wrangler": "^4.159.0"
+    "wrangler": "^4.162.0"
   },
   "packageManager": "pnpm@12.18.0+sha512.9d7882d5dc82147ecfc4e062aa34834e0ad0296710a1837a1115ae012127d36b7109e321ac1598a1dd0a65597681b1e99917e12ed0d749eae91187943363beb3"
 }
